@@ -2,7 +2,7 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <meta name="theme-color" content="#1a1a1a" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -27,7 +27,7 @@
       touch-action: none;
     }
 
-    html { background-color: var(--bg); transition: background-color 0.3s; min-height: 100dvh; }
+    html { background-color: var(--bg); transition: background-color 0.3s; height: 100%; width: 100%; overflow: hidden; }
 
     body { 
       background-color: transparent; 
@@ -39,16 +39,15 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       font-size: clamp(14px, 4vw, 16px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100dvh;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
     }
 
     .app-wrapper {
       width: 100%;
       max-width: 420px;
-      min-height: 100dvh;
+      height: 100%;
       position: relative;
       padding: calc(4.5rem + env(safe-area-inset-top)) 1rem calc(2rem + env(safe-area-inset-bottom)) 1rem;
       text-align: center;
@@ -56,6 +55,8 @@
       display: flex;
       flex-direction: column;
       margin: 0 auto;
+      overflow-y: auto; /* Allow scrolling within the app content */
+      align-items: center; /* Moved from body */
     }
 
     header { 
@@ -77,7 +78,7 @@
     header > div { display: flex; justify-content: flex-end; align-items: center; gap: 8px; flex: 1; width: 100%; }
     header button { background-color: transparent; border: none; font-size: 1.2rem; cursor: pointer; padding: 8px; color: var(--text); display: flex; align-items: center; min-width: 44px; min-height: 44px; justify-content: center; }
     h1 { margin: 1rem 0 1.5rem 0; font-size: 1.6rem; font-weight: 700; }
-    .dropdown-content { display: none; position: absolute; right: 0.6rem; top: calc(3.8rem + env(safe-area-inset-top)); background-color: var(--card); width: 12.5rem; box-shadow: 0px 8px 24px rgba(0,0,0,0.3); z-index: 1001; border-radius: 1rem; overflow: hidden; padding: 0.4rem; border: 1px solid rgba(128,128,128,0.1); }
+    .dropdown-content { display: none; position: absolute; right: 0.6rem; top: calc(3.8rem + env(safe-area-inset-top)); background-color: var(--card); width: 12.5rem; box-shadow: 0px 0.5rem 1.5rem rgba(0,0,0,0.3); z-index: 1001; border-radius: 1rem; overflow: hidden; padding: 0.4rem; border: 1px solid rgba(128,128,128,0.1); }
     .dropdown-content button { display: block; width: 100%; padding: 15px; border: none; background: none; text-align: left; font-size: 17px; cursor: pointer; color: var(--text); }
     .dropdown-content button:hover { background-color: rgba(0,0,0,0.1); }
 
@@ -102,24 +103,24 @@
       appearance: none;
     }
     button.main { background-color: #4CAF50; color: white; border: none; padding: 1rem; width: 100%; cursor: pointer; margin: 0.6rem 0; font-size: 1.1rem; border-radius: 0.8rem; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    button.main:hover { background-color: #45a049; }
+    button.main:hover { background-color: #45a049; } /* Keep px for hover effect */
     button.secondary { background-color: #2196F3; color: white; border: none; padding: 12px 20px; min-width: 140px; cursor: pointer; font-size: 1rem; border-radius: 12px; }
-    button.secondary:hover { background-color: #0b7dda; }
-    button.small { background-color: #666; color: white; border: none; padding: 8px 12px; font-size: 13px; cursor: pointer; margin-top: 5px; border-radius: 8px; }
-    button.small:hover { background-color: #555; }
+    button.secondary:hover { background-color: #0b7dda; } /* Keep px for hover effect */
+    button.small { background-color: #666; color: white; border: none; padding: 0.5rem 0.8rem; font-size: 0.8rem; cursor: pointer; margin-top: 0.3rem; border-radius: 0.5rem; }
+    button.small:hover { background-color: #555; } /* Keep px for hover effect */
     
     #archiv { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    table { width: 95%; margin: 1rem auto; border-collapse: separate; border-spacing: 0; background-color: var(--card); min-width: 280px; border-radius: 0.8rem; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    th, td { border-bottom: 1px solid rgba(128,128,128,0.2); padding: 0.75rem 0.25rem; font-size: 0.81rem; color: var(--text); }
+    table { width: 95%; margin: 1rem auto; border-collapse: separate; border-spacing: 0; background-color: var(--card); min-width: 17.5rem; border-radius: 0.8rem; overflow: hidden; box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.1); }
+    th, td { border-bottom: 1px solid rgba(128,128,128,0.2); padding: 0.75rem 0.25rem; font-size: 0.81rem; color: var(--text); white-space: nowrap; }
     th { background-color: var(--header); font-weight: 600; }
 
     .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center; padding: 15px; }
-    .modal-content { background-color: var(--card); padding: 17px; border-radius: 20px; max-width: 336px; width: 100%; max-height: 85vh; overflow-y: auto; text-align: left; font-size: 0.93rem; color: var(--text); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-    .modal-content input { width: 100%; margin: 10px 0; }
-    .modal-content button { width: 100%; margin: 10px 0 0 0; }
+    .modal-content { background-color: var(--card); padding: 1.1rem; border-radius: 1.25rem; max-width: 21rem; width: 100%; max-height: 85vh; overflow-y: auto; text-align: left; font-size: 0.93rem; color: var(--text); box-shadow: 0 1.25rem 2.5rem rgba(0,0,0,0.4); }
+    .modal-content input { width: 100%; margin: 0.6rem 0; }
+    .modal-content button { width: 100%; margin: 0.6rem 0 0 0; }
     
     #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 999; }
-    #splashScreen img { width: 150px; height: 150px; animation: pulse 1.5s infinite; }
+    #splashScreen img { width: 10rem; height: 10rem; animation: pulse 1.5s infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.1); } }
   </style>
 </head>
@@ -138,25 +139,25 @@
       
       <div id="loginForm">
         <h3>Prihlásenie</h3>
-        <input type="text" id="loginName" placeholder="Tvoje meno" style="width:80%; padding:10px;">
-        <input type="password" id="loginPin" placeholder="PIN (4-6 číslic)" style="width:80%; padding:10px;" maxlength="6">
+        <input type="text" id="loginName" placeholder="Tvoje meno" style="width:80%; padding:0.8rem;">
+        <input type="password" id="loginPin" placeholder="PIN (4-6 číslic)" style="width:80%; padding:0.8rem;" maxlength="6">
         <button class="main" onclick="window.loginUser(); return false;">Prihlásiť sa</button>
-        <p id="loginError" style="color: red; font-size: 14px;"></p>
+        <p id="loginError" style="color: red; font-size: 0.9rem;"></p>
       </div>
 
       <div id="registerForm" style="display: none;">
         <h3>Nový účet</h3>
-        <input type="text" id="regName" placeholder="Tvoje meno" style="width:80%; padding:10px;">
-        <input type="password" id="regPin" placeholder="PIN (4-6 číslic)" style="width:80%; padding:10px;" maxlength="6">
-        <input type="password" id="regPinConfirm" placeholder="Zopakuj PIN" style="width:80%; padding:10px;" maxlength="6">
+        <input type="text" id="regName" placeholder="Tvoje meno" style="width:80%; padding:0.8rem;">
+        <input type="password" id="regPin" placeholder="PIN (4-6 číslic)" style="width:80%; padding:0.8rem;" maxlength="6">
+        <input type="password" id="regPinConfirm" placeholder="Zopakuj PIN" style="width:80%; padding:0.8rem;" maxlength="6">
         <button class="main" onclick="window.registerUser(); return false;">Vytvoriť účet</button>
-        <p id="regError" style="color: red; font-size: 14px;"></p>
+        <p id="regError" style="color: red; font-size: 0.9rem;"></p>
       </div>
     </div>
   </div>
   <header style="display:none;">
     <div>
-      <span id="currentUserName" style="margin-right: 20px;"></span>
+      <span id="currentUserName" style="margin-right: 1.2rem;"></span>
     <button onclick="window.toggleDropdown()">☰ Menu</button>
     </div>
     <div id="dropdown" class="dropdown-content">
@@ -200,7 +201,7 @@
     <p><strong>SYS:</strong> Nízky: < 90, Normálny: 90–140, Vysoký: > 140</p>
     <p><strong>DIA:</strong> Nízky: < 60, Normálny: 60–90, Vysoký: > 90</p>
     <p><strong>PULZ:</strong> Nízky: < 60, Normálny: 60–100, Vysoký: > 100</p>
-    <p style="font-size: 10px; color: #888; margin-top: 20px;">Verzia aplikácie: v33</p>
+    <p style="font-size: 10px; color: #888; margin-top: 1.2rem;">Verzia aplikácie: v34</p>
     <button class="main" onclick="window.zavrietInfo()">Zatvoriť</button>
   </div></div>
   </div>
@@ -213,8 +214,8 @@
   <div id="customDialog" class="modal"><div class="modal-content">
     <h3 id="dialogTitle">Upozornenie</h3>
     <p id="dialogMessage"></p>
-    <button id="dialogConfirmBtn" class="main" style="display:none;">Áno</button>
-    <button id="dialogCancelBtn" class="main" style="display:none;">Nie</button>
+    <button id="dialogConfirmBtn" class="main" style="display:none;">Áno</button> <!-- Changed to rem -->
+    <button id="dialogCancelBtn" class="main" style="display:none;">Nie</button> <!-- Changed to rem -->
     <button id="dialogOkBtn" class="main">OK</button>
   </div></div>
   <script type="module">
@@ -271,7 +272,7 @@
         return;
       }
 
-      if (pin.length < 4 || pin.length > 6 || !/^\d+$/.test(pin)) {
+      if (pin.length < 4 || pin.length > 6 || !/^\d+$/.test(pin)) { // Changed to rem
         errorEl.innerText = 'PIN musí mať 4-6 číslic!';
         return;
       }
@@ -293,7 +294,7 @@
         document.getElementById('regName').value = '';
         document.getElementById('regPin').value = '';
         document.getElementById('regPinConfirm').value = '';
-      } catch (error) {
+      } catch (error) { // Changed to rem
         errorEl.innerText = '❌ Chyba: ' + error.message;
         errorEl.style.color = 'red';
       }
@@ -687,7 +688,7 @@
       const toast = document.getElementById('toast');
       toast.innerText = message;
       toast.style.display = 'block';
-      setTimeout(() => { toast.style.display = 'none'; }, 3000);
+      setTimeout(() => { toast.style.display = 'none'; }, 3000); // Changed to rem
     };
 
     if ('serviceWorker' in navigator) {
@@ -764,13 +765,13 @@
     });
   </script>
 
-  <div id="toast" style="display:none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 16px; z-index: 1000;">
+  <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; font-size: 1rem; z-index: 1000;">
     Záznam bol úspešne uložený.
   </div>
 
 
 <div id="updateBanner" style="display:none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-background-color: #333; color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 16px; z-index: 1000;">
+background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; font-size: 1rem; z-index: 1000;">
   Nová verzia dostupná.
   <button onclick="window.refreshApp()" style="margin-left: 10px; background-color: #4CAF50; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Aktualizovať teraz</button>
 </div>

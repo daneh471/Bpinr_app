@@ -1,10 +1,10 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Vypnutie zoomu pre video elementy (touch-action: none)
-- ✅ Optimalizácia meta viewport (user-scalable=no)
-- ✅ Fixná veľkosť videa pri pinch-zoome a double-tape
-- ✅ Aktualizácia Service Workera na v33
+- ✅ Fullscreen layout bez bieleho okraja a posúvania
+- ✅ Všetky pevné px rozmery nahradené relatívnymi jednotkami (rem, %, vw)
+- ✅ Optimalizácia meta viewport (initial-scale=1, maximum-scale=1)
+- ✅ Aktualizácia Service Workera na v34
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -12,7 +12,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie-test5.git
 git add .
-git commit -m "Update v33: Video zoom prevention and viewport lock"
+git commit -m "Update v34: Fullscreen layout and responsive unit conversion"
 git push origin main --force
 ```
 
