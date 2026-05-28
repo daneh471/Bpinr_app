@@ -12,7 +12,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie-test5.git
 git add .
-git commit -m "Update v14: Vylepšená responzivita pre všetky mobilné zariadenia"
+git commit -m "Update v15: Optimalizácia pre S25 a moderné Androidy"
 git push origin main --force
 ```
 
