@@ -12,7 +12,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie-test5.git
 git add .
-git commit -m "Update v21: Kontajner 420px pre jednotný vzhľad a optimalizácia Flip"
+git commit -m "Update v22: Identický layout naprieč zariadeniami (420px kontajner)"
 git push origin main --force
 ```
 
