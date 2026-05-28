@@ -12,7 +12,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie-test5.git
 git add .
-git commit -m "Update v26: Pixel-perfect responzivita pre všetky mobilné modely"
+git commit -m "Update v27: Responzívna optimalizácia (rem, max-width, fluid layout)"
 git push origin main --force
 ```
 
