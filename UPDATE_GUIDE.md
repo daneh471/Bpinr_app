@@ -12,7 +12,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie-test5.git
 git add .
-git commit -m "Update v16: Kompaktnejší dizajn a oprava prekrývania prvkov"
+git commit -m "Update v17: Fixná lišta a celkové zmenšenie mierky rozhraní"
 git push origin main --force
 ```
 
