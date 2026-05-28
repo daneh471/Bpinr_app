@@ -1,10 +1,9 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Lepší kontrast farieb v archíve (zelená, červená, žltá)
-- ✅ Biele pozadie (mäkké, bez bolesti očí)
-- ✅ Tmavý dark mode
-- ✅ Jeden splash screen (bez duplicity)
+- ✅ Mierne zmenšenie modálnych okien o 2% pre lepší vizuál
+- ✅ Implementované gesto Swipe-back (návrat z archívu potiahnutím doprava)
+- ✅ Optimalizácia ovládania na mobilných zariadeniach
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -12,7 +11,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie-test5.git
 git add .
-git commit -m "Update v27: Responzívna optimalizácia (rem, max-width, fluid layout)"
+git commit -m "Update v29: Swipe-back gesture and modal resizing"
 git push origin main --force
 ```
 
