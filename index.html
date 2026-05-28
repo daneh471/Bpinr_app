@@ -66,8 +66,7 @@
       align-items: center; 
       box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
     }
-    header img { width: 2.06rem; height: 2.06rem; margin-right: auto; display: block; object-fit: contain; }
-    header > div { display: flex; justify-content: flex-end; align-items: center; gap: 8px; flex: 1; }
+    header > div { display: flex; justify-content: flex-end; align-items: center; gap: 8px; flex: 1; width: 100%; }
     header button { background-color: transparent; border: none; font-size: 1.2rem; cursor: pointer; padding: 8px; color: var(--text); display: flex; align-items: center; min-width: 44px; min-height: 44px; justify-content: center; }
     h1 { margin: 1rem 0 1.5rem 0; font-size: 1.6rem; font-weight: 700; }
     .dropdown-content { display: none; position: absolute; right: 0.6rem; top: calc(3.8rem + env(safe-area-inset-top)); background-color: var(--card); width: 12.5rem; box-shadow: 0px 8px 24px rgba(0,0,0,0.3); z-index: 1001; border-radius: 1rem; overflow: hidden; padding: 0.4rem; border: 1px solid rgba(128,128,128,0.1); }
@@ -102,12 +101,12 @@
     button.small:hover { background-color: #555; }
     
     #archiv { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 1rem; background-color: var(--card); min-width: 300px; border-radius: 0.8rem; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    th, td { border-bottom: 1px solid rgba(128,128,128,0.2); padding: 0.8rem 0.3rem; font-size: 0.85rem; color: var(--text); }
+    table { width: 95%; margin: 1rem auto; border-collapse: separate; border-spacing: 0; background-color: var(--card); min-width: 280px; border-radius: 0.8rem; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    th, td { border-bottom: 1px solid rgba(128,128,128,0.2); padding: 0.75rem 0.25rem; font-size: 0.81rem; color: var(--text); }
     th { background-color: var(--header); font-weight: 600; }
 
     .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center; padding: 15px; }
-    .modal-content { background-color: var(--card); padding: 18px; border-radius: 20px; max-width: 354px; width: 100%; max-height: 85vh; overflow-y: auto; text-align: left; font-size: 0.98rem; color: var(--text); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+    .modal-content { background-color: var(--card); padding: 17px; border-radius: 20px; max-width: 336px; width: 100%; max-height: 85vh; overflow-y: auto; text-align: left; font-size: 0.93rem; color: var(--text); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
     .modal-content input { width: 100%; margin: 10px 0; }
     .modal-content button { width: 100%; margin: 10px 0 0 0; }
     
@@ -148,7 +147,6 @@
     </div>
   </div>
   <header style="display:none;">
-    <img src="favicon.png" alt="Zdravie+">
     <div>
       <span id="currentUserName" style="margin-right: 20px;"></span>
     <button onclick="window.toggleDropdown()">☰ Menu</button>
@@ -194,7 +192,7 @@
     <p><strong>SYS:</strong> Nízky: < 90, Normálny: 90–140, Vysoký: > 140</p>
     <p><strong>DIA:</strong> Nízky: < 60, Normálny: 60–90, Vysoký: > 90</p>
     <p><strong>PULZ:</strong> Nízky: < 60, Normálny: 60–100, Vysoký: > 100</p>
-    <p style="font-size: 10px; color: #888; margin-top: 20px;">Verzia aplikácie: v31</p>
+    <p style="font-size: 10px; color: #888; margin-top: 20px;">Verzia aplikácie: v32</p>
     <button class="main" onclick="window.zavrietInfo()">Zatvoriť</button>
   </div></div>
   </div>
