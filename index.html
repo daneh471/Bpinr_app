@@ -40,7 +40,7 @@
       left: 50%;
       transform: translateX(-50%);
       width: 100%;
-      max-width: 420px;
+      max-width: 390px;
       z-index: 1000;
       height: calc(60px + env(safe-area-inset-top));
       background-color: var(--header); 
@@ -54,7 +54,7 @@
     header > div { display: flex; justify-content: flex-end; align-items: center; gap: 8px; flex: 1; }
     header button { background-color: transparent; border: none; font-size: 1.1rem; cursor: pointer; padding: 8px; color: var(--text); display: flex; align-items: center; min-width: 44px; min-height: 44px; justify-content: center; }
     h1 { margin: 0 0 20px 0; font-size: 1.8rem; font-weight: 700; }
-    .dropdown-content { display: none; position: absolute; right: 15px; top: calc(60px + env(safe-area-inset-top)); background-color: var(--card); width: 220px; box-shadow: 0px 8px 24px rgba(0,0,0,0.3); z-index: 1001; border-radius: 16px; overflow: hidden; padding: 5px; border: 1px solid rgba(128,128,128,0.1); }
+    .dropdown-content { display: none; position: absolute; right: 10px; top: calc(60px + env(safe-area-inset-top)); background-color: var(--card); width: 200px; box-shadow: 0px 8px 24px rgba(0,0,0,0.3); z-index: 1001; border-radius: 16px; overflow: hidden; padding: 5px; border: 1px solid rgba(128,128,128,0.1); }
     .dropdown-content button { display: block; width: 100%; padding: 16px; border: none; background: none; text-align: left; font-size: 18px; cursor: pointer; color: var(--text); }
     .dropdown-content button:hover { background-color: rgba(0,0,0,0.1); }
 
@@ -86,12 +86,12 @@
     button.small:hover { background-color: #555; }
     
     #archiv { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 15px; background-color: var(--card); min-width: 380px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 15px; background-color: var(--card); min-width: 360px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
     th, td { border-bottom: 1px solid rgba(128,128,128,0.2); padding: 12px 5px; font-size: 13px; color: var(--text); }
     th { background-color: var(--header); font-weight: 600; }
 
     .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center; padding: 15px; }
-    .modal-content { background-color: var(--card); padding: 20px; border-radius: 20px; max-width: 380px; width: 100%; max-height: 85vh; overflow-y: auto; text-align: left; font-size: 1rem; color: var(--text); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+    .modal-content { background-color: var(--card); padding: 20px; border-radius: 20px; max-width: 360px; width: 100%; max-height: 85vh; overflow-y: auto; text-align: left; font-size: 1rem; color: var(--text); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
     .modal-content input { width: 100%; margin: 10px 0; }
     .modal-content button { width: 100%; margin: 10px 0 0 0; }
     
@@ -178,7 +178,7 @@
     <p><strong>SYS:</strong> Nízky: < 90, Normálny: 90–140, Vysoký: > 140</p>
     <p><strong>DIA:</strong> Nízky: < 60, Normálny: 60–90, Vysoký: > 90</p>
     <p><strong>PULZ:</strong> Nízky: < 60, Normálny: 60–100, Vysoký: > 100</p>
-    <p style="font-size: 10px; color: #888; margin-top: 20px;">Verzia aplikácie: v23</p>
+    <p style="font-size: 10px; color: #888; margin-top: 20px;">Verzia aplikácie: v24</p>
     <button class="main" onclick="window.zavrietInfo()">Zatvoriť</button>
   </div></div>
   </div>
