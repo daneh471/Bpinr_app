@@ -17,9 +17,9 @@
     
     body { background-color: var(--bg); color: var(--text); font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; transition: 0.3s; }
     header { background-color: var(--header); padding: 10px; display: flex; justify-content: space-between; align-items: center; }
-    header img { width: 50px; height: 50px; margin-left: 10px; margin-right: auto; }
+    header img { width: 40px; height: 40px; margin-left: 10px; margin-right: auto; display: block; object-fit: contain; }
     header > div { display: flex; justify-content: flex-end; align-items: center; gap: 20px; flex: 1; }
-    header button { background-color: transparent; border: none; font-size: 20px; margin-right: 15px; cursor: pointer; padding: 10px; color: var(--text); }
+    header button { background-color: transparent; border: none; font-size: 20px; margin-right: 15px; cursor: pointer; padding: 8px; color: var(--text); height: 40px; display: flex; align-items: center; }
     h1 { margin: 20px 0; }
     .dropdown-content { display: none; position: fixed; right: 10px; top: 60px; background-color: var(--card); min-width: 80%; max-width: 300px; box-shadow: 0px 8px 16px rgba(0,0,0,0.2); z-index: 100; border-radius: 8px; overflow: hidden; padding: 10px; }
     .dropdown-content button { display: block; width: 100%; padding: 16px; border: none; background: none; text-align: left; font-size: 18px; cursor: pointer; color: var(--text); }
@@ -45,15 +45,13 @@
     #darkModeBtn { width: auto; margin-right: 15px; }
     
     #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 999; }
-    #splashScreen img { width: 120px; height: 120px; animation: pulse 1.5s infinite; }
-    #splashScreen h2 { color: #fff; margin-top: 20px; font-size: 28px; }
+    #splashScreen img { width: 150px; height: 150px; animation: pulse 1.5s infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.1); } }
   </style>
 </head>
 <body>
   <div id="splashScreen">
     <img src="favicon.png" alt="Zdravie+">
-    <h2>Zdravie+</h2>
   </div>
   <div id="authScreen" class="auth-screen">
     <div class="auth-form">
@@ -323,10 +321,9 @@
 
     // Sledovanie prihlásenia
     onAuthStateChanged(window.auth, async (user) => {
-      // Skryť splash screen po 3 sekundách
       setTimeout(() => {
         window.hideSplash();
-      }, 3000);
+      }, 2000);
 
       if (user) {
         window.currentUser.user = user;
@@ -459,12 +456,12 @@
       let lowColor, highColor, normalColor, textColor;
       
       if (isDark) {
-        lowColor = '#ffaa00'; // Jasná oranžová/žltá
+        lowColor = '#ffff00'; 
         highColor = '#ff3333'; // Jasná červená
         normalColor = '#33cc33'; // Jasná zelená
         textColor = '#000';
       } else {
-        lowColor = '#ffdd66'; // Svetlá jasná žltá
+        lowColor = '#ffff00'; 
         highColor = '#ff6666'; // Svetlá jasná červená
         normalColor = '#66dd66'; // Svetlá jasná zelená
         textColor = '#000';
