@@ -86,8 +86,8 @@
       right: 1rem; 
       top: calc(3.8rem + env(safe-area-inset-top)); 
       background-color: var(--card); 
-      width: calc(100vw - 2rem); 
-      max-width: 16rem; 
+      width: auto;
+      max-width: calc(100vw - 2rem); 
       box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.3); 
       z-index: 1001; 
       border-radius: 1rem; 
@@ -98,14 +98,15 @@
     .dropdown-content button { 
       display: block; 
       width: 100%; 
-      padding: 1.1rem 1rem; 
+      padding: 1rem 1.2rem; 
       border: none; 
       background: none; 
       text-align: left; 
-      font-size: 1.1rem; 
+      font-size: 1rem; 
       cursor: pointer; 
       color: var(--text); 
       border-bottom: 1px solid rgba(128,128,128,0.1);
+      white-space: nowrap;
     }
     .dropdown-content button:last-child { border-bottom: none; }
     .dropdown-content button:hover { background-color: rgba(0,0,0,0.1); }
@@ -161,8 +162,7 @@
       background-color: var(--card); 
       padding: 1.5rem; 
       border-radius: 1.5rem; 
-      max-width: 92vw; 
-      width: 24rem; 
+      width: min(90vw, 24rem); 
       max-height: 85dvh; 
       overflow-y: auto; 
       text-align: left; 
@@ -255,7 +255,7 @@
     <p><strong>SYS:</strong> Nízky: < 90, Normálny: 90–140, Vysoký: > 140</p>
     <p><strong>DIA:</strong> Nízky: < 60, Normálny: 60–90, Vysoký: > 90</p>
     <p><strong>PULZ:</strong> Nízky: < 60, Normálny: 60–100, Vysoký: > 100</p>
-    <p style="font-size: 0.65rem; color: #888; margin-top: 1.2rem;">Verzia aplikácie: v36</p>
+    <p style="font-size: 0.65rem; color: #888; margin-top: 1.2rem;">Verzia aplikácie: v37</p>
     <button class="main" onclick="window.zavrietInfo()">Zatvoriť</button>
   </div></div>
   </div>
