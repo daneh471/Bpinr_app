@@ -2,10 +2,10 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#1a1a1a" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Zdravie+" />
   <title>Zdravie+</title>
   <link rel="manifest" href="manifest.json" />
@@ -38,15 +38,15 @@
       transition: 0.3s;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      font-size: clamp(14px, 4vw, 16px);
-      height: 100%;
+      font-size: 1rem;
+      height: 100dvh; /* Dynamic Viewport Height pre mobilné prehliadače */
       width: 100%;
       overflow: hidden;
     }
 
     .app-wrapper {
       width: 100%;
-      max-width: 420px;
+      max-width: 30rem;
       height: 100%;
       position: relative;
       padding: calc(4.5rem + env(safe-area-inset-top)) 1rem calc(2rem + env(safe-area-inset-bottom)) 1rem;
@@ -65,7 +65,7 @@
       left: 50%;
       transform: translateX(-50%);
       width: 100%;
-      max-width: 420px;
+      max-width: 30rem;
       z-index: 1000;
       height: calc(3.8rem + env(safe-area-inset-top));
       background-color: var(--header); 
@@ -73,26 +73,24 @@
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+      box-shadow: 0 0.125rem 0.3125rem rgba(0,0,0,0.1); 
     }
-    header > div { display: flex; justify-content: flex-end; align-items: center; gap: 8px; flex: 1; width: 100%; }
-    header button { background-color: transparent; border: none; font-size: 1.2rem; cursor: pointer; padding: 8px; color: var(--text); display: flex; align-items: center; min-width: 44px; min-height: 44px; justify-content: center; }
+    header > div { display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; flex: 1; width: 100%; }
+    header button { background-color: transparent; border: none; font-size: 1.2rem; cursor: pointer; padding: 0.5rem; color: var(--text); display: flex; align-items: center; min-width: 2.75rem; min-height: 2.75rem; justify-content: center; }
     h1 { margin: 1rem 0 1.5rem 0; font-size: 1.6rem; font-weight: 700; }
-    .dropdown-content { display: none; position: absolute; right: 0.6rem; top: calc(3.8rem + env(safe-area-inset-top)); background-color: var(--card); width: 12.5rem; box-shadow: 0px 0.5rem 1.5rem rgba(0,0,0,0.3); z-index: 1001; border-radius: 1rem; overflow: hidden; padding: 0.4rem; border: 1px solid rgba(128,128,128,0.1); }
-    .dropdown-content button { display: block; width: 100%; padding: 15px; border: none; background: none; text-align: left; font-size: 17px; cursor: pointer; color: var(--text); }
+    .dropdown-content { display: none; position: absolute; right: 0.6rem; top: calc(3.8rem + env(safe-area-inset-top)); background-color: var(--card); width: 13rem; box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.3); z-index: 1001; border-radius: 1rem; overflow: hidden; padding: 0.4rem; border: 1px solid rgba(128,128,128,0.1); }
+    .dropdown-content button { display: block; width: 100%; padding: 0.9rem; border: none; background: none; text-align: left; font-size: 1.05rem; cursor: pointer; color: var(--text); }
     .dropdown-content button:hover { background-color: rgba(0,0,0,0.1); }
 
     .form-container, #archiv { 
       margin: 0 auto; 
       width: 100%; 
       padding: 0; 
-      display: flex; 
-      flex-wrap: wrap; 
-      justify-content: center; 
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 0.8rem; 
     }
     input { 
-      flex: 1 1 calc(50% - 0.4rem); 
       min-width: 0; 
       padding: 0.8rem; 
       font-size: 1rem; 
@@ -101,10 +99,11 @@
       border: 1px solid #ccc; 
       border-radius: 0.8rem; 
       appearance: none;
+      width: 100%;
     }
-    button.main { background-color: #4CAF50; color: white; border: none; padding: 1rem; width: 100%; cursor: pointer; margin: 0.6rem 0; font-size: 1.1rem; border-radius: 0.8rem; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    button.main { grid-column: span 2; background-color: #4CAF50; color: white; border: none; padding: 1rem; width: 100%; cursor: pointer; margin: 0.6rem 0; font-size: 1.1rem; border-radius: 0.8rem; font-weight: bold; box-shadow: 0 0.25rem 0.375rem rgba(0,0,0,0.1); min-height: 3.5rem; }
     button.main:hover { background-color: #45a049; } /* Keep px for hover effect */
-    button.secondary { background-color: #2196F3; color: white; border: none; padding: 12px 20px; min-width: 140px; cursor: pointer; font-size: 1rem; border-radius: 12px; }
+    button.secondary { background-color: #2196F3; color: white; border: none; padding: 0.75rem 1.25rem; min-width: 8.75rem; cursor: pointer; font-size: 1rem; border-radius: 0.75rem; min-height: 3rem; }
     button.secondary:hover { background-color: #0b7dda; } /* Keep px for hover effect */
     button.small { background-color: #666; color: white; border: none; padding: 0.5rem 0.8rem; font-size: 0.8rem; cursor: pointer; margin-top: 0.3rem; border-radius: 0.5rem; }
     button.small:hover { background-color: #555; } /* Keep px for hover effect */
@@ -114,8 +113,8 @@
     th, td { border-bottom: 1px solid rgba(128,128,128,0.2); padding: 0.75rem 0.25rem; font-size: 0.81rem; color: var(--text); white-space: nowrap; }
     th { background-color: var(--header); font-weight: 600; }
 
-    .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center; padding: 15px; }
-    .modal-content { background-color: var(--card); padding: 1.1rem; border-radius: 1.25rem; max-width: 21rem; width: 100%; max-height: 85vh; overflow-y: auto; text-align: left; font-size: 0.93rem; color: var(--text); box-shadow: 0 1.25rem 2.5rem rgba(0,0,0,0.4); }
+    .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center; padding: 0.95rem; }
+    .modal-content { background-color: var(--card); padding: 1.1rem; border-radius: 1.25rem; max-width: 22rem; width: 100%; max-height: 85dvh; overflow-y: auto; text-align: left; font-size: 0.93rem; color: var(--text); box-shadow: 0 1.25rem 2.5rem rgba(0,0,0,0.4); }
     .modal-content input { width: 100%; margin: 0.6rem 0; }
     .modal-content button { width: 100%; margin: 0.6rem 0 0 0; }
     
@@ -175,7 +174,6 @@
     <input type="tel" id="sys" placeholder="SYS" pattern="[0-9./]*" inputmode="decimal" />
     <input type="tel" id="dia" placeholder="DIA" pattern="[0-9./]*" inputmode="decimal" />
     <input type="tel" id="pulse" placeholder="PULZ" pattern="[0-9./]*" inputmode="decimal" />
-    <br>
     <button class="main" onclick="window.pridatZaznam(); return false;">Pridať záznam</button>
   </div>
   <div id="archiv" style="display:none;">
@@ -201,7 +199,7 @@
     <p><strong>SYS:</strong> Nízky: < 90, Normálny: 90–140, Vysoký: > 140</p>
     <p><strong>DIA:</strong> Nízky: < 60, Normálny: 60–90, Vysoký: > 90</p>
     <p><strong>PULZ:</strong> Nízky: < 60, Normálny: 60–100, Vysoký: > 100</p>
-    <p style="font-size: 10px; color: #888; margin-top: 1.2rem;">Verzia aplikácie: v34</p>
+    <p style="font-size: 0.65rem; color: #888; margin-top: 1.2rem;">Verzia aplikácie: v35</p>
     <button class="main" onclick="window.zavrietInfo()">Zatvoriť</button>
   </div></div>
   </div>
