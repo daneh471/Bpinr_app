@@ -187,6 +187,21 @@
       font-weight: 600;
     }
 
+    /* Mikro-responzivita pre extra malé mobily (v43) */
+    @media (max-width: 360px) {
+      .archive-header, .record-row {
+        grid-template-columns: 74px 1fr 1fr 1fr 1fr 1fr 0.6fr; /* Dátum má pevnú šírku, ostatné sa prispôsobia */
+        font-size: 10.5px; /* Zmenšené písmo */
+        gap: 2px; /* Zmenšené medzery */
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .record-row > div:first-child {
+        white-space: nowrap; /* Zabezpečí, že dátum sa nezalomí */
+        padding-left: 1px; /* Minimálny ľavý padding */
+      }
+    }
+
     /* Vylepšené Modálne okná */
     .modal { 
       display: none; 
@@ -325,7 +340,7 @@
     <p><strong>SYS:</strong> Nízky: < 90, Normálny: 90–140, Vysoký: > 140</p>
     <p><strong>DIA:</strong> Nízky: < 60, Normálny: 60–90, Vysoký: > 90</p>
     <p><strong>PULZ:</strong> Nízky: < 60, Normálny: 60–100, Vysoký: > 100</p>
-    <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem;">Verzia aplikácie: v42</p>
+    <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem;">Verzia aplikácie: v43</p>
     <button class="main" onclick="window.zavrietInfo()">Zatvoriť</button>
   </div></div>
   </div>
