@@ -1,10 +1,10 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Zjednotenie dizajnu hlavného a manuálneho (archívneho) formulára
-- ✅ Modal manuálneho pridávania teraz používa identickú 2-stĺpcovú mriežku
-- ✅ Vylepšená konzistencia tlačidiel a okrajov v celej aplikácii
-- ✅ Aktualizácia Service Workera na v39
+- ✅ Úplné odstránenie HTML tabuľky v archíve
+- ✅ Nový responzívny kartičkový dizajn (Card Layout) pre záznamy
+- ✅ Zákaz horizontálneho skrolovania v celom archíve
+- ✅ Aktualizácia Service Workera na v40
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -12,7 +12,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie-test5.git
 git add .
-git commit -m "Update v39: Synchronized form layouts and grid styles"
+git commit -m "Update v40: Replace table with responsive card layout in archive"
 git push origin main --force
 ```
 

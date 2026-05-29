@@ -146,10 +146,24 @@
     button.small { background-color: #666; color: white; border: none; padding: 0.5rem 0.8rem; font-size: 0.8rem; cursor: pointer; margin-top: 0.3rem; border-radius: 0.5rem; }
     button.small:hover { background-color: #555; } /* Keep px for hover effect */
     
-    #archiv { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    table { width: 95%; margin: 1rem auto; border-collapse: separate; border-spacing: 0; background-color: var(--card); min-width: 17.5rem; border-radius: 0.8rem; overflow: hidden; box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.1); }
-    th, td { border-bottom: 1px solid rgba(128,128,128,0.2); padding: 0.75rem 0.25rem; font-size: 0.81rem; color: var(--text); white-space: nowrap; }
-    th { background-color: var(--header); font-weight: 600; }
+    /* Nový Responzívny Archív bez tabuliek */
+    #archiv { display: block; width: 100%; overflow-x: hidden; }
+    .record-list { display: flex; flex-direction: column; gap: 1rem; width: 100%; padding-bottom: 2rem; margin-top: 1rem; }
+    .record-card { 
+      background-color: var(--card); 
+      border-radius: 1.2rem; 
+      padding: 1.2rem; 
+      box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.1);
+      width: 100%;
+      border: 1px solid rgba(128,128,128,0.1);
+      text-align: left;
+    }
+    .record-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid rgba(128,128,128,0.1); padding-bottom: 0.6rem; }
+    .record-date { font-weight: bold; font-size: 1.1rem; color: var(--text); }
+    .record-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+    .record-item { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.6rem 0.3rem; border-radius: 0.8rem; background: rgba(128,128,128,0.05); border: 1px solid rgba(128,128,128,0.1); }
+    .record-item label { font-size: 0.6rem; text-transform: uppercase; font-weight: 700; margin-bottom: 0.2rem; opacity: 0.6; }
+    .record-item span { font-weight: 800; font-size: 1.1rem; }
 
     /* Vylepšené Modálne okná */
     .modal { 
@@ -267,7 +281,7 @@
   <div id="archiv" style="display:none;">
     <h2>Archív záznamov</h2>
     <button class="main" onclick="window.skrytArchiv()">Späť na formulár</button>
-    <table id="archivTable"><tr><th>Dátum</th><th>INR</th><th>TAB</th><th>SYS</th><th>DIA</th><th>PULZ</th><th>Vymazať</th></tr></table>
+    <div id="archivList" class="record-list"></div>
   </div>
   <div id="manualModal" class="modal"><div class="modal-content">
     <h3>Manuálne pridanie záznamu</h3>
@@ -289,7 +303,7 @@
     <p><strong>SYS:</strong> Nízky: < 90, Normálny: 90–140, Vysoký: > 140</p>
     <p><strong>DIA:</strong> Nízky: < 60, Normálny: 60–90, Vysoký: > 90</p>
     <p><strong>PULZ:</strong> Nízky: < 60, Normálny: 60–100, Vysoký: > 100</p>
-    <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem;">Verzia aplikácie: v39</p>
+    <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem;">Verzia aplikácie: v40</p>
     <button class="main" onclick="window.zavrietInfo()">Zatvoriť</button>
   </div></div>
   </div>
@@ -641,8 +655,8 @@
     window.zobrazArchiv = function() {
       document.getElementById('formular').style.display = 'none';
       document.getElementById('archiv').style.display = 'block';
-      const table = document.getElementById('archivTable');
-      table.innerHTML = '<tr><th>Dátum</th><th>INR</th><th>TAB</th><th>SYS</th><th>DIA</th><th>PULZ</th><th>Vymazať</th></tr>';
+      const container = document.getElementById('archivList');
+      container.innerHTML = '';
       
       const sorted = window.zaznamy.sort((a, b) => {
         const [d1, m1, y1] = a.datum.split('.').map(Number);
@@ -651,15 +665,20 @@
       });
 
       sorted.forEach((z) => {
-        table.innerHTML += `<tr>
-          <td>${z.datum}</td>
-          <td style="${window.getColorStyle(z.inr, 'inr')}">${z.inr || '-'}</td>
-          <td>${z.tab || '-'}</td>
-          <td style="${window.getColorStyle(z.sys, 'sys')}">${z.sys || '-'}</td>
-          <td style="${window.getColorStyle(z.dia, 'dia')}">${z.dia || '-'}</td>
-          <td style="${window.getColorStyle(z.pulse, 'pulse')}">${z.pulse || '-'}</td>
-          <td><button onclick="window.vymazatZaznam('${z.id}')">Vymazať</button></td>
-        </tr>`;
+        container.innerHTML += `
+          <div class="record-card">
+            <div class="record-header">
+              <span class="record-date">📅 ${z.datum}</span>
+              <button class="small" style="margin:0; background-color: #ff4444;" onclick="window.vymazatZaznam('${z.id}')">Vymazať</button>
+            </div>
+            <div class="record-grid">
+              <div class="record-item" style="${window.getColorStyle(z.inr, 'inr')}"><label>INR</label><span>${z.inr || '-'}</span></div>
+              <div class="record-item"><label>TAB</label><span>${z.tab || '-'}</span></div>
+              <div class="record-item" style="${window.getColorStyle(z.sys, 'sys')}"><label>SYS</label><span>${z.sys || '-'}</span></div>
+              <div class="record-item" style="${window.getColorStyle(z.dia, 'dia')}"><label>DIA</label><span>${z.dia || '-'}</span></div>
+              <div class="record-item" style="${window.getColorStyle(z.pulse, 'pulse')}"><label>PULZ</label><span>${z.pulse || '-'}</span></div>
+            </div>
+          </div>`;
       });
     };
 
