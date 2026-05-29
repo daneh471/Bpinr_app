@@ -1,10 +1,10 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Skrátený formát dátumu v archíve (DD.MM.YY) pre lepšiu prehľadnosť
-- ✅ Zmena farby pre nízke hodnoty zo žltej na svetlooranžovú (#ffb366)
-- ✅ Optimalizácia logiky triedenia pre 2-ciferné roky
-- ✅ Aktualizácia Service Workera na v47
+- ✅ Sýta oranžová farba (#ff6600) pre nízke hodnoty pre lepšiu viditeľnosť
+- ✅ Najnovšie pridané záznamy sa zobrazujú na začiatku zoznamu (unshift logika)
+- ✅ Optimalizované radenie v archíve od najnovšieho po najstaršie
+- ✅ Aktualizácia Service Workera na v48
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -12,7 +12,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie-test5.git
 git add .
-git commit -m "Update v47: Short date format and light orange low values"
+git commit -m "Update v48: Saturated orange and newest records on top"
 git push origin main --force
 ```
 

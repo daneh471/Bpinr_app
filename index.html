@@ -339,7 +339,7 @@
     <p><strong>SYS:</strong> Nízky: < 90, Normálny: 90–140, Vysoký: > 140</p>
     <p><strong>DIA:</strong> Nízky: < 60, Normálny: 60–90, Vysoký: > 90</p>
     <p><strong>PULZ:</strong> Nízky: < 60, Normálny: 60–100, Vysoký: > 100</p>
-    <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem;">Verzia aplikácie: v47</p>
+    <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem;">Verzia aplikácie: v48</p>
     <button class="main" onclick="window.zavrietInfo()">Zatvoriť</button>
   </div></div>
   </div>
@@ -574,7 +574,7 @@
       const querySnapshot = await window.getDocs(q);
       window.zaznamy = [];
       querySnapshot.forEach((doc) => {
-        window.zaznamy.push({ id: doc.id, ...doc.data() });
+        window.zaznamy.unshift({ id: doc.id, ...doc.data() });
       });
     };
 
@@ -671,12 +671,12 @@
       let lowColor, highColor, normalColor, textColor;
       
       if (isDark) {
-        lowColor = '#ffb366'; // Svetlooranžová
+        lowColor = '#ff6600'; // Sýta oranžová
         highColor = '#ff3333'; // Jasná červená
         normalColor = '#33cc33'; // Jasná zelená
         textColor = '#000';
       } else {
-        lowColor = '#ffb366'; // Svetlooranžová
+        lowColor = '#ff6600'; // Sýta oranžová
         highColor = '#ff6666'; // Svetlá jasná červená
         normalColor = '#66dd66'; // Svetlá jasná zelená
         textColor = '#000';
