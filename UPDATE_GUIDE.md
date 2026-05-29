@@ -1,11 +1,12 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Dokonalé vertikálne zarovnanie stĺpcov pomocou pevných percent (24% dátum, 11% čísla)
-- ✅ Špecifické zmenšenie písma pre dátum (0.75rem) na zabránenie pretekaniu
-- ✅ Jednotná štruktúra Gridu pre hlavičku aj riadky archívu
-- ✅ Garantovaná šírka 100% s box-sizingom pre všetky riadky
-- ✅ Aktualizácia Service Workera na v45
+- ✅ Transformácia archívu na profesionálnu tabuľku (Real Table Layout)
+- ✅ Identický Grid pre hlavičku aj dáta (24% | 5x12% | 16%)
+- ✅ Zebra pruhovanie riadkov a spodné linky (borders) pre lepšiu čitateľnosť
+- ✅ Fixné písmo 11px a nulové zalamovanie dátumu
+- ✅ Absolútne vycentrovanie hodnôt a tlačidla vymazať
+- ✅ Aktualizácia Service Workera na v46
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -13,7 +14,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie-test5.git
 git add .
-git commit -m "Update v45: Perfect column alignment with fixed percentages"
+git commit -m "Update v46: Professional table layout with zebra striping"
 git push origin main --force
 ```
 

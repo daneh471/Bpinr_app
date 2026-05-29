@@ -146,36 +146,40 @@
     button.small { background-color: #666; color: white; border: none; padding: 0.5rem 0.8rem; font-size: 0.8rem; cursor: pointer; margin-top: 0.3rem; border-radius: 0.5rem; }
     button.small:hover { background-color: #555; } /* Keep px for hover effect */
     
-    /* Ultra-kompaktný riadkový archív v42 */
+    /* Ultra-kompaktná tabuľka archívu v46 */
     #archiv { display: block; width: 100%; overflow-x: hidden; padding: 0; box-sizing: border-box; }
-    .record-list { display: flex; flex-direction: column; gap: 0.2rem; width: 100%; padding-bottom: 2rem; margin-top: 0.5rem; }
+    .record-list { display: flex; flex-direction: column; width: 100%; padding-bottom: 2rem; margin-top: 0.5rem; border: 1px solid rgba(128,128,128,0.1); border-radius: 0.4rem; overflow: hidden; }
     .archive-header { 
       display: grid; 
-      grid-template-columns: 24% 11% 11% 11% 11% 11% 11%; 
+      grid-template-columns: 24% 12% 12% 12% 12% 12% 16%; 
       font-weight: bold; 
-      font-size: clamp(10px, 2.8vw, 14px); 
+      font-size: 11px; 
       text-transform: uppercase; 
-      opacity: 0.6; 
-      padding: 0 2px; 
+      background-color: var(--header);
+      border-bottom: 2px solid rgba(0,0,0,0.1); 
+      padding: 8px 2px; 
       text-align: center;
       width: 100%;
       box-sizing: border-box;
     }
     .record-row { 
       display: grid; 
-      grid-template-columns: 24% 11% 11% 11% 11% 11% 11%; 
+      grid-template-columns: 24% 12% 12% 12% 12% 12% 16%; 
       align-items: center; 
       background-color: var(--card); 
-      border-radius: 0.4rem; 
-      padding: 6px 2px; 
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
+      padding: 8px 2px; 
+      border-bottom: 1px solid rgba(128,128,128,0.2); 
       width: 100%; 
       box-sizing: border-box;
-      border: 1px solid rgba(128,128,128,0.1); 
-      font-size: clamp(10px, 2.8vw, 14px); 
+      font-size: 11px; 
       text-align: center;
-      gap: 1px;
+      gap: 0;
     }
+    .record-list .record-row:nth-child(even) {
+      background-color: rgba(128,128,128,0.05); /* Zebra efekt */
+    }
+    .record-list .record-row:last-child { border-bottom: none; }
+    
     .record-row > div { 
       white-space: nowrap; 
       overflow: hidden; 
@@ -183,10 +187,12 @@
     }
     .record-row > div:first-child, .archive-header > div:first-child {
       text-align: left;
-      padding-left: 2px;
+      padding-left: 6px;
       font-weight: 600;
       white-space: nowrap;
-      font-size: 0.75rem; /* Menšie písmo pre dátum (cca 11-12px) */
+    }
+    .record-row > div:not(:first-child) {
+      justify-self: center;
     }
 
     /* Optimalizácia pre mobily - uvoľnenie priestoru (v44) */
@@ -333,7 +339,7 @@
     <p><strong>SYS:</strong> Nízky: < 90, Normálny: 90–140, Vysoký: > 140</p>
     <p><strong>DIA:</strong> Nízky: < 60, Normálny: 60–90, Vysoký: > 90</p>
     <p><strong>PULZ:</strong> Nízky: < 60, Normálny: 60–100, Vysoký: > 100</p>
-    <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem;">Verzia aplikácie: v45</p>
+    <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem;">Verzia aplikácie: v46</p>
     <button class="main" onclick="window.zavrietInfo()">Zatvoriť</button>
   </div></div>
   </div>
