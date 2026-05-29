@@ -1,11 +1,11 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Favicon v hornej lište vypĺňa 100% vertikálnej výšky
-- ✅ Odstránený vertikálny padding headera pre "edge-to-edge" efekt loga
-- ✅ Implementovaný flexibilný kontajner pre logo so zarovnaním vľavo
-- ✅ Fixná výška headera (45px) pre konzistentný mobilný zážitok
-- ✅ Aktualizácia Service Workera na v59
+- ✅ Rozdelenie archívu na "Aktuálny mesiac" a "Mesačný archív" (minulosť)
+- ✅ Aktuálny mesiac sa zobrazuje ako priamy zoznam pre okamžitý prehľad
+- ✅ Staršie záznamy sa automaticky zoskupujú do rozbaľovacích priečinkov
+- ✅ Logika automatického presunu záznamov pri zmene kalendárneho mesiaca
+- ✅ Aktualizácia Service Workera na v60
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -13,7 +13,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie-test5.git
 git add .
-git commit -m "Update v59: Full-height header logo implementation"
+git commit -m "Update v60: Dynamic archive split (Current vs Past)"
 git push origin main --force
 ```
 

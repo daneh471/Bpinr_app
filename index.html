@@ -208,6 +208,8 @@
     .archive-month-group.open .archive-month-header { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom: none; }
     .archive-month-header::after { content: '▶'; font-size: 0.7rem; transition: transform 0.2s; }
     .archive-month-group.open .archive-month-header::after { content: '▼'; transform: rotate(0deg); }
+    
+    .archive-section-title { font-size: 0.85rem; text-transform: uppercase; opacity: 0.6; margin: 1.5rem 0 0.5rem 0.5rem; text-align: left; font-weight: 700; letter-spacing: 0.05rem; }
 
     .record-list { display: flex; flex-direction: column; width: 100%; border: 1px solid rgba(128,128,128,0.1); border-bottom-left-radius: 0.8rem; border-bottom-right-radius: 0.8rem; overflow: hidden; }
     .archive-header { 
@@ -416,7 +418,7 @@
     <p><strong>SYS:</strong> Nízky: < 90, Normálny: 90–140, Vysoký: > 140</p>
     <p><strong>DIA:</strong> Nízky: < 60, Normálny: 60–90, Vysoký: > 90</p>
     <p><strong>PULZ:</strong> Nízky: < 60, Normálny: 60–100, Vysoký: > 100</p>
-    <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem;">Verzia aplikácie: v59</p>
+    <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem;">Verzia aplikácie: v60</p>
     <button class="main" onclick="window.zavrietInfo()">Zatvoriť</button>
   </div></div>
   </div>
@@ -643,6 +645,10 @@
       querySnapshot.forEach((doc) => {
         window.zaznamy.unshift({ id: doc.id, ...doc.data() });
       });
+      // Ak je archív otvorený, po načítaní ho prekresli
+      if (document.getElementById('archiv').style.display === 'block') {
+        window.zobrazArchiv();
+      }
     };
 
     // Pridaj záznam
