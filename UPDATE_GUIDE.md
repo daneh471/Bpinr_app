@@ -1,10 +1,10 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Fullscreen layout bez bieleho okraja a posúvania
-- ✅ Všetky pevné px rozmery nahradené relatívnymi jednotkami (rem, %, vw)
-- ✅ Optimalizácia meta viewport (initial-scale=1, maximum-scale=1)
-- ✅ Aktualizácia Service Workera na v35
+- ✅ Plne responzívne Dropdown menu s väčšími plochami pre prsty
+- ✅ Modernizované modálne okná s blur efektom a lepším paddingom
+- ✅ Optimalizácia šírky prvkov pre malé smartfóny (max-width: 92vw)
+- ✅ Aktualizácia Service Workera na v36
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -12,7 +12,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie-test5.git
 git add .
-git commit -m "Update v35: Responsive grid layout and DVH optimization"
+git commit -m "Update v36: UI polish for dropdown and modals"
 git push origin main --force
 ```
 

@@ -78,8 +78,36 @@
     header > div { display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; flex: 1; width: 100%; }
     header button { background-color: transparent; border: none; font-size: 1.2rem; cursor: pointer; padding: 0.5rem; color: var(--text); display: flex; align-items: center; min-width: 2.75rem; min-height: 2.75rem; justify-content: center; }
     h1 { margin: 1rem 0 1.5rem 0; font-size: 1.6rem; font-weight: 700; }
-    .dropdown-content { display: none; position: absolute; right: 0.6rem; top: calc(3.8rem + env(safe-area-inset-top)); background-color: var(--card); width: 13rem; box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.3); z-index: 1001; border-radius: 1rem; overflow: hidden; padding: 0.4rem; border: 1px solid rgba(128,128,128,0.1); }
-    .dropdown-content button { display: block; width: 100%; padding: 0.9rem; border: none; background: none; text-align: left; font-size: 1.05rem; cursor: pointer; color: var(--text); }
+    
+    /* Upravené Dropdown Menu pre lepšiu mobilitu */
+    .dropdown-content { 
+      display: none; 
+      position: absolute; 
+      right: 1rem; 
+      top: calc(3.8rem + env(safe-area-inset-top)); 
+      background-color: var(--card); 
+      width: calc(100vw - 2rem); 
+      max-width: 16rem; 
+      box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.3); 
+      z-index: 1001; 
+      border-radius: 1rem; 
+      overflow: hidden; 
+      padding: 0.5rem; 
+      border: 1px solid rgba(128,128,128,0.2); 
+    }
+    .dropdown-content button { 
+      display: block; 
+      width: 100%; 
+      padding: 1.1rem 1rem; 
+      border: none; 
+      background: none; 
+      text-align: left; 
+      font-size: 1.1rem; 
+      cursor: pointer; 
+      color: var(--text); 
+      border-bottom: 1px solid rgba(128,128,128,0.1);
+    }
+    .dropdown-content button:last-child { border-bottom: none; }
     .dropdown-content button:hover { background-color: rgba(0,0,0,0.1); }
 
     .form-container, #archiv { 
@@ -113,10 +141,38 @@
     th, td { border-bottom: 1px solid rgba(128,128,128,0.2); padding: 0.75rem 0.25rem; font-size: 0.81rem; color: var(--text); white-space: nowrap; }
     th { background-color: var(--header); font-weight: 600; }
 
-    .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center; padding: 0.95rem; }
-    .modal-content { background-color: var(--card); padding: 1.1rem; border-radius: 1.25rem; max-width: 22rem; width: 100%; max-height: 85dvh; overflow-y: auto; text-align: left; font-size: 0.93rem; color: var(--text); box-shadow: 0 1.25rem 2.5rem rgba(0,0,0,0.4); }
-    .modal-content input { width: 100%; margin: 0.6rem 0; }
-    .modal-content button { width: 100%; margin: 0.6rem 0 0 0; }
+    /* Vylepšené Modálne okná */
+    .modal { 
+      display: none; 
+      position: fixed; 
+      z-index: 2000; 
+      left: 0; 
+      top: 0; 
+      width: 100%; 
+      height: 100%; 
+      background-color: rgba(0,0,0,0.6); 
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      justify-content: center; 
+      align-items: center; 
+      padding: 1rem; 
+    }
+    .modal-content { 
+      background-color: var(--card); 
+      padding: 1.5rem; 
+      border-radius: 1.5rem; 
+      max-width: 92vw; 
+      width: 24rem; 
+      max-height: 85dvh; 
+      overflow-y: auto; 
+      text-align: left; 
+      font-size: 1rem; 
+      color: var(--text); 
+      box-shadow: 0 1.5rem 3rem rgba(0,0,0,0.5); 
+    }
+    .modal-content h3 { margin-bottom: 1.2rem; font-size: 1.3rem; }
+    .modal-content input { width: 100%; margin: 0.5rem 0 1rem 0; }
+    .modal-content button { width: 100%; margin: 0.5rem 0; }
     
     #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 999; }
     #splashScreen img { width: 10rem; height: 10rem; animation: pulse 1.5s infinite; }
@@ -199,7 +255,7 @@
     <p><strong>SYS:</strong> Nízky: < 90, Normálny: 90–140, Vysoký: > 140</p>
     <p><strong>DIA:</strong> Nízky: < 60, Normálny: 60–90, Vysoký: > 90</p>
     <p><strong>PULZ:</strong> Nízky: < 60, Normálny: 60–100, Vysoký: > 100</p>
-    <p style="font-size: 0.65rem; color: #888; margin-top: 1.2rem;">Verzia aplikácie: v35</p>
+    <p style="font-size: 0.65rem; color: #888; margin-top: 1.2rem;">Verzia aplikácie: v36</p>
     <button class="main" onclick="window.zavrietInfo()">Zatvoriť</button>
   </div></div>
   </div>
