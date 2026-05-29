@@ -1,10 +1,11 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Zväčšený favicon v hornej lište pomocou responzívneho `clamp(30px, 8vw, 38px)`
-- ✅ Optimalizované vertikálne zarovnanie všetkých prvkov v headeri
-- ✅ Odstránené fixné obmedzenia výšky loga
-- ✅ Aktualizácia Service Workera na v57
+- ✅ Favicon v hornej lište vypĺňa 100% vertikálnej výšky
+- ✅ Odstránený vertikálny padding headera pre "edge-to-edge" efekt loga
+- ✅ Implementovaný flexibilný kontajner pre logo so zarovnaním vľavo
+- ✅ Fixná výška headera (45px) pre konzistentný mobilný zážitok
+- ✅ Aktualizácia Service Workera na v59
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -12,7 +13,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie-test5.git
 git add .
-git commit -m "Update v57: Enlarged responsive favicon in header"
+git commit -m "Update v59: Full-height header logo implementation"
 git push origin main --force
 ```
 

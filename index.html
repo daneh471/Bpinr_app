@@ -68,14 +68,21 @@
       max-width: 30rem;
       z-index: 1000;
       background-color: var(--header); 
-      padding: calc(10px + env(safe-area-inset-top)) 15px 10px 15px; 
+      padding: 0 10px; 
+      height: 45px;
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center; 
       box-shadow: 0 0.125rem 0.3125rem rgba(0,0,0,0.1); 
       box-sizing: border-box;
     }
-    .header-logo { height: clamp(30px, 8vw, 38px); width: auto; justify-self: start; pointer-events: none; }
+    .header-logo-container {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .header-logo { height: 100%; max-height: 45px; width: auto; object-fit: contain; pointer-events: none; }
     .header-title { 
       justify-self: center;
       font-weight: 800; 
@@ -182,15 +189,15 @@
     #archiv { display: block; width: 100%; overflow-x: hidden; padding: 0; box-sizing: border-box; }
     .archive-month-group { margin-bottom: 0.8rem; width: 100%; }
     .archive-month-header { 
-      background-color: var(--header); 
-      padding: 12px 14px; 
+      background-color: #2a2a2a; /* Mierne svetlejšie ako pozadie modalu */
+      padding: 10px 15px; 
       border-radius: 0.8rem; 
       cursor: pointer; 
       font-weight: 700; 
       display: flex; 
       justify-content: space-between; 
       align-items: center;
-      border: 1px solid rgba(128,128,128,0.2);
+      border: 1px solid rgba(255,255,255,0.1);
       color: var(--text);
       font-size: 0.95rem;
       transition: background-color 0.2s;
@@ -199,6 +206,8 @@
     .archive-month-content { display: none; padding-top: 0.3rem; }
     .archive-month-group.open .archive-month-content { display: block; }
     .archive-month-group.open .archive-month-header { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom: none; }
+    .archive-month-header::after { content: '▶'; font-size: 0.7rem; transition: transform 0.2s; }
+    .archive-month-group.open .archive-month-header::after { content: '▼'; transform: rotate(0deg); }
 
     .record-list { display: flex; flex-direction: column; width: 100%; border: 1px solid rgba(128,128,128,0.1); border-bottom-left-radius: 0.8rem; border-bottom-right-radius: 0.8rem; overflow: hidden; }
     .archive-header { 
@@ -345,7 +354,9 @@
     </div>
   </div>
   <header style="display:none;">
-    <img src="favicon.png" class="header-logo" alt="Logo">
+    <div class="header-logo-container">
+      <img src="favicon.png" class="header-logo" alt="Logo">
+    </div>
     <span class="header-title">Zdravie+</span>
     <button onclick="window.toggleDropdown()">☰ Menu</button>
     <div id="dropdown" class="dropdown-content">
@@ -405,7 +416,7 @@
     <p><strong>SYS:</strong> Nízky: < 90, Normálny: 90–140, Vysoký: > 140</p>
     <p><strong>DIA:</strong> Nízky: < 60, Normálny: 60–90, Vysoký: > 90</p>
     <p><strong>PULZ:</strong> Nízky: < 60, Normálny: 60–100, Vysoký: > 100</p>
-    <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem;">Verzia aplikácie: v57</p>
+    <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem;">Verzia aplikácie: v59</p>
     <button class="main" onclick="window.zavrietInfo()">Zatvoriť</button>
   </div></div>
   </div>
