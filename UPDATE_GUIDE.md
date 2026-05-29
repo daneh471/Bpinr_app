@@ -1,10 +1,10 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Úplné odstránenie HTML tabuľky v archíve
-- ✅ Nový responzívny kartičkový dizajn (Card Layout) pre záznamy
-- ✅ Zákaz horizontálneho skrolovania v celom archíve
-- ✅ Aktualizácia Service Workera na v40
+- ✅ Ultra-kompaktný riadkový dizajn archívu (všetko vedľa seba)
+- ✅ Dynamický CSS Grid pre plynulé prispôsobenie šírke displeja
+- ✅ Optimalizované písmo a minimálne paddingy pre malé smartfóny
+- ✅ Aktualizácia Service Workera na v41
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -12,7 +12,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie-test5.git
 git add .
-git commit -m "Update v40: Replace table with responsive card layout in archive"
+git commit -m "Update v41: Compact row-based archive layout"
 git push origin main --force
 ```
 
