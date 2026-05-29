@@ -1,10 +1,9 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Sýta oranžová farba (#ff6600) pre nízke hodnoty pre lepšiu viditeľnosť
-- ✅ Najnovšie pridané záznamy sa zobrazujú na začiatku zoznamu (unshift logika)
-- ✅ Optimalizované radenie v archíve od najnovšieho po najstaršie
-- ✅ Aktualizácia Service Workera na v48
+- ✅ Použitá vibrantná oranžová (#FF8800) pre nízke hodnoty (vysoký kontrast)
+- ✅ Zlepšená čitateľnosť textu v bunkách s varovaním
+- ✅ Aktualizácia Service Workera na v49
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -12,7 +11,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie-test5.git
 git add .
-git commit -m "Update v48: Saturated orange and newest records on top"
+git commit -m "Update v49: Vibrant orange for low values and UI polish"
 git push origin main --force
 ```
 
