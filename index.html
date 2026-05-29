@@ -206,12 +206,8 @@
     .archive-month-content { display: none; padding-top: 0.3rem; }
     .archive-month-group.open .archive-month-content { display: block; }
     .archive-month-group.open .archive-month-header { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom: none; }
-    .archive-month-header::after { content: '▶'; font-size: 0.7rem; transition: transform 0.2s; }
-    .archive-month-group.open .archive-month-header::after { content: '▼'; transform: rotate(0deg); }
-    
-    .archive-section-title { font-size: 0.85rem; text-transform: uppercase; opacity: 0.6; margin: 1.5rem 0 0.5rem 0.5rem; text-align: left; font-weight: 700; letter-spacing: 0.05rem; }
 
-    .record-list { display: flex; flex-direction: column; width: 100%; border: 1px solid rgba(128,128,128,0.1); border-bottom-left-radius: 0.8rem; border-bottom-right-radius: 0.8rem; overflow: hidden; }
+    .record-list { display: flex; flex-direction: column; width: 100%; border: 1px solid rgba(128,128,128,0.1); border-radius: 0.8rem; overflow: hidden; margin-top: 0.5rem; padding-bottom: 2rem;}
     .archive-header { 
       display: grid; 
       grid-template-columns: 24% 12% 12% 12% 12% 12% 16%; 
@@ -363,7 +359,6 @@
     <button onclick="window.toggleDropdown()">☰ Menu</button>
     <div id="dropdown" class="dropdown-content">
       <button onclick="window.zobrazArchiv(); window.toggleDropdown();">📄 Zobraziť archív</button>
-      <button onclick="window.zobrazArchiv(); window.toggleDropdown();">📅 Mesačný archív</button>
       <button onclick="window.otvoritModal(); window.toggleDropdown();">➕ Pridať záznam manuálne</button>
       <button onclick="window.otvoritInfo(); window.toggleDropdown();">ℹ️ Zobraziť informácie</button>
       <button onclick="window.logout(); window.toggleDropdown();">🚪 Odhlásiť sa</button>
@@ -385,12 +380,12 @@
   <div id="manualModal" class="modal"><div class="modal-content">
     <h3>Manuálne pridanie záznamu</h3>
     <div class="modal-form-grid">
-      <input type="text" id="manualDatum" placeholder="Dátum (dd.mm.rr)" onfocus="window.setFocused(this)">
-      <input type="tel" id="manualInr" placeholder="INR" pattern="[0-9./]*" inputmode="decimal" onfocus="window.setFocused(this)">
-      <input type="tel" id="manualTab" placeholder="TAB" pattern="[0-9./]*" inputmode="decimal" onfocus="window.setFocused(this)">
-      <input type="tel" id="manualSys" placeholder="SYS" pattern="[0-9./]*" inputmode="decimal" onfocus="window.setFocused(this)">
-      <input type="tel" id="manualDia" placeholder="DIA" pattern="[0-9./]*" inputmode="decimal" onfocus="window.setFocused(this)">
-      <input type="tel" id="manualPulse" placeholder="PULZ" pattern="[0-9./]*" inputmode="decimal" onfocus="window.setFocused(this)">
+      <input type="text" id="manualDatum" placeholder="Dátum (dd.mm.rr)" onfocus="window.setFocused(this)" inputmode="none">
+      <input type="tel" id="manualInr" placeholder="INR" pattern="[0-9./]*" inputmode="none" onfocus="window.setFocused(this)">
+      <input type="tel" id="manualTab" placeholder="TAB" pattern="[0-9./]*" inputmode="none" onfocus="window.setFocused(this)">
+      <input type="tel" id="manualSys" placeholder="SYS" pattern="[0-9./]*" inputmode="none" onfocus="window.setFocused(this)">
+      <input type="tel" id="manualDia" placeholder="DIA" pattern="[0-9./]*" inputmode="none" onfocus="window.setFocused(this)">
+      <input type="tel" id="manualPulse" placeholder="PULZ" pattern="[0-9./]*" inputmode="none" onfocus="window.setFocused(this)">
       
       <div class="numeric-keypad">
         <button onclick="window.keypadInput('1')">1</button>
@@ -418,7 +413,7 @@
     <p><strong>SYS:</strong> Nízky: < 90, Normálny: 90–140, Vysoký: > 140</p>
     <p><strong>DIA:</strong> Nízky: < 60, Normálny: 60–90, Vysoký: > 90</p>
     <p><strong>PULZ:</strong> Nízky: < 60, Normálny: 60–100, Vysoký: > 100</p>
-    <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem;">Verzia aplikácie: v60</p>
+    <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem;">Verzia aplikácie: v61</p>
     <button class="main" onclick="window.zavrietInfo()">Zatvoriť</button>
   </div></div>
   </div>
@@ -645,6 +640,9 @@
       querySnapshot.forEach((doc) => {
         window.zaznamy.unshift({ id: doc.id, ...doc.data() });
       });
+      // Zabezpečí, že záznamy sú vždy zoradené od najnovšieho po najstarší
+      window.zaznamy.sort((a, b) => new Date(window.parseDateString(b.datum)) - new Date(window.parseDateString(a.datum)));
+
       // Ak je archív otvorený, po načítaní ho prekresli
       if (document.getElementById('archiv').style.display === 'block') {
         window.zobrazArchiv();

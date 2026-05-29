@@ -1,11 +1,11 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Rozdelenie archívu na "Aktuálny mesiac" a "Mesačný archív" (minulosť)
-- ✅ Aktuálny mesiac sa zobrazuje ako priamy zoznam pre okamžitý prehľad
-- ✅ Staršie záznamy sa automaticky zoskupujú do rozbaľovacích priečinkov
-- ✅ Logika automatického presunu záznamov pri zmene kalendárneho mesiaca
-- ✅ Aktualizácia Service Workera na v60
+- ✅ Odstránenie funkcie "Mesačný archív" a jej rozbaľovacích priečinkov
+- ✅ Návrat k jednému súvislému zoznamu záznamov v archíve (najnovšie hore)
+- ✅ Odstránenie položky "Mesačný archív" z dropdown menu
+- ✅ Pridanie `inputmode="none"` na vstupné polia v modale "Pridať manuálne" pre vynútenie vlastnej klávesnice
+- ✅ Aktualizácia Service Workera na v61
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -13,7 +13,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie-test5.git
 git add .
-git commit -m "Update v60: Dynamic archive split (Current vs Past)"
+git commit -m "Update v61: Revert monthly archive, disable system keyboard"
 git push origin main --force
 ```
 
