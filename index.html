@@ -115,7 +115,7 @@
     .dropdown-content button:last-child { border-bottom: none; }
     .dropdown-content button:hover { background-color: rgba(0,0,0,0.1); }
 
-    .form-container, #archiv { 
+    .form-container, .modal-form-grid { 
       margin: 0 auto; 
       width: 100%; 
       padding: 0; 
@@ -123,6 +123,11 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 0.8rem; 
     }
+    
+    #archiv {
+      width: 100%;
+    }
+
     input { 
       min-width: 0; 
       padding: 0.8rem; 
@@ -134,7 +139,7 @@
       appearance: none;
       width: 100%;
     }
-    button.main { grid-column: span 2; background-color: #4CAF50; color: white; border: none; padding: 1rem; width: 100%; cursor: pointer; margin: 0.6rem 0; font-size: 1.1rem; border-radius: 0.8rem; font-weight: bold; box-shadow: 0 0.25rem 0.375rem rgba(0,0,0,0.1); min-height: 3.5rem; }
+    button.main { grid-column: span 2; background-color: #4CAF50; color: white; border: none; padding: 1rem; width: 100%; cursor: pointer; margin: 0.3rem 0; font-size: 1.1rem; border-radius: 0.8rem; font-weight: bold; box-shadow: 0 0.25rem 0.375rem rgba(0,0,0,0.1); min-height: 3.5rem; }
     button.main:hover { background-color: #45a049; } /* Keep px for hover effect */
     button.secondary { background-color: #2196F3; color: white; border: none; padding: 0.75rem 1.25rem; min-width: 8.75rem; cursor: pointer; font-size: 1rem; border-radius: 0.75rem; min-height: 3rem; }
     button.secondary:hover { background-color: #0b7dda; } /* Keep px for hover effect */
@@ -179,9 +184,9 @@
       box-shadow: 0 1.5rem 3rem rgba(0,0,0,0.5); 
     }
     .modal-content h3 { margin-bottom: 1rem; font-size: 1.2rem; flex-shrink: 0; }
-    .modal-content p { margin-bottom: 0.5rem; line-height: 1.3; flex-shrink: 1; }
-    .modal-content input { width: 100%; margin: 0.3rem 0; flex-shrink: 1; min-height: 2.5rem; }
-    .modal-content button { width: 100%; margin: 0.3rem 0; flex-shrink: 0; }
+    .modal-content p { margin-bottom: 0.5rem; line-height: 1.3; flex-shrink: 1; width: 100%; }
+    .modal-content input { flex-shrink: 1; min-height: 2.5rem; }
+    .modal-content button { flex-shrink: 0; }
 
     /* Kompaktný režim pre malé displeje (iPhone SE a pod.) */
     @media (max-height: 670px) {
@@ -266,13 +271,15 @@
   </div>
   <div id="manualModal" class="modal"><div class="modal-content">
     <h3>Manuálne pridanie záznamu</h3>
-    <input type="text" id="manualDatum" placeholder="Dátum (dd.mm.rrrr)">
-    <input type="tel" id="manualInr" placeholder="INR" pattern="[0-9./]*" inputmode="decimal">
-    <input type="tel" id="manualTab" placeholder="TAB" pattern="[0-9./]*" inputmode="decimal">
-    <input type="tel" id="manualSys" placeholder="SYS" pattern="[0-9./]*" inputmode="decimal">
-    <input type="tel" id="manualDia" placeholder="DIA" pattern="[0-9./]*" inputmode="decimal">
-    <input type="tel" id="manualPulse" placeholder="PULZ" pattern="[0-9./]*" inputmode="decimal">
-    <button class="main" onclick="window.ulozitManual(); return false;">Uložiť záznam</button>
+    <div class="modal-form-grid">
+      <input type="text" id="manualDatum" placeholder="Dátum (dd.mm.rrrr)">
+      <input type="tel" id="manualInr" placeholder="INR" pattern="[0-9./]*" inputmode="decimal">
+      <input type="tel" id="manualTab" placeholder="TAB" pattern="[0-9./]*" inputmode="decimal">
+      <input type="tel" id="manualSys" placeholder="SYS" pattern="[0-9./]*" inputmode="decimal">
+      <input type="tel" id="manualDia" placeholder="DIA" pattern="[0-9./]*" inputmode="decimal">
+      <input type="tel" id="manualPulse" placeholder="PULZ" pattern="[0-9./]*" inputmode="decimal">
+      <button class="main" onclick="window.ulozitManual(); return false;">Uložiť záznam</button>
+    </div>
     <button class="main" onclick="window.zavrietModal()">Zatvoriť</button>
   </div></div>
   <div id="infoModal" class="modal"><div class="modal-content">
@@ -282,7 +289,7 @@
     <p><strong>SYS:</strong> Nízky: < 90, Normálny: 90–140, Vysoký: > 140</p>
     <p><strong>DIA:</strong> Nízky: < 60, Normálny: 60–90, Vysoký: > 90</p>
     <p><strong>PULZ:</strong> Nízky: < 60, Normálny: 60–100, Vysoký: > 100</p>
-    <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem;">Verzia aplikácie: v38</p>
+    <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem;">Verzia aplikácie: v39</p>
     <button class="main" onclick="window.zavrietInfo()">Zatvoriť</button>
   </div></div>
   </div>
