@@ -1,10 +1,11 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Ultra-kompaktný riadkový dizajn archívu (všetko vedľa seba)
-- ✅ Dynamický CSS Grid pre plynulé prispôsobenie šírke displeja
-- ✅ Optimalizované písmo a minimálne paddingy pre malé smartfóny
-- ✅ Aktualizácia Service Workera na v41
+- ✅ Plná viditeľnosť všetkých 7 stĺpcov vedľa seba (bez skrolovania)
+- ✅ Rozdelenie SYS a DIA na samostatné bunky s farebným kódovaním
+- ✅ Miniaturizácia písma (0.72rem) a paddingov (2px) pre max. efektivitu
+- ✅ Kompaktná ikona košíka 🗑️ pre mazanie záznamov
+- ✅ Aktualizácia Service Workera na v42
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -12,7 +13,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie-test5.git
 git add .
-git commit -m "Update v41: Compact row-based archive layout"
+git commit -m "Update v42: 7-column compact archive layout with trash icon"
 git push origin main --force
 ```
 
