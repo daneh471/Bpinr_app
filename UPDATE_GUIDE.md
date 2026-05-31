@@ -3,8 +3,9 @@
 ## Zmeny v tejto verzii:
 - ✅ Responzívne prihlasovacie a registračné okno bez nutnosti skrolovania
 - ✅ Optimalizácia informačného modálu pre všetky veľkosti mobilov
-- ✅ Úprava zobrazenia verzie na v84
-- ✅ Aktualizácia Service Workera na v84
+- ✅ Oprava pretekania textu "Registrácia" v modrom tlačidle
+- ✅ Úprava zobrazenia verzie na v85
+- ✅ Aktualizácia Service Workera na v85
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -12,7 +13,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v84: Fixed responsiveness for auth and info modals"
+git commit -m "Update v85: Fixed button text overflow in auth screen"
 git push origin main --force
 ```
 
