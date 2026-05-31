@@ -1,11 +1,11 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Optimalizácia kontrastu farieb pre Dark Mode
-- ✅ Overenie čitateľnosti hodnôt v tmavom režime
-- ✅ Vylepšené vizuálne odlíšenie stavov (nízky/normálny/vysoký)
-- ✅ Pridané zobrazenie verzie vľavo dole (v81)
-- ✅ Aktualizácia Service Workera na v81
+- ✅ Zmena farby pre nízke hodnoty na modrú (namiesto žltej)
+- ✅ Oprava zobrazovania zelenej farby pre normálny pulz v archíve
+- ✅ Zjednotená farebná logika pre všetky metriky (INR, SYS, DIA, PULZ)
+- ✅ Pridané zobrazenie verzie vľavo dole (v82)
+- ✅ Aktualizácia Service Workera na v82
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -13,7 +13,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v81: Dark mode color visibility check"
+git commit -m "Update v82: Low values blue color and pulse fix"
 git push origin main --force
 ```
 

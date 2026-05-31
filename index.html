@@ -197,7 +197,7 @@
     </div></div>
 
     <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; z-index: 1000;"></div>
-    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v81</div>
+    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v82</div>
   </div>
 
   <script type="module">
@@ -322,7 +322,7 @@
       else if (type === 'dia') { low = 60; high = 90; }
       else if (type === 'pulse') { low = 60; high = 100; }
       else return '';
-      if (val < low) return 'background:#ffea00;color:#000;font-weight:bold;';
+      if (val < low) return 'background:#2196F3;color:#fff;font-weight:bold;';
       if (val > high) return 'background:#ff1744;color:#fff;font-weight:bold;';
       return 'background:#00e676;color:#000;font-weight:bold;';
     };
@@ -343,7 +343,7 @@
           <div>${r.tab||'-'}</div>
           <div style="${window.getColorStyle(r.sys,'sys')}">${r.sys||'-'}</div>
           <div style="${window.getColorStyle(r.dia,'dia')}">${r.dia||'-'}</div>
-          <div>${r.pulse||'-'}</div>
+          <div style="${window.getColorStyle(r.pulse,'pulse')}">${r.pulse||'-'}</div>
           <div onclick="window.vymazatZaznam('${r.id}')">🗑️</div>
         </div>`;
       });
@@ -401,7 +401,7 @@
     window.showUpdateUI = () => {
       const dialog = document.getElementById('customDialog');
       document.getElementById('dialogTitle').innerText = 'Nová verzia';
-      document.getElementById('dialogMessage').innerText = 'Aktualizácia (v81) je pripravená. Kliknite na OK pre načítanie.';
+      document.getElementById('dialogMessage').innerText = 'Aktualizácia (v82) je pripravená. Kliknite na OK pre načítanie.';
       document.getElementById('dialogCancelBtn').style.display = 'none';
       document.getElementById('dialogOkBtn').onclick = () => window.location.reload(true);
       dialog.style.display = 'flex';
