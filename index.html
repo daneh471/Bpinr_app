@@ -188,13 +188,16 @@
     </div></div>
 
     <div id="customDialog" class="modal"><div class="modal-content">
-      <h3 id="dialogTitle">Upozornenie</h3>
+      <h3 id="dialogTitle">Zdravie+</h3>
       <p id="dialogMessage"></p>
-      <button id="dialogOkBtn" class="main">OK</button>
+      <div style="display: flex; gap: 0.5rem; width: 100%;">
+        <button id="dialogCancelBtn" class="main" style="background-color: #777; display: none;">Zrušiť</button>
+        <button id="dialogOkBtn" class="main">OK</button>
+      </div>
     </div></div>
 
     <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; z-index: 1000;"></div>
-    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v78</div>
+    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v79</div>
   </div>
 
   <script type="module">
@@ -215,6 +218,27 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    // Vlastné funkcie pre dialógy namiesto systémových
+    window.showAlert = (msg) => {
+      const dialog = document.getElementById('customDialog');
+      document.getElementById('dialogMessage').innerText = msg;
+      document.getElementById('dialogCancelBtn').style.display = 'none';
+      document.getElementById('dialogOkBtn').onclick = () => dialog.style.display = 'none';
+      dialog.style.display = 'flex';
+    };
+
+    window.showConfirm = (msg, onOk) => {
+      const dialog = document.getElementById('customDialog');
+      document.getElementById('dialogMessage').innerText = msg;
+      document.getElementById('dialogCancelBtn').style.display = 'block';
+      document.getElementById('dialogCancelBtn').onclick = () => dialog.style.display = 'none';
+      document.getElementById('dialogOkBtn').onclick = () => {
+        dialog.style.display = 'none';
+        onOk();
+      };
+      dialog.style.display = 'flex';
+    };
+
     window.showLogin = () => { document.getElementById('loginForm').style.display = 'block'; document.getElementById('registerForm').style.display = 'none'; };
     window.showRegister = () => { document.getElementById('loginForm').style.display = 'none'; document.getElementById('registerForm').style.display = 'block'; };
 
@@ -223,13 +247,13 @@
       const pin = document.getElementById('regPin').value;
       const confirmPin = document.getElementById('regPinConfirm').value;
 
-      if (!name || pin.length < 4) return alert('Meno a PIN (min 4 číslice)!');
-      if (pin !== confirmPin) return alert('PIN sa nezhodujú!');
+      if (!name || pin.length < 4) return window.showAlert('Meno a PIN (min 4 číslice)!');
+      if (pin !== confirmPin) return window.showAlert('PIN sa nezhodujú!');
       try {
         const email = `${name}${Date.now()}@zdravie.local`;
         const res = await createUserWithEmailAndPassword(auth, email, pin);
         await addDoc(collection(db, 'users'), { uid: res.user.uid, name: name, email: email });
-        alert('Účet vytvorený!');
+        window.showAlert('Účet úspešne vytvorený!');
       } catch (e) { alert(e.message); }
     };
 
@@ -239,9 +263,9 @@
       try {
         const q = query(collection(db, 'users'), where('name', '==', name));
         const snap = await getDocs(q);
-        if (snap.empty) return alert('Užívateľ nenájdený');
+        if (snap.empty) return window.showAlert('Užívateľ s týmto menom neexistuje.');
         await signInWithEmailAndPassword(auth, snap.docs[0].data().email, pin);
-      } catch (e) { alert('Nesprávny PIN'); }
+      } catch (e) { window.showAlert('Nesprávny PIN kód.'); }
     };
 
     onAuthStateChanged(auth, (user) => {
@@ -298,9 +322,9 @@
       else if (type === 'dia') { low = 60; high = 90; }
       else if (type === 'pulse') { low = 60; high = 100; }
       else return '';
-      if (val < low) return 'background:#f80;color:#000;font-weight:bold;';
-      if (val > high) return 'background:#f33;color:#000;font-weight:bold;';
-      return 'background:#3c3;color:#000;';
+      if (val < low) return 'background:#fff59d;color:#000;';
+      if (val > high) return 'background:#ef5350;color:#fff;font-weight:bold;';
+      return 'background:#a5d6a7;color:#000;';
     };
 
     window.zobrazArchiv = function() {
@@ -325,11 +349,20 @@
       });
     };
 
-    window.vymazatZaznam = async (id) => { if (confirm('Vymazať?')) { await deleteDoc(doc(db, 'zaznamy', id)); window.loadRecords(); window.zobrazArchiv(); }};
+    window.vymazatZaznam = (id) => {
+      window.showConfirm('Naozaj chcete vymazať tento záznam?', async () => {
+        await deleteDoc(doc(db, 'zaznamy', id));
+        window.loadRecords();
+        window.zobrazArchiv();
+      });
+    };
 
     window.formatDatum = () => { const d = new Date(); return `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getFullYear()).slice(-2)}`; };
     window.skrytArchiv = () => { document.getElementById('archiv').style.display = 'none'; document.getElementById('formular').style.display = 'block'; };
-    window.logout = () => signOut(auth);
+    
+    window.logout = () => {
+      window.showConfirm('Ste si istý, že sa chcete odhlásiť?', () => signOut(auth));
+    };
 
     window.toggleDropdown = () => { const d = document.getElementById('dropdown'); d.style.display = (d.style.display === 'flex') ? 'none' : 'flex'; };
     window.otvoritModal = () => document.getElementById('manualModal').style.display = 'flex';
@@ -367,8 +400,9 @@
 
     window.showUpdateUI = () => {
       const dialog = document.getElementById('customDialog');
-      document.getElementById('dialogTitle').innerText = 'Aktualizácia';
-      document.getElementById('dialogMessage').innerText = 'Nová verzia (v78) je k dispozícii. Kliknite na OK pre načítanie.';
+      document.getElementById('dialogTitle').innerText = 'Nová verzia';
+      document.getElementById('dialogMessage').innerText = 'Aktualizácia (v79) je pripravená. Kliknite na OK pre načítanie.';
+      document.getElementById('dialogCancelBtn').style.display = 'none';
       document.getElementById('dialogOkBtn').onclick = () => window.location.reload(true);
       dialog.style.display = 'flex';
     };

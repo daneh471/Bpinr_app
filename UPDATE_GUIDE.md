@@ -1,12 +1,12 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Návrat k Firebase (Auth & Cloud Firestore)
-- ✅ Cloudová synchronizácia dát medzi zariadeniami
-- ✅ Oprava radenia záznamov v archíve
-- ✅ Rozšírené informácie o TAB, INR, SYS, DIA a PULZ
-- ✅ Pridané zobrazenie verzie vľavo dole (v78)
-- ✅ Aktualizácia Service Workera na v78
+- ✅ Odstránenie systémových alert/confirm okien
+- ✅ Implementované vlastné dizajnové dialógy
+- ✅ Potvrdenie odhlásenia používateľa
+- ✅ Nové farebné rozlíšenie (žltá, zelená, červená)
+- ✅ Pridané zobrazenie verzie vľavo dole (v79)
+- ✅ Aktualizácia Service Workera na v79
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -14,7 +14,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v78: Added version display"
+git commit -m "Update v79: Custom dialogs and color updates"
 git push origin main --force
 ```
 
