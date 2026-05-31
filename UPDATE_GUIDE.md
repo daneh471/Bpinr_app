@@ -4,16 +4,16 @@
 - ✅ Pridaná nová sekcia "Rady" (SK / DE) s tipmi na stravu pri tlaku
 - ✅ Optimalizácia scrollovania v modálnych oknách pre malé mobily
 - ✅ Automatické vymazanie polí v manuálnom zázname po uložení
-- ✅ Úprava zobrazenia verzie na v1.9
-- ✅ Aktualizácia Service Workera na v1.9
+- ✅ Úprava zobrazenia verzie na v2.0
+- ✅ Aktualizácia Service Workera na v2.0
 
 ## POSTUP - Skopíruj do Git Bash:
 
 ```bash
-cd "c:\Users\doros\Desktop\Nový priečinok"
+cd "c:\Users\doros\Desktop\zdravieplus"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.9: Added Health Tips section and scrollable modals"
+git commit -m "Update v2.0: Correct versioning and path synchronization"
 git push origin main --force
 ```
 
