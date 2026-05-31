@@ -5,7 +5,7 @@
 - ✅ Implementovaná funkcia "Vrátiť späť" (Undo) po vymazaní záznamu
 - ✅ Pridaná validácia prázdnych polí pred uložením
 - ✅ Zjednotená logika spracovania desatinných miest (. aj ,)
-- ✅ Aktualizácia Service Workera na v70
+- ✅ Aktualizácia Service Workera na v71
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -13,7 +13,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v70: Forced PWA update logic"
+git commit -m "Update v71: Vercel auto-deploy and PWA sync"
 git push origin main --force
 ```
 
@@ -26,4 +26,4 @@ git push origin main --force
 ## ✅ Hotovo!
 
 GitHub Pages: https://daneh471.github.io/Zdravie_plus/
-Vercel: (tvoja-url).vercel.app
+Vercel: https://zdravieplus123.vercel.app/
