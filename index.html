@@ -146,6 +146,7 @@
         <button onclick="window.zobrazArchiv(); window.toggleDropdown();">📄 Archív</button>
         <button onclick="window.otvoritModal(); window.toggleDropdown();">➕ Manuálny záznam</button>
         <button onclick="window.otvoritInfo(); window.toggleDropdown();">ℹ️ Informácie</button>
+        <button onclick="window.otvoritRady(); window.toggleDropdown();" id="menu_rady">💡 Rady</button>
         <button onclick="window.otvoritNastavenia(); window.toggleDropdown();">⚙️ Nastavenia</button>
         <button onclick="window.logout(); window.toggleDropdown();">🚪 Odhlásiť sa</button>
       </div>
@@ -205,13 +206,20 @@
     </div></div>
 
     <div id="infoModal" class="modal"><div class="modal-content">
-      <h3>Informácie o hodnotách</h3>
-      <p><strong>TAB:</strong> Tabletka (počet tabletiek)</p>
-      <p><strong>INR:</strong> &lt;2 Nízky | 2–3 Normálny | &gt;3 Vysoký</p>
-      <p><strong>SYS:</strong> &lt;90 Nízky | 90–140 Normálny | &gt;140 Vysoký</p>
-      <p><strong>DIA:</strong> &lt;60 Nízky | 60–90 Normálny | &gt;90 Vysoký</p>
-      <p><strong>PULZ:</strong> &lt;60 Nízky | 60–100 Normálny | &gt;100 Vysoký</p>
+      <h3 id="info_title">Informácie o hodnotách</h3>
+      <p><strong>TAB:</strong> <span id="info_tab_desc">Tabletka (počet tabletiek)</span></p>
+      <p><strong>INR:</strong> &lt;2 <span class="t-low">Nízky</span> | 2–3 <span class="t-norm">Normálny</span> | &gt;3 <span class="t-high">Vysoký</span></p>
+      <p><strong>SYS:</strong> &lt;90 <span class="t-low">Nízky</span> | 90–140 <span class="t-norm">Normálny</span> | &gt;140 <span class="t-high">Vysoký</span></p>
+      <p><strong>DIA:</strong> &lt;60 <span class="t-low">Nízky</span> | 60–90 <span class="t-norm">Normálny</span> | &gt;90 <span class="t-high">Vysoký</span></p>
+      <p><strong>PULZ:</strong> &lt;60 <span class="t-low">Nízky</span> | 60–100 <span class="t-norm">Normálny</span> | &gt;100 <span class="t-high">Vysoký</span></p>
       <button class="main" onclick="window.zavrietInfo()">Zatvoriť</button>
+    </div></div>
+
+    <div id="radyModal" class="modal"><div class="modal-content" style="max-height: 85dvh; overflow-y: auto; display: block;">
+      <h3 id="rady_title" style="text-align: center;">Rady</h3>
+      <div id="rady_content" style="font-size: 0.9rem; line-height: 1.4; text-align: left;">
+      </div>
+      <button class="main" id="rady_close" onclick="window.zavrietRady()" style="margin-top: 1rem;">Zatvoriť</button>
     </div></div>
 
     <div id="customDialog" class="modal"><div class="modal-content">
@@ -224,7 +232,7 @@
     </div></div>
 
     <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; z-index: 1000;"></div>
-    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.7</div>
+    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.9</div>
   </div>
 
   <script type="module">
@@ -249,18 +257,36 @@
       sk: {
         login: "Prihlásiť sa", register: "Registrácia", titleLogin: "Prihlásenie", titleReg: "Nový účet", namePh: "Tvoje meno", pinPh: "PIN (4-6 číslic)", 
         pinConfPh: "Zopakuj PIN", createBtn: "Vytvoriť účet", menuArchive: "📄 Archív", menuManual: "➕ Manuálny záznam", menuInfo: "ℹ️ Informácie", 
-        menuSettings: "⚙️ Nastavenia", menuLogout: "🚪 Odhlásiť sa", addBtn: "Pridať záznam", backBtn: "Späť na formulár", saveBtn: "Uložiť", 
+        menuRady: "💡 Rady", menuSettings: "⚙️ Nastavenia", menuLogout: "🚪 Odhlásiť sa", addBtn: "Pridať záznam", backBtn: "Späť na formulár", saveBtn: "Uložiť", 
         closeBtn: "Zatvoriť", titleArchive: "Archív záznamov", titleManual: "Manuálny záznam", titleInfo: "Informácie o hodnotách", titleSettings: "Nastavenia",
-        menuLang: "Jazyk", selectLang: "Vybrať jazyk", saved: "Uložené", msgOccupied: "Meno je už obsadené.", msgUserNotFound: "Užívateľ neexistuje.", msgWrongPin: "Nesprávny PIN kód.",
-        confirmDel: "Naozaj chcete vymazať tento záznam?", confirmLogout: "Ste si istý, že sa chcete odhlásiť?", updateReady: "Aktualizácia (v1.7) je pripravená."
+        menuLang: "Jazyk", selectLang: "Vybrať jazyk", infoTab: "Tabletka (počet tabletiek)", infoLow: "Nízky", infoNorm: "Normálny", infoHigh: "Vysoký",
+        saved: "Uložené", msgOccupied: "Meno je už obsadené.", msgUserNotFound: "Užívateľ neexistuje.", msgWrongPin: "Nesprávny PIN kód.",
+        confirmDel: "Naozaj chcete vymazať tento záznam?", confirmLogout: "Ste si istý, že sa chcete odhlásiť?", updateReady: "Aktualizácia (v1.9) je pripravená.",
+        radyTitle: "Rady",
+        radyText: `<strong>📉 Nízky tlak (Hypotenzia)</strong><br>Prejav: točenie hlavy, únava.<br><br>
+        <strong>Čo vypiť:</strong><br>• Čistá voda / minerálka<br>• Káva, čierny/zelený čaj (kofeín)<br>• Rozmarínový čaj<br><br>
+        <strong>Čo zjesť:</strong><br>• Niečo slané (syr, oriešky)<br>• Sladké drievko (pendrek)<br>• Vitamín B12 (vajíčka, mäso)<br><br>
+        <strong>Rýchla pomoc:</strong> Vypite pohár vody, dajte si niečo slané a vyložte nohy hore.<br><hr>
+        <strong>📈 Vysoký tlak (Hypertenzia)</strong><br>Prejav: tlak v hlave, napätie.<br><br>
+        <strong>Čo vypiť:</strong><br>• Ibištekový čaj<br>• Cviklová / granátová šťava<br>• Voda (nízkosodíková)<br><br>
+        <strong>Čo zjesť:</strong><br>• Draslík (Banány, avokádo, zemiaky)<br>• Cesnak (surový)<br>• Tmavá čokoláda (70%+)<br>• Bobuľové ovocie`
       },
       de: {
         login: "Anmelden", register: "Registrierung", titleLogin: "Login", titleReg: "Neues Konto", namePh: "Dein Name", pinPh: "PIN (4-6 Stellen)", 
         pinConfPh: "PIN wiederholen", createBtn: "Konto erstellen", menuArchive: "📄 Archiv", menuManual: "➕ Manueller Eintrag", menuInfo: "ℹ️ Informationen", 
-        menuSettings: "⚙️ Einstellungen", menuLogout: "🚪 Abmelden", addBtn: "Eintrag hinzufügen", backBtn: "Zurück zum Formular", saveBtn: "Speichern", 
+        menuRady: "💡 Tipps", menuSettings: "⚙️ Einstellungen", menuLogout: "🚪 Abmelden", addBtn: "Eintrag hinzufügen", backBtn: "Zurück zum Formular", saveBtn: "Speichern", 
         closeBtn: "Schließen", titleArchive: "Eintragshistorie", titleManual: "Manueller Eintrag", titleInfo: "Informationen zu Werten", titleSettings: "Einstellungen",
-        menuLang: "Sprache", selectLang: "Sprache wählen", saved: "Gespeichert", msgOccupied: "Name bereits vergeben.", msgUserNotFound: "Benutzer existiert nicht.", msgWrongPin: "Falscher PIN-Code.",
-        confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?", updateReady: "Update (v1.7) ist bereit."
+        menuLang: "Sprache", selectLang: "Sprache wählen", infoTab: "Tablette (Anzahl der Tabletten)", infoLow: "Niedrig", infoNorm: "Normal", infoHigh: "Hoch",
+        saved: "Gespeichert", msgOccupied: "Name bereits vergeben.", msgUserNotFound: "Benutzer existiert nicht.", msgWrongPin: "Falscher PIN-Code.",
+        confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?", updateReady: "Update (v1.9) ist bereit.",
+        radyTitle: "Tipps",
+        radyText: `<strong>📉 Niedriger Blutdruck</strong><br>Symptome: Schwindel, Müdigkeit.<br><br>
+        <strong>Trinken:</strong><br>• Wasser / Mineralwasser<br>• Kaffee, schwarzer/grüner Tee<br>• Rosmarintee<br><br>
+        <strong>Essen:</strong><br>• Salziges (Käse, Nüsse)<br>• Lakritz<br>• Vitamin B12 (Eier, Fleisch)<br><br>
+        <strong>Schnelle Hilfe:</strong> Ein Glas Wasser trinken, etwas Salziges essen und Beine hochlagern.<br><hr>
+        <strong>📈 Hoher Blutdruck</strong><br>Symptome: Kopfdruck, Anspannung.<br><br>
+        <strong>Trinken:</strong><br>• Hibiskustee<br>• Rote Bete / Granatapfelsaft<br>• Wasser (natriumarm)<br><br>
+        <strong>Essen:</strong><br>• Kalium (Bananen, Avocado, Kartoffeln)<br>• Knoblauch (roh)<br>• Dunkle Schokolade (70%+)<br>• Beerenfrüchte`
       }
     };
 
@@ -284,8 +310,9 @@
       menuBtns[0].innerText = t.menuArchive;
       menuBtns[1].innerText = t.menuManual;
       menuBtns[2].innerText = t.menuInfo;
-      menuBtns[3].innerText = t.menuSettings;
-      menuBtns[4].innerText = t.menuLogout;
+      document.getElementById('menu_rady').innerText = t.menuRady;
+      menuBtns[4].innerText = t.menuSettings;
+      menuBtns[5].innerText = t.menuLogout;
 
       document.querySelector('#formular .main').innerText = t.addBtn;
       document.querySelector('#archiv h2').innerText = t.titleArchive;
@@ -304,6 +331,15 @@
 
       document.querySelector('#infoModal h3').innerText = t.titleInfo;
       document.querySelector('#infoModal .main').innerText = t.closeBtn;
+      document.getElementById('info_tab_desc').innerText = t.infoTab;
+
+      document.getElementById('rady_title').innerText = t.radyTitle;
+      document.getElementById('rady_content').innerHTML = t.radyText;
+      document.getElementById('rady_close').innerText = t.closeBtn;
+      
+      document.querySelectorAll('.t-low').forEach(el => el.innerText = t.infoLow);
+      document.querySelectorAll('.t-norm').forEach(el => el.innerText = t.infoNorm);
+      document.querySelectorAll('.t-high').forEach(el => el.innerText = t.infoHigh);
 
       // Placeholder-y pre hlavný formulár
       ['inr','tab','sys','dia','pulse'].forEach(id => {
@@ -323,6 +359,9 @@
     window.zavrietNastavenia = () => document.getElementById('settingsModal').style.display = 'none';
     window.otvoritJazyk = () => { document.getElementById('settingsModal').style.display = 'none'; document.getElementById('languageModal').style.display = 'flex'; };
     window.zavrietJazyk = () => { document.getElementById('languageModal').style.display = 'none'; document.getElementById('settingsModal').style.display = 'flex'; };
+
+    window.otvoritRady = () => document.getElementById('radyModal').style.display = 'flex';
+    window.zavrietRady = () => document.getElementById('radyModal').style.display = 'none';
 
     // Vlastné funkcie pre dialógy namiesto systémových
     window.showAlert = (msg) => {
