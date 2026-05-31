@@ -19,14 +19,6 @@
 
     img { max-width: 100%; height: auto; }
 
-    video {
-      width: 100%;
-      height: auto;
-      max-width: 100%;
-      object-fit: cover;
-      touch-action: none;
-    }
-
     html { background-color: var(--bg); transition: background-color 0.3s; height: 100%; width: 100%; overflow: hidden; }
 
     body { 
@@ -39,7 +31,7 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       font-size: 1rem;
-      height: 100dvh; /* Dynamic Viewport Height pre mobilné prehliadače */
+      height: 100dvh;
       width: 100%;
       overflow: hidden;
     }
@@ -55,8 +47,8 @@
       display: flex;
       flex-direction: column;
       margin: 0 auto;
-      overflow-y: auto; /* Allow scrolling within the app content */
-      align-items: center; /* Moved from body */
+      overflow-y: auto;
+      align-items: center;
     }
 
     header { 
@@ -76,248 +68,30 @@
       box-shadow: 0 0.125rem 0.3125rem rgba(0,0,0,0.1); 
       box-sizing: border-box;
     }
-    .header-logo-container {
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-    }
+    .header-logo-container { height: 100%; display: flex; align-items: center; justify-content: flex-start; }
     .header-logo { height: 100%; max-height: 45px; width: auto; object-fit: contain; pointer-events: none; }
-    .header-title { 
-      justify-self: center;
-      font-weight: 800; 
-      font-size: 1.3rem; 
-      background: linear-gradient(45deg, #FF8800, #ffb366); 
-      -webkit-background-clip: text; 
-      -webkit-text-fill-color: transparent; 
-      white-space: nowrap;
-    }
+    .header-title { justify-self: center; font-weight: 800; font-size: 1.3rem; background: linear-gradient(45deg, #FF8800, #ffb366); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
     header button { background-color: transparent; border: none; font-size: 1.2rem; cursor: pointer; padding: 0.5rem; color: var(--text); display: flex; align-items: center; min-width: 2.75rem; min-height: 2.75rem; justify-content: center; justify-self: end; }
     
-    /* Upravené Dropdown Menu pre lepšiu mobilitu */
-    .dropdown-content { 
-      display: none; 
-      position: absolute; 
-      right: 0.5rem; 
-      top: calc(3.8rem + env(safe-area-inset-top)); 
-      background-color: var(--card); 
-      width: max-content;
-      max-width: 90vw; 
-      box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.3); 
-      z-index: 1001; 
-      border-radius: 1rem; 
-      overflow: hidden; 
-      max-height: calc(100dvh - 5rem);
-      display: flex;
-      flex-direction: column;
-      padding: 0.5rem;
-      box-sizing: border-box;
-      border: 1px solid rgba(128,128,128,0.2); 
-    }
-    .dropdown-content button { 
-      display: block; 
-      width: 100%; 
-      padding: 0.625rem 0.9375rem; 
-      border: none; 
-      background: none; 
-      text-align: left; 
-      font-size: 1rem; 
-      cursor: pointer; 
-      color: var(--text); 
-      flex-shrink: 1;
-      border-bottom: 1px solid rgba(128,128,128,0.1);
-      white-space: nowrap;
-    }
+    .dropdown-content { display: none; position: absolute; right: 0.5rem; top: calc(3.8rem + env(safe-area-inset-top)); background-color: var(--card); width: max-content; max-width: 90vw; box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.3); z-index: 1001; border-radius: 1rem; overflow: hidden; max-height: calc(100dvh - 5rem); display: flex; flex-direction: column; padding: 0.5rem; box-sizing: border-box; border: 1px solid rgba(128,128,128,0.2); }
+    .dropdown-content button { display: block; width: 100%; padding: 0.625rem 0.9375rem; border: none; background: none; text-align: left; font-size: 1rem; cursor: pointer; color: var(--text); flex-shrink: 1; border-bottom: 1px solid rgba(128,128,128,0.1); white-space: nowrap; }
     .dropdown-content button:last-child { border-bottom: none; }
-    .dropdown-content button:hover { background-color: rgba(255,255,255,0.1); }
 
-    /* Nová číselná klávesnica (Keypad) v51 */
-    .numeric-keypad {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.35rem;
-      width: 100%;
-      margin-top: 0.5rem;
-      grid-column: span 2;
-    }
-    .numeric-keypad button {
-      padding: 0.6rem;
-      font-size: 1.1rem;
-      border-radius: 0.6rem;
-      background-color: var(--card);
-      color: var(--text);
-      border: 1px solid rgba(128,128,128,0.3);
-      cursor: pointer;
-      font-weight: 600;
-      min-height: 2.8rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .numeric-keypad button:active { background-color: rgba(128,128,128,0.2); }
+    .numeric-keypad { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.35rem; width: 100%; margin-top: 0.5rem; grid-column: span 2; }
+    .numeric-keypad button { padding: 0.6rem; font-size: 1.1rem; border-radius: 0.6rem; background-color: var(--card); color: var(--text); border: 1px solid rgba(128,128,128,0.3); cursor: pointer; font-weight: 600; min-height: 2.8rem; display: flex; align-items: center; justify-content: center; }
 
-    .form-container, .modal-form-grid { 
-      margin: 0 auto; 
-      width: 100%; 
-      padding: 0; 
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.8rem; 
-    }
-    
-    #archiv {
-      width: 100%;
-    }
-
-    input { 
-
-      min-width: 0; 
-      padding: 0.8rem; 
-      font-size: 1rem; 
-      background-color: var(--card); 
-      color: var(--text); 
-      border: 1px solid #ccc; 
-      border-radius: 0.8rem; 
-      appearance: none;
-      width: 100%;
-    }
+    .form-container, .modal-form-grid { margin: 0 auto; width: 100%; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
+    input { min-width: 0; padding: 0.8rem; font-size: 1rem; background-color: var(--card); color: var(--text); border: 1px solid #ccc; border-radius: 0.8rem; appearance: none; width: 100%; }
     button.main { grid-column: span 2; background-color: #4CAF50; color: white; border: none; padding: 1rem; width: 100%; cursor: pointer; margin: 0.3rem 0; font-size: 1.1rem; border-radius: 0.8rem; font-weight: bold; box-shadow: 0 0.25rem 0.375rem rgba(0,0,0,0.1); min-height: 3.5rem; }
-    button.main:hover { background-color: #45a049; } /* Keep px for hover effect */
     button.secondary { background-color: #2196F3; color: white; border: none; padding: 0.75rem 1.25rem; min-width: 8.75rem; cursor: pointer; font-size: 1rem; border-radius: 0.75rem; min-height: 3rem; }
-    button.secondary:hover { background-color: #0b7dda; } /* Keep px for hover effect */
-    button.small { background-color: #666; color: white; border: none; padding: 0.5rem 0.8rem; font-size: 0.8rem; cursor: pointer; margin-top: 0.3rem; border-radius: 0.5rem; }
-    button.small:hover { background-color: #555; } /* Keep px for hover effect */
-    
-    /* Mesačný archív a Accordion UI v55 */
-    #archiv { display: block; width: 100%; overflow-x: hidden; padding: 0; box-sizing: border-box; }
-    .archive-month-group { margin-bottom: 0.8rem; width: 100%; }
-    .archive-month-header { 
-      background-color: #2a2a2a; /* Mierne svetlejšie ako pozadie modalu */
-      padding: 10px 15px; 
-      border-radius: 0.8rem; 
-      cursor: pointer; 
-      font-weight: 700; 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center;
-      border: 1px solid rgba(255,255,255,0.1);
-      color: var(--text);
-      font-size: 0.95rem;
-      transition: background-color 0.2s;
-    }
-    .archive-month-header:active { background-color: rgba(128,128,128,0.2); }
-    .archive-month-content { display: none; padding-top: 0.3rem; }
-    .archive-month-group.open .archive-month-content { display: block; }
-    .archive-month-group.open .archive-month-header { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom: none; }
 
     .record-list { display: flex; flex-direction: column; width: 100%; border: 1px solid rgba(128,128,128,0.1); border-radius: 0.8rem; overflow: hidden; margin-top: 0.5rem; padding-bottom: 2rem;}
-    .archive-header { 
-      display: grid; 
-      grid-template-columns: 24% 12% 12% 12% 12% 12% 16%; 
-      font-weight: bold; 
-      font-size: 11px; 
-      text-transform: uppercase; 
-      background-color: var(--header);
-      border-bottom: 2px solid rgba(0,0,0,0.1); 
-      padding: 8px 2px; 
-      text-align: center;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .record-row { 
-      display: grid; 
-      grid-template-columns: 24% 12% 12% 12% 12% 12% 16%; 
-      align-items: center; 
-      background-color: var(--card); 
-      padding: 8px 2px; 
-      border-bottom: 1px solid rgba(128,128,128,0.2); 
-      width: 100%; 
-      box-sizing: border-box;
-      font-size: 11px; 
-      text-align: center;
-      gap: 0;
-    }
-    .record-list .record-row:nth-child(even) {
-      background-color: rgba(128,128,128,0.05); /* Zebra efekt */
-    }
-    .record-list .record-row:last-child { border-bottom: none; }
-    
-    .record-row > div { 
-      white-space: nowrap; 
-      overflow: hidden; 
-      text-overflow: clip; 
-    }
-    .record-row > div:first-child, .archive-header > div:first-child {
-      text-align: left;
-      padding-left: 6px;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-    .record-row > div:not(:first-child) {
-      justify-self: center;
-    }
+    .archive-header { display: grid; grid-template-columns: 24% 12% 12% 12% 12% 12% 16%; font-weight: bold; font-size: 11px; text-transform: uppercase; background-color: var(--header); border-bottom: 2px solid rgba(0,0,0,0.1); padding: 8px 2px; text-align: center; width: 100%; box-sizing: border-box; }
+    .record-row { display: grid; grid-template-columns: 24% 12% 12% 12% 12% 12% 16%; align-items: center; background-color: var(--card); padding: 8px 2px; border-bottom: 1px solid rgba(128,128,128,0.2); width: 100%; box-sizing: border-box; font-size: 11px; text-align: center; gap: 0; }
 
-    /* Optimalizácia pre mobily - uvoľnenie priestoru (v44) */
-    @media (max-width: 480px) {
-      .app-wrapper { padding-left: 0.6rem; padding-right: 0.6rem; }
-      .record-row, .archive-header { gap: 2px; padding-left: 0; padding-right: 0; }
-    }
+    .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); justify-content: center; align-items: center; padding: 1rem; }
+    .modal-content { background-color: var(--card); padding: 1.5rem; border-radius: 1.5rem; width: 90%; max-width: 400px; max-height: 96dvh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; text-align: left; }
 
-    /* Vylepšené Modálne okná */
-    .modal { 
-      display: none; 
-      position: fixed; 
-      z-index: 2000; 
-      left: 0; 
-      top: 0; 
-      width: 100%; 
-      height: 100%; 
-      background-color: rgba(0,0,0,0.6); 
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      justify-content: center; 
-      align-items: center; 
-      padding: 1rem; 
-    }
-    .modal-content { 
-      background-color: var(--card); 
-      padding: 1.5rem; 
-      border-radius: 1.5rem; 
-      width: 90%;
-      max-width: 400px;
-      max-height: 96dvh; 
-      overflow: hidden; 
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      text-align: left; 
-      font-size: clamp(11px, 3vw, 15px); 
-      color: var(--text); 
-      box-shadow: 0 1.5rem 3rem rgba(0,0,0,0.5); 
-    }
-    .modal-content h3 { margin-bottom: 0.8rem; font-size: 1.2em; flex-shrink: 0; }
-    .modal-content p { margin-bottom: 0.4rem; line-height: 1.25; flex-shrink: 1; width: 100%; }
-    .modal-content input { flex-shrink: 1; min-height: 2.5rem; }
-    .modal-content button { flex-shrink: 0; }
-
-    /* Kompaktný režim pre malé displeje (iPhone SE a pod.) */
-    @media (max-height: 670px) {
-      .modal-content { padding: 1rem; border-radius: 1.2rem; }
-      .modal-content h3 { font-size: 1.1em; margin-bottom: 0.4rem; }
-      .modal-content p { margin-bottom: 0.2rem; }
-      .modal-content input { padding: 0.6rem; font-size: 0.9rem; min-height: 2.2rem; margin: 0.2rem 0; }
-      button.main { padding: 0.8rem; font-size: 1rem; min-height: 3rem; margin: 0.2rem 0; }
-      .dropdown-content button { padding: 0.8rem 1rem; font-size: 0.9rem; }
-    }
-
-    /* Extrémne stlačenie pre veľmi nízke displeje alebo landscape */
-    @media (max-height: 500px) {
-      .modal-content { padding: 0.6rem; }
-      .modal-content h3 { display: none; } /* Schová nadpis pre úsporu miesta */
-      .modal-content input { margin: 0.1rem 0; padding: 0.4rem; }
-      button.main { min-height: 2.5rem; padding: 0.5rem; }
-    }
-    
     #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 999; }
     #splashScreen img { width: 10rem; height: 10rem; animation: pulse 1.5s infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.1); } }
@@ -325,124 +99,103 @@
 </head>
 <body>
   <div class="app-wrapper">
-  <div id="splashScreen">
-    <img src="favicon.png" alt="Zdravie+">
-  </div>
-  <div id="authScreen" class="auth-screen">
-    <div class="auth-form">
-      <h2>Zdravie+</h2>
-      <div class="tab-buttons">
-        <button class="secondary" onclick="window.showLogin()">Prihlásiť sa</button>
-        <button class="secondary" onclick="window.showRegister()">Registrácia</button>
-      </div>
-      
-      <div id="loginForm">
-        <h3>Prihlásenie</h3>
-        <input type="text" id="loginName" placeholder="Tvoje meno" style="width:80%; padding:0.8rem;">
-        <input type="password" id="loginPin" placeholder="PIN (4-6 číslic)" style="width:80%; padding:0.8rem;" maxlength="6">
-        <button class="main" onclick="window.loginUser(); return false;">Prihlásiť sa</button>
-        <p id="loginError" style="color: red; font-size: 0.9rem;"></p>
-      </div>
+    <div id="splashScreen">
+      <img src="favicon.png" alt="Zdravie+">
+    </div>
+    <div id="authScreen">
+      <div class="auth-form">
+        <h2>Zdravie+</h2>
+        <div class="tab-buttons">
+          <button class="secondary" onclick="window.showLogin()">Prihlásiť sa</button>
+          <button class="secondary" onclick="window.showRegister()">Registrácia</button>
+        </div>
+        
+        <div id="loginForm">
+          <h3>Prihlásenie</h3>
+          <input type="text" id="loginName" placeholder="Tvoje meno" style="width:80%; padding:0.8rem;">
+          <input type="password" id="loginPin" placeholder="PIN (4-6 číslic)" style="width:80%; padding:0.8rem;" maxlength="6">
+          <button class="main" onclick="window.loginUser(); return false;">Prihlásiť sa</button>
+          <p id="loginError" style="color: red; font-size: 0.9rem;"></p>
+        </div>
 
-      <div id="registerForm" style="display: none;">
-        <h3>Nový účet</h3>
-        <input type="text" id="regName" placeholder="Tvoje meno" style="width:80%; padding:0.8rem;">
-        <input type="password" id="regPin" placeholder="PIN (4-6 číslic)" style="width:80%; padding:0.8rem;" maxlength="6">
-        <input type="password" id="regPinConfirm" placeholder="Zopakuj PIN" style="width:80%; padding:0.8rem;" maxlength="6">
-        <button class="main" onclick="window.registerUser(); return false;">Vytvoriť účet</button>
-        <p id="regError" style="color: red; font-size: 0.9rem;"></p>
+        <div id="registerForm" style="display: none;">
+          <h3>Nový účet</h3>
+          <input type="text" id="regName" placeholder="Tvoje meno" style="width:80%; padding:0.8rem;">
+          <input type="password" id="regPin" placeholder="PIN (4-6 číslic)" style="width:80%; padding:0.8rem;" maxlength="6">
+          <input type="password" id="regPinConfirm" placeholder="Zopakuj PIN" style="width:80%; padding:0.8rem;" maxlength="6">
+          <button class="main" onclick="window.registerUser(); return false;">Vytvoriť účet</button>
+          <p id="regError" style="color: red; font-size: 0.9rem;"></p>
+        </div>
       </div>
     </div>
-  </div>
-  <header style="display:none;">
-    <div class="header-logo-container">
-      <img src="favicon.png" class="header-logo" alt="Logo">
-    </div>
-    <span class="header-title">Zdravie+</span>
-    <button onclick="window.toggleDropdown()">☰ Menu</button>
-    <div id="dropdown" class="dropdown-content">
-      <button onclick="window.zobrazArchiv(); window.toggleDropdown();">📄 Zobraziť archív</button>
-      <button onclick="window.otvoritModal(); window.toggleDropdown();">➕ Pridať záznam manuálne</button>
-      <button onclick="window.otvoritInfo(); window.toggleDropdown();">ℹ️ Zobraziť informácie</button>
-      <button onclick="window.logout(); window.toggleDropdown();">🚪 Odhlásiť sa</button>
-    </div>
-  </header>
-  <div class="form-container" id="formular" style="display:none;">
-    <input type="tel" id="inr" placeholder="INR" pattern="[0-9./]*" inputmode="decimal" />
-    <input type="tel" id="tab" placeholder="TAB" pattern="[0-9./]*" inputmode="decimal" />
-    <input type="tel" id="sys" placeholder="SYS" pattern="[0-9./]*" inputmode="decimal" />
-    <input type="tel" id="dia" placeholder="DIA" pattern="[0-9./]*" inputmode="decimal" />
-    <input type="tel" id="pulse" placeholder="PULZ" pattern="[0-9./]*" inputmode="decimal" />
-    <button class="main" onclick="window.pridatZaznam(); return false;">Pridať záznam</button>
-  </div>
-  <div id="archiv" style="display:none;">
-    <h2>Archív záznamov</h2>
-    <button class="main" onclick="window.skrytArchiv()">Späť na formulár</button>
-    <div id="archivList" class="record-list"></div>
-  </div>
-  <div id="manualModal" class="modal"><div class="modal-content">
-    <h3>Manuálne pridanie záznamu</h3>
-    <div class="modal-form-grid">
-      <input type="text" id="manualDatum" placeholder="Dátum (dd.mm.rr)" onfocus="window.setFocused(this)" inputmode="none">
-      <input type="tel" id="manualInr" placeholder="INR" pattern="[0-9./]*" inputmode="none" onfocus="window.setFocused(this)">
-      <input type="tel" id="manualTab" placeholder="TAB" pattern="[0-9./]*" inputmode="none" onfocus="window.setFocused(this)">
-      <input type="tel" id="manualSys" placeholder="SYS" pattern="[0-9./]*" inputmode="none" onfocus="window.setFocused(this)">
-      <input type="tel" id="manualDia" placeholder="DIA" pattern="[0-9./]*" inputmode="none" onfocus="window.setFocused(this)">
-      <input type="tel" id="manualPulse" placeholder="PULZ" pattern="[0-9./]*" inputmode="none" onfocus="window.setFocused(this)">
-      
-      <div class="numeric-keypad">
-        <button onclick="window.keypadInput('1')">1</button>
-        <button onclick="window.keypadInput('2')">2</button>
-        <button onclick="window.keypadInput('3')">3</button>
-        <button onclick="window.keypadInput('CLEAR')" style="color: #ff4444;">C</button>
-        <button onclick="window.keypadInput('4')">4</button>
-        <button onclick="window.keypadInput('5')">5</button>
-        <button onclick="window.keypadInput('6')">6</button>
-        <button onclick="window.keypadInput('DEL')" style="color: #ff8800;">⌫</button>
-        <button onclick="window.keypadInput('7')">7</button>
-        <button onclick="window.keypadInput('8')">8</button>
-        <button onclick="window.keypadInput('9')">9</button>
-        <button onclick="window.keypadInput('/')">/</button>
-        <button onclick="window.keypadInput('.')">.</button>
-        <button onclick="window.keypadInput('0')">0</button>
-        <button onclick="window.keypadInput(',')">,</button>
-        <button onclick="window.keypadInput('-')">-</button>
-      </div>
 
-      <button class="main" onclick="window.ulozitManual(); return false;">Uložiť záznam</button>
+    <header style="display:none;">
+      <div class="header-logo-container"><img src="favicon.png" class="header-logo" alt="Logo"></div>
+      <span class="header-title">Zdravie+</span>
+      <button onclick="window.toggleDropdown()">☰ Menu</button>
+      <div id="dropdown" class="dropdown-content">
+        <button onclick="window.zobrazArchiv(); window.toggleDropdown();">📄 Archív</button>
+        <button onclick="window.otvoritModal(); window.toggleDropdown();">➕ Manuálny záznam</button>
+        <button onclick="window.otvoritInfo(); window.toggleDropdown();">ℹ️ Informácie</button>
+        <button onclick="window.logout(); window.toggleDropdown();">🚪 Odhlásiť sa</button>
+      </div>
+    </header>
+
+    <div class="form-container" id="formular" style="display:none;">
+      <input type="tel" id="inr" placeholder="INR" inputmode="decimal" />
+      <input type="tel" id="tab" placeholder="TAB" inputmode="decimal" />
+      <input type="tel" id="sys" placeholder="SYS" inputmode="decimal" />
+      <input type="tel" id="dia" placeholder="DIA" inputmode="decimal" />
+      <input type="tel" id="pulse" placeholder="PULZ" inputmode="decimal" />
+      <button class="main" onclick="window.pridatZaznam()">Pridať záznam</button>
     </div>
-    <button class="main" onclick="window.zavrietModal()">Zatvoriť</button>
-  </div></div>
-  <div id="infoModal" class="modal"><div class="modal-content">
-    <h3>Informácie</h3>
-    <p><strong>TAB</strong> = Tabletka (počet tabliet)</p>
-    <p><strong>INR:</strong> Nízky: < 2, Normálny: 2–3, Vysoký: > 3</p>
-    <p><strong>SYS:</strong> Nízky: < 90, Normálny: 90–140, Vysoký: > 140</p>
-    <p><strong>DIA:</strong> Nízky: < 60, Normálny: 60–90, Vysoký: > 90</p>
-    <p><strong>PULZ:</strong> Nízky: < 60, Normálny: 60–100, Vysoký: > 100</p>
-    <p style="font-size: 0.65rem; color: #888; margin-top: 0.8rem;">Verzia aplikácie: v61</p>
-    <button class="main" onclick="window.zavrietInfo()">Zatvoriť</button>
-  </div></div>
+
+    <div id="archiv" style="display:none; width: 100%;">
+      <h2>Archív záznamov</h2>
+      <button class="main" onclick="window.skrytArchiv()">Späť na formulár</button>
+      <div id="archivList" class="record-list"></div>
+    </div>
+
+    <div id="manualModal" class="modal"><div class="modal-content">
+      <h3>Manuálny záznam</h3>
+      <div class="modal-form-grid">
+        <input type="text" id="manualDatum" placeholder="Dátum (dd.mm.rr)" onfocus="window.setFocused(this)" inputmode="none">
+        <input type="tel" id="manualInr" placeholder="INR" onfocus="window.setFocused(this)" inputmode="none">
+        <input type="tel" id="manualTab" placeholder="TAB" onfocus="window.setFocused(this)" inputmode="none">
+        <input type="tel" id="manualSys" placeholder="SYS" onfocus="window.setFocused(this)" inputmode="none">
+        <input type="tel" id="manualDia" placeholder="DIA" onfocus="window.setFocused(this)" inputmode="none">
+        <input type="tel" id="manualPulse" placeholder="PULZ" onfocus="window.setFocused(this)" inputmode="none">
+        <div class="numeric-keypad">
+          <button onclick="window.keypadInput('1')">1</button><button onclick="window.keypadInput('2')">2</button><button onclick="window.keypadInput('3')">3</button><button onclick="window.keypadInput('CLEAR')" style="color:#f44;">C</button>
+          <button onclick="window.keypadInput('4')">4</button><button onclick="window.keypadInput('5')">5</button><button onclick="window.keypadInput('6')">6</button><button onclick="window.keypadInput('DEL')" style="color:#f80;">⌫</button>
+          <button onclick="window.keypadInput('7')">7</button><button onclick="window.keypadInput('8')">8</button><button onclick="window.keypadInput('9')">9</button><button onclick="window.keypadInput('/')">/</button>
+          <button onclick="window.keypadInput('.')">.</button><button onclick="window.keypadInput('0')">0</button><button onclick="window.keypadInput(',')">,</button><button onclick="window.keypadInput('-')">-</button>
+        </div>
+        <button class="main" onclick="window.ulozitManual()">Uložiť</button>
+      </div>
+      <button class="main" onclick="window.zavrietModal()">Zatvoriť</button>
+    </div></div>
+
+    <div id="infoModal" class="modal"><div class="modal-content">
+      <h3>Informácie</h3>
+      <p><strong>INR:</strong> 2–3 | <strong>SYS:</strong> 90–140 | <strong>DIA:</strong> 60–90</p>
+      <button class="main" onclick="window.zavrietInfo()">Zatvoriť</button>
+    </div></div>
+
+    <div id="customDialog" class="modal"><div class="modal-content">
+      <h3 id="dialogTitle">Upozornenie</h3>
+      <p id="dialogMessage"></p>
+      <button id="dialogOkBtn" class="main">OK</button>
+    </div></div>
+
+    <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; z-index: 1000;"></div>
   </div>
-  <div id="deleteModal" class="modal"><div class="modal-content">
-    <h3>Vymazať záznam</h3>
-    <p>Naozaj chceš vymazať tento záznam?</p>
-    <button class="main" onclick="window.potvrditVymazanie(); return false;">Áno, vymazať</button>
-    <button class="main" onclick="window.zavrietDeleteModal()">Nie, zavrieť</button>
-  </div></div>
-  <div id="customDialog" class="modal"><div class="modal-content">
-    <h3 id="dialogTitle">Upozornenie</h3>
-    <p id="dialogMessage"></p>
-    <button id="dialogConfirmBtn" class="main" style="display:none;">Áno</button> <!-- Changed to rem -->
-    <button id="dialogCancelBtn" class="main" style="display:none;">Nie</button> <!-- Changed to rem -->
-    <button id="dialogOkBtn" class="main">OK</button>
-  </div></div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-    import { getAuth, signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    import { getAuth, signOut, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
     import { getFirestore, collection, addDoc, query, where, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
-    // ⚠️ FIREBASE KONFIGURÁCIA
     const firebaseConfig = {
       apiKey: "AIzaSyDlzYqLEcy1OzZMcGOlidQRr8tNdZNXsSk",
       authDomain: "zdravie-plus-5193f.firebaseapp.com",
@@ -456,181 +209,42 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    let currentUser = null;
-    let zaznamy = [];
+    window.showLogin = () => { document.getElementById('loginForm').style.display = 'block'; document.getElementById('registerForm').style.display = 'none'; };
+    window.showRegister = () => { document.getElementById('loginForm').style.display = 'none'; document.getElementById('registerForm').style.display = 'block'; };
 
-    // Exponuj do okna pre HTML
-    window.auth = auth;
-    window.db = db;
-    window.currentUser = { user: null };
-    window.zaznamy = [];
-    window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
-    window.signInWithEmailAndPassword = signInWithEmailAndPassword;
-    window.collection = collection;
-    window.addDoc = addDoc;
-    window.query = query;
-    window.where = where;
-    window.getDocs = getDocs;
-    window.deleteDoc = deleteDoc;
-    window.doc = doc;
-
-    // Registrácia
     window.registerUser = async function() {
       const name = document.getElementById('regName').value.trim();
       const pin = document.getElementById('regPin').value;
-      const pinConfirm = document.getElementById('regPinConfirm').value;
-      const errorEl = document.getElementById('regError');
-
-      if (!name || !pin || !pinConfirm) {
-        errorEl.innerText = 'Vyplň všetky polia!';
-        return;
-      }
-
-      if (pin !== pinConfirm) {
-        errorEl.innerText = 'PIN-y sa nezhodujú!';
-        return;
-      }
-
-      if (pin.length < 4 || pin.length > 6 || !/^\d+$/.test(pin)) { // Changed to rem
-        errorEl.innerText = 'PIN musí mať 4-6 číslic!';
-        return;
-      }
-
+      if (!name || pin.length < 4) return alert('Meno a PIN (min 4 číslice)!');
       try {
-        const anonymousEmail = `${name.replace(/\s+/g, '')}${Date.now()}@zdravie.local`;
-        const userCredential = await window.createUserWithEmailAndPassword(window.auth, anonymousEmail, pin);
-        const user = userCredential.user;
-        
-        await window.addDoc(window.collection(window.db, 'users'), {
-          uid: user.uid,
-          name: name,
-          email: anonymousEmail,
-          createdAt: new Date()
-        });
-
-        errorEl.innerText = '✅ Účet vytvorený! Teraz sa prihlásiš nižšie.';
-        errorEl.style.color = 'green';
-        document.getElementById('regName').value = '';
-        document.getElementById('regPin').value = '';
-        document.getElementById('regPinConfirm').value = '';
-      } catch (error) { // Changed to rem
-        errorEl.innerText = '❌ Chyba: ' + error.message;
-        errorEl.style.color = 'red';
-      }
+        const email = `${name}${Date.now()}@zdravie.local`;
+        const res = await createUserWithEmailAndPassword(auth, email, pin);
+        await addDoc(collection(db, 'users'), { uid: res.user.uid, name: name, email: email });
+        alert('Účet vytvorený!');
+      } catch (e) { alert(e.message); }
     };
 
-    // Prihlásenie
     window.loginUser = async function() {
       const name = document.getElementById('loginName').value.trim();
       const pin = document.getElementById('loginPin').value;
-      const errorEl = document.getElementById('loginError');
-
-      if (!name || !pin) {
-        errorEl.innerText = 'Vyplň meno a PIN!';
-        return;
-      }
-
-      if (!/^\d+$/.test(pin)) {
-        errorEl.innerText = 'PIN musí obsahovať iba čísla!';
-        return;
-      }
-
       try {
-        const usersQuery = window.query(window.collection(window.db, 'users'), window.where('name', '==', name));
-        const querySnapshot = await window.getDocs(usersQuery);
-
-        if (querySnapshot.empty) {
-          errorEl.innerText = 'Užívateľ nenájdený!';
-          return;
-        }
-
-        const userData = querySnapshot.docs[0].data();
-        
-        await window.signInWithEmailAndPassword(window.auth, userData.email, pin);
-      } catch (error) {
-        document.getElementById('loginError').innerText = 'Nesprávne meno alebo PIN!';
-      }
+        const q = query(collection(db, 'users'), where('name', '==', name));
+        const snap = await getDocs(q);
+        if (snap.empty) return alert('Užívateľ nenájdený');
+        await signInWithEmailAndPassword(auth, snap.docs[0].data().email, pin);
+      } catch (e) { alert('Nesprávny PIN'); }
     };
 
-    // Vlastné dialógy
-    window.showAlert = function(title, message) {
-      document.getElementById('dialogTitle').innerText = title;
-      document.getElementById('dialogMessage').innerText = message;
-      document.getElementById('dialogConfirmBtn').style.display = 'none';
-      document.getElementById('dialogCancelBtn').style.display = 'none';
-      document.getElementById('dialogOkBtn').style.display = 'block';
-      document.getElementById('customDialog').style.display = 'flex';
-      document.getElementById('dialogOkBtn').onclick = () => {
-        document.getElementById('customDialog').style.display = 'none';
-      };
-    };
-
-    window.showConfirm = function(title, message, callback) {
-      document.getElementById('dialogTitle').innerText = title;
-      document.getElementById('dialogMessage').innerText = message;
-      document.getElementById('dialogOkBtn').style.display = 'none';
-      document.getElementById('dialogConfirmBtn').style.display = 'block';
-      document.getElementById('dialogCancelBtn').style.display = 'block';
-      document.getElementById('customDialog').style.display = 'flex';
-      
-      document.getElementById('dialogConfirmBtn').onclick = () => {
-        document.getElementById('customDialog').style.display = 'none';
-        callback(true);
-      };
-      document.getElementById('dialogCancelBtn').onclick = () => {
-        document.getElementById('customDialog').style.display = 'none';
-        callback(false);
-      };
-    };
-
-    // Odhlásenie
-    window.logout = async function() {
-      window.showConfirm('Odhlásenie', 'Naozaj sa chceš odhlásiť?', async (confirmed) => {
-        if (confirmed) {
-          try {
-            await signOut(window.auth);
-          } catch (error) {
-            window.showAlert('Chyba', 'Chyba pri odhlásení: ' + error.message);
-          }
-        }
-      });
-    };
-
-    // Zmena View - Prihlásenie
-    window.showLogin = function() {
-      document.getElementById('loginForm').style.display = 'block';
-      document.getElementById('registerForm').style.display = 'none';
-      document.getElementById('loginError').innerText = '';
-      document.getElementById('loginName').value = '';
-      document.getElementById('loginPin').value = '';
-    };
-
-    // Zmena View - Registrácia
-    window.showRegister = function() {
-      document.getElementById('loginForm').style.display = 'none';
-      document.getElementById('registerForm').style.display = 'block';
-      document.getElementById('regError').innerText = '';
-      document.getElementById('regName').value = '';
-      document.getElementById('regPin').value = '';
-      document.getElementById('regPinConfirm').value = '';
-    };
-
-    // Sledovanie prihlásenia
-    onAuthStateChanged(window.auth, async (user) => {
-      setTimeout(() => {
-        window.hideSplash();
-      }, 2000);
-
+    onAuthStateChanged(auth, (user) => {
+      document.getElementById('splashScreen').style.opacity = '0';
+      setTimeout(() => document.getElementById('splashScreen').style.display = 'none', 500);
       if (user) {
-        window.currentUser.user = user;
-        currentUser = user;
+        window.user = user;
         document.getElementById('authScreen').style.display = 'none';
         document.querySelector('header').style.display = 'grid';
         document.getElementById('formular').style.display = 'block';
         window.loadRecords();
       } else {
-        window.currentUser.user = null;
-        currentUser = null;
         document.getElementById('authScreen').style.display = 'flex';
         document.querySelector('header').style.display = 'none';
         document.getElementById('formular').style.display = 'none';
@@ -638,361 +252,192 @@
       }
     });
 
-    // Načítaj záznamy z Firestore
     window.loadRecords = async function() {
-      if (!window.currentUser.user) return;
-      const q = window.query(window.collection(window.db, 'zaznamy'), window.where('userId', '==', window.currentUser.user.uid));
-      const querySnapshot = await window.getDocs(q);
-      window.zaznamy = [];
-      querySnapshot.forEach((doc) => {
-        window.zaznamy.unshift({ id: doc.id, ...doc.data() });
-      });
-      // Zabezpečí, že záznamy sú vždy zoradené od najnovšieho po najstarší
-      window.zaznamy.sort((a, b) => new Date(window.parseDateString(b.datum)) - new Date(window.parseDateString(a.datum)));
-
-      // Ak je archív otvorený, po načítaní ho prekresli
-      if (document.getElementById('archiv').style.display === 'block') {
-        window.zobrazArchiv();
-      }
+      const q = query(collection(db, 'zaznamy'), where('userId', '==', window.user.uid));
+      const snap = await getDocs(q);
+      window.zaznamy = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     };
 
-    // Pridaj záznam
     window.pridatZaznam = async function() {
-      const inr = document.getElementById('inr').value;
-      const tab = document.getElementById('tab').value;
-      const sys = document.getElementById('sys').value;
-      const dia = document.getElementById('dia').value;
-      const pulse = document.getElementById('pulse').value;
-
-      if (inr || tab || sys || dia || pulse) {
-        try {
-          if (!window.currentUser.user) {
-            window.showAlert('Chyba', 'Nie si prihlásený!');
-            return;
-          }
-          await window.addDoc(window.collection(window.db, 'zaznamy'), {
-            userId: window.currentUser.user.uid,
-            datum: window.formatDatum(),
-            inr: inr || null,
-            tab: tab || null,
-            sys: sys || null,
-            dia: dia || null,
-            pulse: pulse || null
-          });
-          ['inr','tab','sys','dia','pulse'].forEach(id => document.getElementById(id).value = '');
-          window.showToast('Záznam bol úspešne uložený.');
-          window.loadRecords();
-        } catch (error) {
-          window.showAlert('Chyba', 'Chyba: ' + error.message);
-        }
-      }
+      const data = {
+        userId: window.user.uid,
+        datum: window.formatDatum(),
+        inr: document.getElementById('inr').value,
+        tab: document.getElementById('tab').value,
+        sys: document.getElementById('sys').value,
+        dia: document.getElementById('dia').value,
+        pulse: document.getElementById('pulse').value
+      };
+      if (!Object.values(data).some(v => v && v !== data.userId && v !== data.datum)) return;
+      await addDoc(collection(db, 'zaznamy'), data);
+      ['inr','tab','sys','dia','pulse'].forEach(id => document.getElementById(id).value = '');
+      window.showToast('Uložené');
+      window.loadRecords();
     };
 
-    // Pridaj záznam manuálne
-    window.ulozitManual = async function() {
-      const d = document.getElementById('manualDatum').value;
-      const inr = document.getElementById('manualInr').value;
-      const tab = document.getElementById('manualTab').value;
-      const sys = document.getElementById('manualSys').value;
-      const dia = document.getElementById('manualDia').value;
-      const pulse = document.getElementById('manualPulse').value;
-
-      if (d && (inr || tab || sys || dia || pulse)) {
-        try {
-          await window.addDoc(window.collection(window.db, 'zaznamy'), {
-            userId: window.currentUser.user.uid,
-            datum: d,
-            inr: inr || null,
-            tab: tab || null,
-            sys: sys || null,
-            dia: dia || null,
-            pulse: pulse || null
-          });
-          window.zavrietModal();
-          window.showToast('Záznam bol úspešne uložený.');
-          window.loadRecords();
-        } catch (error) {
-          console.error('Chyba pri ukládaní:', error);
-        }
-      }
-    };
-
-    // Logika pre vlastnú klávesnicu v51
-    let lastFocusedInput = null;
-    window.setFocused = function(el) {
-      lastFocusedInput = el;
-    };
-
-    window.keypadInput = function(val) {
-      if (!lastFocusedInput) return;
-      if (val === 'DEL') {
-        lastFocusedInput.value = lastFocusedInput.value.slice(0, -1);
-      } else if (val === 'CLEAR') {
-        lastFocusedInput.value = '';
-      } else {
-        lastFocusedInput.value += val;
-      }
-    };
-
-    // Pomocná funkcia na premenu textu (aj zlomkov) na číslo
-    window.parseValue = function(val) {
-      if (!val) return null;
-      let sVal = String(val).trim().replace(',', '.');
-      if (sVal.includes('/')) {
-        const parts = sVal.split('/');
-        if (parts.length === 2) {
-          const num = parseFloat(parts[0]);
-          const den = parseFloat(parts[1]);
-          if (!isNaN(num) && !isNaN(den) && den !== 0) return num / den;
-        }
-      }
-      const p = parseFloat(sVal);
-      return isNaN(p) ? null : p;
-    };
-
-    // Určenie farby pozadia bunky podľa hodnôt z Informácií
-    window.getColorStyle = function(valStr, type) {
-      const val = window.parseValue(valStr);
-      if (val === null) return '';
-
+    window.getColorStyle = (valStr, type) => {
+      const val = parseFloat(valStr?.replace(',','.'));
+      if (isNaN(val)) return '';
       let low, high;
       if (type === 'inr') { low = 2; high = 3; }
       else if (type === 'sys') { low = 90; high = 140; }
       else if (type === 'dia') { low = 60; high = 90; }
-      else if (type === 'pulse') { low = 60; high = 100; }
       else return '';
-
-      const lowColor = '#FF8C00 '; // Vibrantná oranžová
-      const highColor = '#ff3333'; // Jasná červená
-      const normalColor = '#33cc33'; // Jasná zelená
-      const textColor = '#000';
-
-      if (val < low) return `background-color: ${lowColor}; color: ${textColor}; font-weight: bold;`;
-      if (val > high) return `background-color: ${highColor}; color: ${textColor}; font-weight: bold;`;
-      return `background-color: ${normalColor}; color: ${textColor};`;
+      if (val < low) return 'background:#f80;color:#000;font-weight:bold;';
+      if (val > high) return 'background:#f33;color:#000;font-weight:bold;';
+      return 'background:#3c3;color:#000;';
     };
 
-    // Zobraziť archív
     window.zobrazArchiv = function() {
       document.getElementById('formular').style.display = 'none';
       document.getElementById('archiv').style.display = 'block';
-      const container = document.getElementById('archivList');
-      container.innerHTML = `
-        <div class="archive-header">
-          <div>Dátum</div><div>INR</div><div>Tab</div><div>Sys</div><div>Dia</div><div>Pulz</div><div></div>
-        </div>
-      `;
-      
-      const sorted = window.zaznamy.sort((a, b) => {
-        let [d1, m1, y1] = a.datum.split('.').map(Number);
-        let [d2, m2, y2] = b.datum.split('.').map(Number);
-        if (y1 < 100) y1 += 2000;
-        if (y2 < 100) y2 += 2000;
-        return new Date(y2, m2 -1, d2) - new Date(y1, m1 -1, d1);
-      });
-
-      sorted.forEach((z) => {
-        // Skrátenie roku na 2 číslice pre lepší fit (napr. 25.05.2026 -> 25.05.26)
-        const datumShort = z.datum.length === 10 ? z.datum.substring(0, 6) + z.datum.slice(-2) : z.datum;
-        container.innerHTML += `
-          <div class="record-row">
-            <div>${datumShort}</div>
-            <div style="${window.getColorStyle(z.inr, 'inr')} border-radius:3px;">${z.inr || '-'}</div>
-            <div>${z.tab || '-'}</div>
-            <div style="${window.getColorStyle(z.sys, 'sys')} border-radius:3px;">${z.sys || '-'}</div>
-            <div style="${window.getColorStyle(z.dia, 'dia')} border-radius:3px;">${z.dia || '-'}</div>
-            <div style="${window.getColorStyle(z.pulse, 'pulse')} border-radius:3px;">${z.pulse || '-'}</div>
-            <div onclick="window.vymazatZaznam('${z.id}')" style="color:#ff4444; cursor:pointer; font-size:1rem; display:flex; justify-content:center; align-items:center;">🗑️</div>
-          </div>`;
+      const list = document.getElementById('archivList');
+      list.innerHTML = '<div class="archive-header"><div>Dátum</div><div>INR</div><div>Tab</div><div>Sys</div><div>Dia</div><div>Pulz</div><div></div></div>';
+      window.zaznamy.sort((a,b) => b.datum.localeCompare(a.datum)).forEach(r => {
+        list.innerHTML += `<div class="record-row">
+          <div>${r.datum}</div>
+          <div style="${window.getColorStyle(r.inr,'inr')}">${r.inr||'-'}</div>
+          <div>${r.tab||'-'}</div>
+          <div style="${window.getColorStyle(r.sys,'sys')}">${r.sys||'-'}</div>
+          <div style="${window.getColorStyle(r.dia,'dia')}">${r.dia||'-'}</div>
+          <div>${r.pulse||'-'}</div>
+          <div onclick="window.vymazatZaznam('${r.id}')">🗑️</div>
+        </div>`;
       });
     };
 
-    let recordToDelete = null;
+    window.vymazatZaznam = async (id) => { if (confirm('Vymazať?')) { await deleteDoc(doc(db, 'zaznamy', id)); window.loadRecords(); window.zobrazArchiv(); }};
+    window.formatDatum = () => { const d = new Date(); return `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getFullYear()).slice(-2)}`; };
+    window.skrytArchiv = () => { document.getElementById('archiv').style.display = 'none'; document.getElementById('formular').style.display = 'block'; };
+    window.logout = () => signOut(auth);
+    window.toggleDropdown = () => { const d = document.getElementById('dropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'; };
+    window.otvoritModal = () => document.getElementById('manualModal').style.display = 'flex';
+    window.zavrietModal = () => document.getElementById('manualModal').style.display = 'none';
+    window.otvoritInfo = () => document.getElementById('infoModal').style.display = 'flex';
+    window.zavrietInfo = () => document.getElementById('infoModal').style.display = 'none';
+    window.showToast = (m) => { const t = document.getElementById('toast'); t.innerText = m; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); };
 
-    // Vymaž záznam
-    window.vymazatZaznam = function(id) {
-      recordToDelete = id;
-      document.getElementById('deleteModal').style.display = 'flex';
+    let lastFocused;
+    window.setFocused = (el) => lastFocused = el;
+    window.keypadInput = (v) => { if (!lastFocused) return; if (v === 'DEL') lastFocused.value = lastFocused.value.slice(0,-1); else if (v === 'CLEAR') lastFocused.value = ''; else lastFocused.value += v; };
+    window.ulozitManual = async () => {
+      const data = { userId: window.user.uid, datum: document.getElementById('manualDatum').value, inr: document.getElementById('manualInr').value, tab: document.getElementById('manualTab').value, sys: document.getElementById('manualSys').value, dia: document.getElementById('manualDia').value, pulse: document.getElementById('manualPulse').value };
+      await addDoc(collection(db, 'zaznamy'), data); window.zavrietModal(); window.loadRecords(); window.showToast('Uložené');
     };
 
-    window.potvrditVymazanie = async function() {
-      if (recordToDelete) {
-        try {
-          await window.deleteDoc(window.doc(window.db, 'zaznamy', recordToDelete));
-          window.zobrazArchiv();
-          recordToDelete = null;
-          window.zavrietDeleteModal();
-          window.showToast('Záznam bol vymazaný.');
-          window.loadRecords();
-        } catch (error) {
-          console.error('Chyba pri mazaní:', error);
-        }
-      }
-    };
-
-    // Zvyšok funkcií
-
-    // Splash screen - 2 sekundy
-    window.hideSplash = function() {
-      const splash = document.getElementById('splashScreen');
-      splash.style.opacity = '0';
-      splash.style.transition = 'opacity 0.5s ease-out';
-      setTimeout(() => {
-        splash.style.display = 'none';
-      }, 500);
-    };
-
-    window.refreshApp = function() {
-      location.reload();
-    };
-
-    window.toggleDropdown = function() {
-      const d = document.getElementById('dropdown');
-      d.style.display = (d.style.display === 'block') ? 'none' : 'block';
-    };
-
-    window.closeDropdown = function(event) {
-      const dropdown = document.getElementById('dropdown');
-      const menuButton = document.querySelector('header button');
-      if (dropdown.style.display === 'block' && !dropdown.contains(event.target) && !menuButton.contains(event.target)) {
-        dropdown.style.display = 'none';
-      }
-    };
-
-    window.skrytArchiv = function() {
-      document.getElementById('archiv').style.display = 'none';
-      document.getElementById('formular').style.display = 'block';
-    };
-
-    window.otvoritModal = function() {
-      document.getElementById('manualModal').style.display = 'flex';
-    };
-
-    window.zavrietModal = function() {
-      document.getElementById('manualModal').style.display = 'none';
-      document.getElementById('manualDatum').value = '';
-      document.getElementById('manualInr').value = '';
-      document.getElementById('manualTab').value = '';
-      document.getElementById('manualSys').value = '';
-      document.getElementById('manualDia').value = '';
-      document.getElementById('manualPulse').value = '';
-    };
-
-    window.otvoritInfo = function() {
-      document.getElementById('infoModal').style.display = 'flex';
-    };
-
-    window.zavrietInfo = function() {
-      document.getElementById('infoModal').style.display = 'none';
-    };
-
-    window.zavrietDeleteModal = function() {
-      document.getElementById('deleteModal').style.display = 'none';
-      recordToDelete = null;
-    };
-
-    window.formatDatum = function() {
-      const d = new Date();
-      const yy = String(d.getFullYear()).slice(-2);
-      return `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${yy}`;
-    };
-
-    window.showToast = function(message, showUndo = false) {
-      const toast = document.getElementById('toast');
-      toast.innerHTML = message;
-      if (showUndo) {
-        toast.innerHTML += ` <button onclick="window.undoDelete()" style="background:none; border:none; color:#4CAF50; font-weight:bold; cursor:pointer; margin-left:10px; text-decoration:underline;">VRÁTIŤ SPÄŤ</button>`;
-      }
-      toast.style.display = 'block';
-      setTimeout(() => { 
-        if (toast.innerText.includes(message)) toast.style.display = 'none'; 
-      }, 5000); 
-    };
-
-    if ('serviceWorker' in navigator) {
-      // Automatický refresh pri aktivácii nového SW
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        window.location.reload();
-      });
-
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').then(reg => {
-          swRegistration = reg;
-          // Kontrola aktualizácií pri každom načítaní
-          reg.update();
-          console.log('Service Worker zaregistrovaný.');
-
-          reg.onupdatefound = () => {
-            const installingWorker = reg.installing;
-            installingWorker.onstatechange = () => {
-              if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                window.showConfirm('Aktualizácia dostupná', 'Nová verzia aplikácie je pripravená. Chcete ju teraz aktivovať?', (confirmed) => {
-                  if (confirmed) {
-                    window.refreshApp();
-                  }
-                });
-              }
-            };
-          }
-        });
-      });
-    }
-
-    // Swipe-back gesto (návrat z archívu)
-    let touchstartX = 0;
-    let touchendX = 0;
-
-    document.addEventListener('touchstart', e => {
-      touchstartX = e.changedTouches[0].screenX;
-    }, false);
-
-    document.addEventListener('touchend', e => {
-      touchendX = e.changedTouches[0].screenX;
-      handleGesture();
-    }, false);
-
-    function handleGesture() {
-      if (touchendX > touchstartX + 100) {
-        // 1. Ak je otvorené manuálne pridávanie, zatvor ho
-        if (document.getElementById('manualModal').style.display === 'flex') {
-          window.zavrietModal();
-          return;
-        }
-        // 2. Ak sú otvorené informácie, zatvor ich
-        if (document.getElementById('infoModal').style.display === 'flex') {
-          window.zavrietInfo();
-          return;
-        }
-        // 3. Ak je otvorené potvrdzovacie okno vymazania, zatvor ho
-        if (document.getElementById('deleteModal').style.display === 'flex') {
-          window.zavrietDeleteModal();
-          return;
-        }
-        // 4. Ak sme v archíve a žiadne okno nie je otvorené, vráť sa na formulár
-        if (document.getElementById('archiv').style.display === 'block') {
-          window.skrytArchiv();
-        }
-      }
-    }
-
-    // Automatická kontrola pri každom návrate do aplikácie
-    window.addEventListener('focus', () => {
-      if (swRegistration) {
-        swRegistration.update();
-      }
-    });
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
   </script>
+</body>
+</html>
+      <div id="loginForm">
+        <input type="text" id="loginName" placeholder="Tvoje meno"><br><br>
+        <input type="password" id="loginPin" placeholder="PIN" maxlength="6"><br><br>
+        <button class="main" onclick="window.loginUser()">Prihlásiť sa</button>
+      </div>
+    </div>
 
-  <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; font-size: 1rem; z-index: 1000;">
-    Záznam bol úspešne uložený.
+    <header style="display:none;">
+      <div></div>
+      <span class="header-title">Zdravie+</span>
+      <button onclick="window.toggleDropdown()">☰</button>
+      <div id="dropdown" class="dropdown-content">
+        <button onclick="window.zobrazArchiv()">📄 Archív</button>
+        <button onclick="window.logout()">🚪 Odhlásiť</button>
+      </div>
+    </header>
+
+    <div class="form-container" id="formular" style="display:none;">
+      <input type="tel" id="inr" placeholder="INR" inputmode="decimal" />
+      <input type="tel" id="tab" placeholder="TAB" inputmode="decimal" />
+      <input type="tel" id="sys" placeholder="SYS" inputmode="decimal" />
+      <input type="tel" id="dia" placeholder="DIA" inputmode="decimal" />
+      <input type="tel" id="pulse" placeholder="PULZ" inputmode="decimal" />
+      <button class="main" onclick="window.pridatZaznam()">Pridať záznam</button>
+    </div>
+
+    <div id="archiv" style="display:none; width: 100%;">
+      <h2>Archív</h2>
+      <button class="main" onclick="window.skrytArchiv()">Späť</button>
+      <div id="archivList" class="record-list"></div>
+    </div>
   </div>
 
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getAuth, signOut, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query, where, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
-<div id="updateBanner" style="display:none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; font-size: 1rem; z-index: 1000;">
-  Nová verzia dostupná.
-  <button onclick="window.refreshApp()" style="margin-left: 10px; background-color: #4CAF50; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Aktualizovať teraz</button>
-</div>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDlzYqLEcy1OzZMcGOlidQRr8tNdZNXsSk",
+      authDomain: "zdravie-plus-5193f.firebaseapp.com",
+      projectId: "zdravie-plus-5193f",
+      storageBucket: "zdravie-plus-5193f.appspot.com",
+      messagingSenderId: "21608089094",
+      appId: "1:21608089094:web:53b5f9fc60d51ae96ba587"
+    };
 
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.loginUser = async function() {
+      const name = document.getElementById('loginName').value.trim();
+      const pin = document.getElementById('loginPin').value;
+      try {
+        const q = query(collection(db, 'users'), where('name', '==', name));
+        const snap = await getDocs(q);
+        if (snap.empty) return alert('Užívateľ nenájdený');
+        const email = snap.docs[0].data().email;
+        await signInWithEmailAndPassword(auth, email, pin);
+      } catch (e) { alert('Chyba prihlásenia'); }
+    };
+
+    onAuthStateChanged(auth, (user) => {
+      document.getElementById('splashScreen').style.display = 'none';
+      if (user) {
+        document.getElementById('authScreen').style.display = 'none';
+        document.querySelector('header').style.display = 'grid';
+        document.getElementById('formular').style.display = 'block';
+        window.user = user;
+      } else {
+        document.getElementById('authScreen').style.display = 'block';
+        document.querySelector('header').style.display = 'none';
+      }
+    });
+
+    window.pridatZaznam = async function() {
+      const data = {
+        userId: window.user.uid,
+        datum: new Date().toLocaleDateString('sk-SK'),
+        inr: document.getElementById('inr').value,
+        tab: document.getElementById('tab').value,
+        sys: document.getElementById('sys').value,
+        dia: document.getElementById('dia').value,
+        pulse: document.getElementById('pulse').value
+      };
+      await addDoc(collection(db, 'zaznamy'), data);
+      alert('Uložené');
+      ['inr','tab','sys','dia','pulse'].forEach(id => document.getElementById(id).value = '');
+    };
+
+    window.zobrazArchiv = async function() {
+      document.getElementById('formular').style.display = 'none';
+      document.getElementById('archiv').style.display = 'block';
+      const q = query(collection(db, 'zaznamy'), where('userId', '==', window.user.uid));
+      const snap = await getDocs(q);
+      const list = document.getElementById('archivList');
+      list.innerHTML = '';
+      snap.forEach(d => {
+        const r = d.data();
+        list.innerHTML += `<div class="record-row"><div>${r.datum}</div><div>${r.inr||'-'}</div><div>${r.tab||'-'}</div><div>${r.sys||'-'}</div><div>${r.dia||'-'}</div><div>${r.pulse||'-'}</div><div onclick="window.vymazat('${d.id}')">🗑️</div></div>`;
+      });
+    };
+
+    window.skrytArchiv = () => { document.getElementById('archiv').style.display = 'none'; document.getElementById('formular').style.display = 'block'; };
+    window.logout = () => signOut(auth);
+    window.toggleDropdown = () => { const d = document.getElementById('dropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'; };
+
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+  </script>
 </body>
 </html>
