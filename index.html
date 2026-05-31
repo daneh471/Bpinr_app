@@ -568,6 +568,11 @@
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').then(reg => {
+        // Ak už existuje čakajúci worker (napr. z minulej relácie), ukážeme info o update hneď
+        if (reg.waiting) {
+          window.showUpdateUI();
+        }
+
         reg.onupdatefound = () => {
           const installingWorker = reg.installing;
           installingWorker.onstatechange = () => {
