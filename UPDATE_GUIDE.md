@@ -1,11 +1,10 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Vynútený Cache Busting pre sw.js (sw.js?v=2.6)
-- ✅ Oprava synchronizácie verzií v rozhraní
-- ✅ Zlepšená spoľahlivosť aktualizácie na iOS a Android
-- ✅ Úprava zobrazenia verzie na v2.6
-- ✅ Aktualizácia Service Workera na v2.6
+- ✅ Cache Buster zvýšený na v2.8 pre spoľahlivejšiu aktualizáciu
+- ✅ Oprava nekonzistentných verzií v prekladoch (SK/DE)
+- ✅ Úprava zobrazenia verzie na v2.8
+- ✅ Aktualizácia Service Workera na v2.8
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -13,7 +12,7 @@
 cd "c:\Users\doros\Desktop\zdravieplus"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v2.6: Forced sw.js cache busting"
+git commit -m "Update v2.8: Comprehensive version bump and cache management"
 git push origin main --force
 ```
 
