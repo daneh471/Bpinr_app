@@ -146,6 +146,7 @@
         <button onclick="window.zobrazArchiv(); window.toggleDropdown();">📄 Archív</button>
         <button onclick="window.otvoritModal(); window.toggleDropdown();">➕ Manuálny záznam</button>
         <button onclick="window.otvoritInfo(); window.toggleDropdown();">ℹ️ Informácie</button>
+        <button onclick="window.otvoritNastavenia(); window.toggleDropdown();">⚙️ Nastavenia</button>
         <button onclick="window.logout(); window.toggleDropdown();">🚪 Odhlásiť sa</button>
       </div>
     </header>
@@ -158,7 +159,7 @@
       <input type="tel" id="pulse" placeholder="PULZ" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" />
       <button class="main" onclick="window.pridatZaznam()">Pridať záznam</button>
       <div style="grid-column: span 2; margin-top: 1rem; display: flex; justify-content: center; opacity: 0.3;">
-        <img src="favicon.png" style="width: 7rem; height: 7rem; object-fit: contain;" alt="Zdravie+ Logo">
+        <img src="favicon.png" style="width: 11rem; height: 11rem; object-fit: contain;" alt="Zdravie+ Logo">
       </div>
     </div>
 
@@ -188,6 +189,16 @@
       <button class="main" onclick="window.zavrietModal()">Zatvoriť</button>
     </div></div>
 
+    <div id="settingsModal" class="modal"><div class="modal-content">
+      <h3 id="set_title">Nastavenia</h3>
+      <p id="set_lang">Jazyk / Sprache:</p>
+      <div class="tab-buttons">
+        <button class="secondary" onclick="window.changeLanguage('sk')">SK</button>
+        <button class="secondary" onclick="window.changeLanguage('de')">DE</button>
+      </div>
+      <button class="main" onclick="window.zavrietNastavenia()">Zatvoriť</button>
+    </div></div>
+
     <div id="infoModal" class="modal"><div class="modal-content">
       <h3>Informácie o hodnotách</h3>
       <p><strong>TAB:</strong> Tabletka (počet tabletiek)</p>
@@ -208,7 +219,7 @@
     </div></div>
 
     <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; z-index: 1000;"></div>
-    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.5</div>
+    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.6</div>
   </div>
 
   <script type="module">
@@ -228,6 +239,81 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+
+    const translations = {
+      sk: {
+        login: "Prihlásiť sa", register: "Registrácia", titleLogin: "Prihlásenie", titleReg: "Nový účet", namePh: "Tvoje meno", pinPh: "PIN (4-6 číslic)", 
+        pinConfPh: "Zopakuj PIN", createBtn: "Vytvoriť účet", menuArchive: "📄 Archív", menuManual: "➕ Manuálny záznam", menuInfo: "ℹ️ Informácie", 
+        menuSettings: "⚙️ Nastavenia", menuLogout: "🚪 Odhlásiť sa", addBtn: "Pridať záznam", backBtn: "Späť na formulár", saveBtn: "Uložiť", 
+        closeBtn: "Zatvoriť", titleArchive: "Archív záznamov", titleManual: "Manuálny záznam", titleInfo: "Informácie o hodnotách", titleSettings: "Nastavenia",
+        langLabel: "Jazyk:", saved: "Uložené", msgOccupied: "Meno je už obsadené.", msgUserNotFound: "Užívateľ neexistuje.", msgWrongPin: "Nesprávny PIN kód.",
+        confirmDel: "Naozaj chcete vymazať tento záznam?", confirmLogout: "Ste si istý, že sa chcete odhlásiť?", updateReady: "Aktualizácia (v1.6) je pripravená."
+      },
+      de: {
+        login: "Anmelden", register: "Registrierung", titleLogin: "Login", titleReg: "Neues Konto", namePh: "Dein Name", pinPh: "PIN (4-6 Stellen)", 
+        pinConfPh: "PIN wiederholen", createBtn: "Konto erstellen", menuArchive: "📄 Archiv", menuManual: "➕ Manueller Eintrag", menuInfo: "ℹ️ Informationen", 
+        menuSettings: "⚙️ Einstellungen", menuLogout: "🚪 Abmelden", addBtn: "Eintrag hinzufügen", backBtn: "Zurück zum Formular", saveBtn: "Speichern", 
+        closeBtn: "Schließen", titleArchive: "Eintragshistorie", titleManual: "Manueller Eintrag", titleInfo: "Informationen zu Werten", titleSettings: "Einstellungen",
+        langLabel: "Sprache:", saved: "Gespeichert", msgOccupied: "Name bereits vergeben.", msgUserNotFound: "Benutzer existiert nicht.", msgWrongPin: "Falscher PIN-Code.",
+        confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?", updateReady: "Update (v1.6) ist bereit."
+      }
+    };
+
+    window.currentLang = localStorage.getItem('zdravie_lang') || 'sk';
+
+    window.updateUI = () => {
+      const t = translations[window.currentLang];
+      document.querySelectorAll('.tab-buttons .secondary')[0].innerText = t.login;
+      document.querySelectorAll('.tab-buttons .secondary')[1].innerText = t.register;
+      document.querySelector('#loginForm h3').innerText = t.titleLogin;
+      document.querySelector('#registerForm h3').innerText = t.titleReg;
+      document.getElementById('loginName').placeholder = t.namePh;
+      document.getElementById('loginPin').placeholder = t.pinPh;
+      document.getElementById('regName').placeholder = t.namePh;
+      document.getElementById('regPin').placeholder = t.pinPh;
+      document.getElementById('regPinConfirm').placeholder = t.pinConfPh;
+      document.querySelectorAll('#loginForm .main')[0].innerText = t.login;
+      document.querySelectorAll('#registerForm .main')[0].innerText = t.createBtn;
+      
+      const menuBtns = document.querySelectorAll('#dropdown button');
+      menuBtns[0].innerText = t.menuArchive;
+      menuBtns[1].innerText = t.menuManual;
+      menuBtns[2].innerText = t.menuInfo;
+      menuBtns[3].innerText = t.menuSettings;
+      menuBtns[4].innerText = t.menuLogout;
+
+      document.querySelector('#formular .main').innerText = t.addBtn;
+      document.querySelector('#archiv h2').innerText = t.titleArchive;
+      document.querySelector('#archiv .main').innerText = t.backBtn;
+      
+      document.querySelector('#manualModal h3').innerText = t.titleManual;
+      document.getElementById('manualDatum').placeholder = "Dátum (dd.mm.rr)";
+      document.querySelector('#manualModal .main').innerText = t.saveBtn;
+      document.querySelectorAll('#manualModal .main')[1].innerText = t.closeBtn;
+
+      document.querySelector('#settingsModal h3').innerText = t.titleSettings;
+      document.getElementById('set_lang').innerText = t.langLabel;
+      document.querySelector('#settingsModal .main').innerText = t.closeBtn;
+
+      document.querySelector('#infoModal h3').innerText = t.titleInfo;
+      document.querySelector('#infoModal .main').innerText = t.closeBtn;
+
+      // Placeholder-y pre hlavný formulár
+      ['inr','tab','sys','dia','pulse'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.placeholder = id.toUpperCase();
+      });
+    };
+
+    window.changeLanguage = (lang) => {
+      window.currentLang = lang;
+      localStorage.setItem('zdravie_lang', lang);
+      window.updateUI();
+      window.zavrietNastavenia();
+    };
+
+    window.otvoritNastavenia = () => document.getElementById('settingsModal').style.display = 'flex';
+    window.zavrietNastavenia = () => document.getElementById('settingsModal').style.display = 'none';
 
     // Vlastné funkcie pre dialógy namiesto systémových
     window.showAlert = (msg) => {
@@ -267,8 +353,8 @@
         const q = query(collection(db, 'users'), where('name', '==', name));
         const snap = await getDocs(q);
         if (!snap.empty) {
-          errorEl.innerText = `Meno "${name}" je už obsadené.`;
-          return window.showAlert(`Meno "${name}" je už obsadené. Zvoľte si, prosím, iné.`);
+          errorEl.innerText = translations[window.currentLang].msgOccupied;
+          return window.showAlert(translations[window.currentLang].msgOccupied);
         }
         // Odstránime medzery z mena pre potreby vytvorenia validného e-mailu
         const safeEmailPrefix = name.replace(/\s+/g, '').toLowerCase();
@@ -289,13 +375,13 @@
         const q = query(collection(db, 'users'), where('name', '==', name));
         const snap = await getDocs(q);
         if (snap.empty) {
-          errorEl.innerText = 'Užívateľ neexistuje.';
-          return window.showAlert('Užívateľ s týmto menom neexistuje.');
+          errorEl.innerText = translations[window.currentLang].msgUserNotFound;
+          return window.showAlert(translations[window.currentLang].msgUserNotFound);
         }
         await signInWithEmailAndPassword(auth, snap.docs[0].data().email, pin);
       } catch (e) { 
-        errorEl.innerText = 'Nesprávny PIN kód.';
-        window.showAlert('Nesprávny PIN kód.'); 
+        errorEl.innerText = translations[window.currentLang].msgWrongPin;
+        window.showAlert(translations[window.currentLang].msgWrongPin); 
       }
     };
 
@@ -308,14 +394,18 @@
         document.querySelector('header').style.display = 'grid';
         document.getElementById('formular').style.display = 'block';
         window.loadRecords();
+        window.updateUI();
       } else {
         window.user = null; 
         document.getElementById('authScreen').style.display = 'flex';
         document.querySelector('header').style.display = 'none';
         document.getElementById('formular').style.display = 'none';
         document.getElementById('archiv').style.display = 'none';
+        window.updateUI();
       }
     });
+
+    window.updateUI(); // Prvotná inicializácia
 
     // Cache pre záznamy, aby sme ich neťahali z Firebase pri každom prepnutí okna
     window.zaznamy = [];
@@ -339,7 +429,7 @@
       if (!Object.values(data).some(v => v && v !== data.userId && v !== data.datum)) return;
       await addDoc(collection(db, 'zaznamy'), data);
       ['inr','tab','sys','dia','pulse'].forEach(id => document.getElementById(id).value = '');
-      window.showToast('Uložené');
+      window.showToast(translations[window.currentLang].saved);
       window.loadRecords();
     };
 
@@ -381,7 +471,7 @@
     };
 
     window.vymazatZaznam = (id) => {
-      window.showConfirm('Naozaj chcete vymazať tento záznam?', async () => {
+      window.showConfirm(translations[window.currentLang].confirmDel, async () => {
         await deleteDoc(doc(db, 'zaznamy', id));
         window.loadRecords();
         window.zobrazArchiv();
@@ -392,7 +482,7 @@
     window.skrytArchiv = () => { document.getElementById('archiv').style.display = 'none'; document.getElementById('formular').style.display = 'block'; };
     
     window.logout = () => {
-      window.showConfirm('Ste si istý, že sa chcete odhlásiť?', () => signOut(auth));
+      window.showConfirm(translations[window.currentLang].confirmLogout, () => signOut(auth));
     };
 
     window.toggleDropdown = () => { const d = document.getElementById('dropdown'); d.style.display = (d.style.display === 'flex') ? 'none' : 'flex'; };
@@ -425,7 +515,7 @@
       const data = { userId: window.user.uid, datum: dateStr, inr: document.getElementById('manualInr').value, tab: document.getElementById('manualTab').value, sys: document.getElementById('manualSys').value, dia: document.getElementById('manualDia').value, pulse: document.getElementById('manualPulse').value };
       await addDoc(collection(db, 'zaznamy'), data);
       ['manualDatum','manualInr','manualTab','manualSys','manualDia','manualPulse'].forEach(id => document.getElementById(id).value = '');
-      window.zavrietModal(); window.loadRecords(); window.showToast('Uložené');
+      window.zavrietModal(); window.loadRecords(); window.showToast(translations[window.currentLang].saved);
     };
 
     if ('serviceWorker' in navigator) {
@@ -444,7 +534,7 @@
     window.showUpdateUI = () => {
       const dialog = document.getElementById('customDialog');
       document.getElementById('dialogTitle').innerText = 'Nová verzia';
-      document.getElementById('dialogMessage').innerText = 'Aktualizácia (v1.5) je pripravená. Kliknite na OK pre načítanie.';
+      document.getElementById('dialogMessage').innerText = translations[window.currentLang].updateReady;
       document.getElementById('dialogCancelBtn').style.display = 'none';
       document.getElementById('dialogOkBtn').onclick = () => window.location.reload(true);
       dialog.style.display = 'flex';
