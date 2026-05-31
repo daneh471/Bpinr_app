@@ -1,11 +1,10 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Zmena farby pre nízke hodnoty na modrú (namiesto žltej)
-- ✅ Oprava zobrazovania zelenej farby pre normálny pulz v archíve
-- ✅ Zjednotená farebná logika pre všetky metriky (INR, SYS, DIA, PULZ)
-- ✅ Pridané zobrazenie verzie vľavo dole (v82)
-- ✅ Aktualizácia Service Workera na v82
+- ✅ Responzívne prihlasovacie a registračné okno bez nutnosti skrolovania
+- ✅ Optimalizácia informačného modálu pre všetky veľkosti mobilov
+- ✅ Úprava zobrazenia verzie na v84
+- ✅ Aktualizácia Service Workera na v84
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -13,7 +12,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v82: Low values blue color and pulse fix"
+git commit -m "Update v84: Fixed responsiveness for auth and info modals"
 git push origin main --force
 ```
 

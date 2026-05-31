@@ -30,7 +30,7 @@
       transition: 0.3s;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      font-size: 1rem;
+      font-size: 16px;
       height: 100dvh;
       width: 100%;
       overflow: hidden;
@@ -73,7 +73,7 @@
     .header-title { justify-self: center; font-weight: 800; font-size: 1.3rem; background: linear-gradient(45deg, #FF8800, #ffb366); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
     header button { background-color: transparent; border: none; font-size: 1.2rem; cursor: pointer; padding: 0.5rem; color: var(--text); display: flex; align-items: center; min-width: 2.75rem; min-height: 2.75rem; justify-content: center; justify-self: end; }
     
-    .dropdown-content { display: none; position: absolute; right: 0.5rem; top: calc(3.8rem + env(safe-area-inset-top)); background-color: var(--card); width: max-content; max-width: 90vw; box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.3); z-index: 1001; border-radius: 1rem; overflow: hidden; max-height: calc(100dvh - 5rem); flex-direction: column; padding: 0.5rem; box-sizing: border-box; border: 1px solid rgba(128,128,128,0.2); }
+  .dropdown-content { display: none; position: absolute; right: 0.5rem; top: calc(3.8rem + env(safe-area-inset-top)); background-color: var(--card); width: max-content; max-width: 90vw; box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.3); z-index: 1001; border-radius: 1rem; overflow: hidden; max-height: calc(100dvh - 5rem); flex-direction: column; padding: 0.5rem; box-sizing: border-box; border: 1px solid rgba(128,128,128,0.2); }
     .dropdown-content button { display: block; width: 100%; padding: 0.625rem 0.9375rem; border: none; background: none; text-align: left; font-size: 1rem; cursor: pointer; color: var(--text); flex-shrink: 1; border-bottom: 1px solid rgba(128,128,128,0.1); white-space: nowrap; }
     .dropdown-content button:last-child { border-bottom: none; }
 
@@ -81,16 +81,25 @@
     .numeric-keypad button { padding: 0.6rem; font-size: 1.1rem; border-radius: 0.6rem; background-color: var(--card); color: var(--text); border: 1px solid rgba(128,128,128,0.3); cursor: pointer; font-weight: 600; min-height: 2.8rem; display: flex; align-items: center; justify-content: center; }
 
     .form-container, .modal-form-grid { margin: 0 auto; width: 100%; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
-    input { min-width: 0; padding: 0.8rem; font-size: 1rem; background-color: var(--card); color: var(--text); border: 1px solid #ccc; border-radius: 0.8rem; appearance: none; width: 100%; }
+    input { min-width: 0; padding: 0.75rem; font-size: 16px; background-color: var(--card); color: var(--text); border: 1px solid #ccc; border-radius: 0.8rem; appearance: none; width: 100%; box-sizing: border-box; }
     button.main { grid-column: span 2; background-color: #4CAF50; color: white; border: none; padding: 1rem; width: 100%; cursor: pointer; margin: 0.3rem 0; font-size: 1.1rem; border-radius: 0.8rem; font-weight: bold; box-shadow: 0 0.25rem 0.375rem rgba(0,0,0,0.1); min-height: 3.5rem; }
-    button.secondary { background-color: #2196F3; color: white; border: none; padding: 0.75rem 1.25rem; min-width: 8.75rem; cursor: pointer; font-size: 1rem; border-radius: 0.75rem; min-height: 3rem; }
+    button.secondary { background-color: #2196F3; color: white; border: none; padding: 0.6rem 1rem; min-width: 8rem; cursor: pointer; font-size: 0.95rem; border-radius: 0.75rem; min-height: 2.8rem; }
 
-    .record-list { display: flex; flex-direction: column; width: 100%; border: 1px solid rgba(128,128,128,0.1); border-radius: 0.8rem; overflow: hidden; margin-top: 0.5rem; padding-bottom: 2rem;}
+    #authScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--bg); z-index: 1002; overflow: hidden; }
+    .auth-form { width: 90%; max-width: 20rem; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
+    .auth-form h2 { margin: 0 0 0.2rem 0; font-size: 1.5rem; }
+    .auth-form h3 { margin: 0 0 0.3rem 0; font-size: 1.1rem; }
+    .auth-form input { margin-bottom: 0.4rem; }
+    .tab-buttons { display: flex; gap: 0.4rem; margin-bottom: 0.6rem; width: 100%; justify-content: center; }
+
+    .record-list { display: flex; flex-direction: column; width: 100%; border: 1px solid rgba(128,128,128,0.1); border-radius: 0.8rem; overflow-x: auto; margin-top: 0.5rem; padding-bottom: 2rem; -webkit-overflow-scrolling: touch; }
     .archive-header { display: grid; grid-template-columns: 24% 12% 12% 12% 12% 12% 16%; font-weight: bold; font-size: 11px; text-transform: uppercase; background-color: var(--header); border-bottom: 2px solid rgba(0,0,0,0.1); padding: 8px 2px; text-align: center; width: 100%; box-sizing: border-box; }
-    .record-row { display: grid; grid-template-columns: 24% 12% 12% 12% 12% 12% 16%; align-items: center; background-color: var(--card); padding: 8px 2px; border-bottom: 1px solid rgba(128,128,128,0.2); width: 100%; box-sizing: border-box; font-size: 11px; text-align: center; gap: 0; }
+    .record-row { display: grid; grid-template-columns: 24% 12% 12% 12% 12% 12% 16%; align-items: center; background-color: var(--card); padding: 8px 2px; border-bottom: 1px solid rgba(128,128,128,0.2); width: 100%; min-width: 300px; box-sizing: border-box; font-size: 11px; text-align: center; gap: 0; }
 
     .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); justify-content: center; align-items: center; padding: 1rem; }
-    .modal-content { background-color: var(--card); padding: 1.5rem; border-radius: 1.5rem; width: 90%; max-width: 400px; max-height: 96dvh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; text-align: left; }
+    .modal-content { background-color: var(--card); padding: 1rem; border-radius: 1.5rem; width: 100%; max-width: 380px; max-height: 98dvh; overflow: hidden; display: flex; flex-direction: column; text-align: left; box-sizing: border-box; }
+    #infoModal .modal-content { justify-content: center; gap: 0.2rem; }
+    #infoModal p { margin: 0.3rem 0; font-size: 0.9rem; line-height: 1.3; }
 
     #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 999; }
     #splashScreen img { width: 10rem; height: 10rem; animation: pulse 1.5s infinite; }
@@ -112,17 +121,17 @@
         
         <div id="loginForm">
           <h3>Prihlásenie</h3>
-          <input type="text" id="loginName" placeholder="Tvoje meno" style="width:80%; padding:0.8rem;">
-          <input type="password" id="loginPin" placeholder="PIN (4-6 číslic)" style="width:80%; padding:0.8rem;" maxlength="6">
+          <input type="text" id="loginName" placeholder="Tvoje meno">
+          <input type="password" id="loginPin" placeholder="PIN (4-6 číslic)" maxlength="6">
           <button class="main" onclick="window.loginUser(); return false;">Prihlásiť sa</button>
           <p id="loginError" style="color: red; font-size: 0.9rem;"></p>
         </div>
 
         <div id="registerForm" style="display: none;">
           <h3>Nový účet</h3>
-          <input type="text" id="regName" placeholder="Tvoje meno" style="width:80%; padding:0.8rem;">
-          <input type="password" id="regPin" placeholder="PIN (4-6 číslic)" style="width:80%; padding:0.8rem;" maxlength="6">
-          <input type="password" id="regPinConfirm" placeholder="Zopakuj PIN" style="width:80%; padding:0.8rem;" maxlength="6">
+          <input type="text" id="regName" placeholder="Tvoje meno">
+          <input type="password" id="regPin" placeholder="PIN (4-6 číslic)" maxlength="6">
+          <input type="password" id="regPinConfirm" placeholder="Zopakuj PIN" maxlength="6">
           <button class="main" onclick="window.registerUser(); return false;">Vytvoriť účet</button>
           <p id="regError" style="color: red; font-size: 0.9rem;"></p>
         </div>
@@ -179,7 +188,6 @@
     <div id="infoModal" class="modal"><div class="modal-content">
       <h3>Informácie o hodnotách</h3>
       <p><strong>TAB:</strong> Tabletka (počet tabletiek)</p>
-      <hr style="opacity:0.2; margin: 10px 0;">
       <p><strong>INR:</strong> &lt;2 Nízky | 2–3 Normálny | &gt;3 Vysoký</p>
       <p><strong>SYS:</strong> &lt;90 Nízky | 90–140 Normálny | &gt;140 Vysoký</p>
       <p><strong>DIA:</strong> &lt;60 Nízky | 60–90 Normálny | &gt;90 Vysoký</p>
@@ -197,7 +205,7 @@
     </div></div>
 
     <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; z-index: 1000;"></div>
-    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v82</div>
+    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v84</div>
   </div>
 
   <script type="module">
@@ -401,7 +409,7 @@
     window.showUpdateUI = () => {
       const dialog = document.getElementById('customDialog');
       document.getElementById('dialogTitle').innerText = 'Nová verzia';
-      document.getElementById('dialogMessage').innerText = 'Aktualizácia (v82) je pripravená. Kliknite na OK pre načítanie.';
+      document.getElementById('dialogMessage').innerText = 'Aktualizácia (v84) je pripravená. Kliknite na OK pre načítanie.';
       document.getElementById('dialogCancelBtn').style.display = 'none';
       document.getElementById('dialogOkBtn').onclick = () => window.location.reload(true);
       dialog.style.display = 'flex';
