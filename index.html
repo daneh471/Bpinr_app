@@ -158,7 +158,7 @@
       <input type="tel" id="pulse" placeholder="PULZ" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" />
       <button class="main" onclick="window.pridatZaznam()">Pridať záznam</button>
       <div style="grid-column: span 2; margin-top: 1rem; display: flex; justify-content: center; opacity: 0.3;">
-        <img src="favicon.png" style="width: 4rem; height: 4rem; object-fit: contain;" alt="Zdravie+ Logo">
+        <img src="favicon.png" style="width: 7rem; height: 7rem; object-fit: contain;" alt="Zdravie+ Logo">
       </div>
     </div>
 
@@ -208,7 +208,7 @@
     </div></div>
 
     <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; z-index: 1000;"></div>
-    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.4</div>
+    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.5</div>
   </div>
 
   <script type="module">
@@ -444,7 +444,7 @@
     window.showUpdateUI = () => {
       const dialog = document.getElementById('customDialog');
       document.getElementById('dialogTitle').innerText = 'Nová verzia';
-      document.getElementById('dialogMessage').innerText = 'Aktualizácia (v1.4) je pripravená. Kliknite na OK pre načítanie.';
+      document.getElementById('dialogMessage').innerText = 'Aktualizácia (v1.5) je pripravená. Kliknite na OK pre načítanie.';
       document.getElementById('dialogCancelBtn').style.display = 'none';
       document.getElementById('dialogOkBtn').onclick = () => window.location.reload(true);
       dialog.style.display = 'flex';

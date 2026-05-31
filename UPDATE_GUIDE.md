@@ -1,11 +1,11 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Pridané logo (favicon) pod hlavné tlačidlo pre lepší vizuál
+- ✅ Zväčšené logo (favicon) pod hlavným tlačidlom na 7rem x 7rem
 - ✅ Automatické vymazanie polí v manuálnom zázname po uložení
 - ✅ Responzívne doladenie prvkov pre rôzne typy mobilov
-- ✅ Úprava zobrazenia verzie na v1.4
-- ✅ Aktualizácia Service Workera na v1.4
+- ✅ Úprava zobrazenia verzie na v1.5
+- ✅ Aktualizácia Service Workera na v1.5
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -13,7 +13,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.4: UI improvements and field clearing"
+git commit -m "Update v1.5: Increased logo size"
 git push origin main --force
 ```
 
