@@ -1,4 +1,4 @@
-const CACHE_NAME = 'zdravie-cache-v2.3';
+const CACHE_NAME = 'zdravie-cache-v2.4';
 const FILES_TO_CACHE = [
   './index.html',
   './favicon.png',
@@ -28,6 +28,13 @@ self.addEventListener('activate', function (e) {
       );
     }).then(() => self.clients.claim()) // Okamžité prevzatie kontroly
   );
+});
+
+// Počúvame na správu o preskočení čakania (vynútený update)
+self.addEventListener('message', function (e) {
+  if (e.data && e.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 // Network-first stratégia s detekciou updatu

@@ -1,10 +1,11 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Vynútené 'no-store' pre fetch dopyty v Service Workeri
-- ✅ Meta tagy pre zamedzenie ukladania HTML do cache prehliadača
-- ✅ Úprava zobrazenia verzie na v2.3
-- ✅ Aktualizácia Service Workera na v2.3
+- ✅ Implementovaná podpora SKIP_WAITING správy pre Service Workera
+- ✅ Tlačidlo OK v aktualizačnom dialógu teraz vynucuje okamžitý swap verzií
+- ✅ Zlepšená detekcia čakajúceho Service Workera (reg.waiting)
+- ✅ Úprava zobrazenia verzie na v2.4
+- ✅ Aktualizácia Service Workera na v2.4
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -12,7 +13,7 @@
 cd "c:\Users\doros\Desktop\zdravieplus"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v2.3: Cache busting and meta tag fixes"
+git commit -m "Update v2.4: Forced PWA update logic via SKIP_WAITING"
 git push origin main --force
 ```
 
