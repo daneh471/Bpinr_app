@@ -1,12 +1,11 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Odstránenie systémových alert/confirm okien
-- ✅ Implementované vlastné dizajnové dialógy
-- ✅ Potvrdenie odhlásenia používateľa
-- ✅ Nové farebné rozlíšenie (žltá, zelená, červená)
-- ✅ Pridané zobrazenie verzie vľavo dole (v79)
-- ✅ Aktualizácia Service Workera na v79
+- ✅ Optimalizácia kontrastu farieb pre Dark Mode
+- ✅ Overenie čitateľnosti hodnôt v tmavom režime
+- ✅ Vylepšené vizuálne odlíšenie stavov (nízky/normálny/vysoký)
+- ✅ Pridané zobrazenie verzie vľavo dole (v81)
+- ✅ Aktualizácia Service Workera na v81
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -14,7 +13,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v79: Custom dialogs and color updates"
+git commit -m "Update v81: Dark mode color visibility check"
 git push origin main --force
 ```
 
