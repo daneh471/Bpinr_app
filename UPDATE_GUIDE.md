@@ -5,7 +5,8 @@
 - ✅ Cloudová synchronizácia dát medzi zariadeniami
 - ✅ Oprava radenia záznamov v archíve
 - ✅ Rozšírené informácie o TAB, INR, SYS, DIA a PULZ
-- ✅ Aktualizácia Service Workera na v77
+- ✅ Pridané zobrazenie verzie vľavo dole (v78)
+- ✅ Aktualizácia Service Workera na v78
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -13,7 +14,7 @@
 cd "c:\Users\doros\Desktop\Nový priečinok"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v77: Updated info modal and health ranges"
+git commit -m "Update v78: Added version display"
 git push origin main --force
 ```
 
