@@ -159,7 +159,7 @@
       <input type="tel" id="pulse" placeholder="PULZ" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" />
       <button class="main" onclick="window.pridatZaznam()">Pridať záznam</button>
       <div style="grid-column: span 2; margin-top: 1rem; display: flex; justify-content: center; opacity: 0.3;">
-        <img src="favicon.png" style="width: 11rem; height: 11rem; object-fit: contain;" alt="Zdravie+ Logo">
+        <img src="favicon.png" style="width: 14rem; height: 14rem; object-fit: contain;" alt="Zdravie+ Logo">
       </div>
     </div>
 
@@ -191,12 +191,17 @@
 
     <div id="settingsModal" class="modal"><div class="modal-content">
       <h3 id="set_title">Nastavenia</h3>
-      <p id="set_lang">Jazyk / Sprache:</p>
+      <button class="main" id="btn_lang_menu" onclick="window.otvoritJazyk()">Jazyk</button>
+      <button class="main" id="set_close" onclick="window.zavrietNastavenia()">Zatvoriť</button>
+    </div></div>
+
+    <div id="languageModal" class="modal"><div class="modal-content">
+      <h3 id="lang_title">Vybrať jazyk</h3>
       <div class="tab-buttons">
         <button class="secondary" onclick="window.changeLanguage('sk')">SK</button>
         <button class="secondary" onclick="window.changeLanguage('de')">DE</button>
       </div>
-      <button class="main" onclick="window.zavrietNastavenia()">Zatvoriť</button>
+      <button class="main" id="lang_close" onclick="window.zavrietJazyk()">Zatvoriť</button>
     </div></div>
 
     <div id="infoModal" class="modal"><div class="modal-content">
@@ -219,7 +224,7 @@
     </div></div>
 
     <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; z-index: 1000;"></div>
-    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.6</div>
+    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.7</div>
   </div>
 
   <script type="module">
@@ -246,16 +251,16 @@
         pinConfPh: "Zopakuj PIN", createBtn: "Vytvoriť účet", menuArchive: "📄 Archív", menuManual: "➕ Manuálny záznam", menuInfo: "ℹ️ Informácie", 
         menuSettings: "⚙️ Nastavenia", menuLogout: "🚪 Odhlásiť sa", addBtn: "Pridať záznam", backBtn: "Späť na formulár", saveBtn: "Uložiť", 
         closeBtn: "Zatvoriť", titleArchive: "Archív záznamov", titleManual: "Manuálny záznam", titleInfo: "Informácie o hodnotách", titleSettings: "Nastavenia",
-        langLabel: "Jazyk:", saved: "Uložené", msgOccupied: "Meno je už obsadené.", msgUserNotFound: "Užívateľ neexistuje.", msgWrongPin: "Nesprávny PIN kód.",
-        confirmDel: "Naozaj chcete vymazať tento záznam?", confirmLogout: "Ste si istý, že sa chcete odhlásiť?", updateReady: "Aktualizácia (v1.6) je pripravená."
+        menuLang: "Jazyk", selectLang: "Vybrať jazyk", saved: "Uložené", msgOccupied: "Meno je už obsadené.", msgUserNotFound: "Užívateľ neexistuje.", msgWrongPin: "Nesprávny PIN kód.",
+        confirmDel: "Naozaj chcete vymazať tento záznam?", confirmLogout: "Ste si istý, že sa chcete odhlásiť?", updateReady: "Aktualizácia (v1.7) je pripravená."
       },
       de: {
         login: "Anmelden", register: "Registrierung", titleLogin: "Login", titleReg: "Neues Konto", namePh: "Dein Name", pinPh: "PIN (4-6 Stellen)", 
         pinConfPh: "PIN wiederholen", createBtn: "Konto erstellen", menuArchive: "📄 Archiv", menuManual: "➕ Manueller Eintrag", menuInfo: "ℹ️ Informationen", 
         menuSettings: "⚙️ Einstellungen", menuLogout: "🚪 Abmelden", addBtn: "Eintrag hinzufügen", backBtn: "Zurück zum Formular", saveBtn: "Speichern", 
         closeBtn: "Schließen", titleArchive: "Eintragshistorie", titleManual: "Manueller Eintrag", titleInfo: "Informationen zu Werten", titleSettings: "Einstellungen",
-        langLabel: "Sprache:", saved: "Gespeichert", msgOccupied: "Name bereits vergeben.", msgUserNotFound: "Benutzer existiert nicht.", msgWrongPin: "Falscher PIN-Code.",
-        confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?", updateReady: "Update (v1.6) ist bereit."
+        menuLang: "Sprache", selectLang: "Sprache wählen", saved: "Gespeichert", msgOccupied: "Name bereits vergeben.", msgUserNotFound: "Benutzer existiert nicht.", msgWrongPin: "Falscher PIN-Code.",
+        confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?", updateReady: "Update (v1.7) ist bereit."
       }
     };
 
@@ -292,8 +297,10 @@
       document.querySelectorAll('#manualModal .main')[1].innerText = t.closeBtn;
 
       document.querySelector('#settingsModal h3').innerText = t.titleSettings;
-      document.getElementById('set_lang').innerText = t.langLabel;
-      document.querySelector('#settingsModal .main').innerText = t.closeBtn;
+      document.getElementById('btn_lang_menu').innerText = t.menuLang;
+      document.getElementById('set_close').innerText = t.closeBtn;
+      document.getElementById('lang_title').innerText = t.selectLang;
+      document.getElementById('lang_close').innerText = t.closeBtn;
 
       document.querySelector('#infoModal h3').innerText = t.titleInfo;
       document.querySelector('#infoModal .main').innerText = t.closeBtn;
@@ -309,11 +316,13 @@
       window.currentLang = lang;
       localStorage.setItem('zdravie_lang', lang);
       window.updateUI();
-      window.zavrietNastavenia();
+      window.zavrietJazyk();
     };
 
     window.otvoritNastavenia = () => document.getElementById('settingsModal').style.display = 'flex';
     window.zavrietNastavenia = () => document.getElementById('settingsModal').style.display = 'none';
+    window.otvoritJazyk = () => { document.getElementById('settingsModal').style.display = 'none'; document.getElementById('languageModal').style.display = 'flex'; };
+    window.zavrietJazyk = () => { document.getElementById('languageModal').style.display = 'none'; document.getElementById('settingsModal').style.display = 'flex'; };
 
     // Vlastné funkcie pre dialógy namiesto systémových
     window.showAlert = (msg) => {
