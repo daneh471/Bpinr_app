@@ -1,10 +1,10 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Implementovaný 'controllerchange' listener pre okamžitú aktualizáciu PWA
-- ✅ Vylepšená stabilita Service Workera (oprava fetch eventu)
-- ✅ Úprava zobrazenia verzie na v2.1
-- ✅ Aktualizácia Service Workera na v2.1
+- ✅ Vynútené 'no-store' pre fetch dopyty v Service Workeri
+- ✅ Meta tagy pre zamedzenie ukladania HTML do cache prehliadača
+- ✅ Úprava zobrazenia verzie na v2.3
+- ✅ Aktualizácia Service Workera na v2.3
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -12,7 +12,7 @@
 cd "c:\Users\doros\Desktop\zdravieplus"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v2.1: Robust PWA update logic"
+git commit -m "Update v2.3: Cache busting and meta tag fixes"
 git push origin main --force
 ```
 

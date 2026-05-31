@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta name="theme-color" content="#1a1a1a" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -232,7 +235,7 @@
     </div></div>
 
     <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; z-index: 1000;"></div>
-    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v2.1</div>
+    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v2.3</div>
   </div>
 
   <script type="module">
@@ -261,7 +264,7 @@
         closeBtn: "Zatvoriť", titleArchive: "Archív záznamov", titleManual: "Manuálny záznam", titleInfo: "Informácie o hodnotách", titleSettings: "Nastavenia",
         menuLang: "Jazyk", selectLang: "Vybrať jazyk", infoTab: "Tabletka (počet tabletiek)", infoLow: "Nízky", infoNorm: "Normálny", infoHigh: "Vysoký",
         saved: "Uložené", msgOccupied: "Meno je už obsadené.", msgUserNotFound: "Užívateľ neexistuje.", msgWrongPin: "Nesprávny PIN kód.",
-        confirmDel: "Naozaj chcete vymazať tento záznam?", confirmLogout: "Ste si istý, že sa chcete odhlásiť?", updateReady: "Aktualizácia (v2.1) je pripravená.",
+        confirmDel: "Naozaj chcete vymazať tento záznam?", confirmLogout: "Ste si istý, že sa chcete odhlásiť?", updateReady: "Aktualizácia (v2.3) je pripravená.",
         radyTitle: "Rady",
         radyText: `<strong>📉 Nízky tlak (Hypotenzia)</strong><br>Prejav: točenie hlavy, únava.<br><br>
         <strong>Čo vypiť:</strong><br>• Čistá voda / minerálka<br>• Káva, čierny/zelený čaj (kofeín)<br>• Rozmarínový čaj<br><br>
@@ -278,7 +281,7 @@
         closeBtn: "Schließen", titleArchive: "Eintragshistorie", titleManual: "Manueller Eintrag", titleInfo: "Informationen zu Werten", titleSettings: "Einstellungen",
         menuLang: "Sprache", selectLang: "Sprache wählen", infoTab: "Tablette (Anzahl der Tabletten)", infoLow: "Niedrig", infoNorm: "Normal", infoHigh: "Hoch",
         saved: "Gespeichert", msgOccupied: "Name bereits vergeben.", msgUserNotFound: "Benutzer existiert nicht.", msgWrongPin: "Falscher PIN-Code.",
-        confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?", updateReady: "Update (v2.1) ist bereit.",
+        confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?", updateReady: "Update (v2.3) ist bereit.",
         radyTitle: "Tipps",
         radyText: `<strong>📉 Niedriger Blutdruck</strong><br>Symptome: Schwindel, Müdigkeit.<br><br>
         <strong>Trinken:</strong><br>• Wasser / Mineralwasser<br>• Kaffee, schwarzer/grüner Tee<br>• Rosmarintee<br><br>
@@ -576,6 +579,8 @@
       });
 
       navigator.serviceWorker.register('sw.js').then(reg => {
+        reg.update(); // Vynútená kontrola aktualizácie pri každom načítaní
+
         // Ak už existuje čakajúci worker (napr. z minulej relácie), ukážeme info o update hneď
         if (reg.waiting) {
           window.showUpdateUI();

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'zdravie-cache-v2.1';
+const CACHE_NAME = 'zdravie-cache-v2.3';
 const FILES_TO_CACHE = [
   './index.html',
   './favicon.png',
@@ -32,10 +32,12 @@ self.addEventListener('activate', function (e) {
 
 // Network-first stratégia s detekciou updatu
 self.addEventListener('fetch', function(e) {
-  if (e.request.method !== 'GET' || e.request.url.includes('firestore.googleapis.com')) return;
+  if (e.request.method !== 'GET' || 
+      e.request.url.includes('firestore.googleapis.com') ||
+      e.request.url.includes('google.com')) return;
 
   e.respondWith(
-    fetch(e.request)
+    fetch(e.request, { cache: 'no-store' }) // Vynútime čerstvé dáta zo servera
       .then(function(response) {
         const clone = response.clone();
         caches.open(CACHE_NAME).then(function(cache) {
