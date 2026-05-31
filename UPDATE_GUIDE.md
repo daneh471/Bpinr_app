@@ -1,12 +1,11 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Oprava životného cyklu Service Workera (odstránenie skipWaiting pri inštalácii)
-- ✅ Správne riadenie aktualizácie cez používateľský dialóg
-- ✅ Synchronizácia verzií na v2.5
-- ✅ Stabilizácia PWA aktualizačnej logiky
-- ✅ Úprava zobrazenia verzie na v2.5
-- ✅ Aktualizácia Service Workera na v2.5
+- ✅ Vynútený Cache Busting pre sw.js (sw.js?v=2.6)
+- ✅ Oprava synchronizácie verzií v rozhraní
+- ✅ Zlepšená spoľahlivosť aktualizácie na iOS a Android
+- ✅ Úprava zobrazenia verzie na v2.6
+- ✅ Aktualizácia Service Workera na v2.6
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -14,7 +13,7 @@
 cd "c:\Users\doros\Desktop\zdravieplus"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v2.5: Final fix for Service Worker update flow"
+git commit -m "Update v2.6: Forced sw.js cache busting"
 git push origin main --force
 ```
 
