@@ -1,4 +1,4 @@
-# Nasadenie na GitHub Pages
+# Nasadenie (GitHub Pages alebo Vercel)
 
 ## Krok 1: Vytvor repo na GitHub
 1. Choď na https://github.com/new
@@ -18,10 +18,16 @@ git push -u origin main
 2. Source: main branch
 3. Save
 
-Hotovo! App bude dostupná na: https://daneh471.github.io/Zdravie_plus/
+App na GitHub Pages: https://daneh471.github.io/Zdravie_plus/
+
+## Produkcia: Vercel
+1. Prihlás sa na [Vercel.com](https://vercel.com)
+2. Importuj repozitár `Zdravie_plus`
+3. Deployment je automatický po každom pushi.
+App na Vercel: https://zdravieplus123.vercel.app/
 
 ## Updates na mobile
-- Keď pushneš novú verziu na GitHub
+- Keď pushneš novú verziu na GitHub (Pages/Vercel)
 - Service Worker detekuje zmenu
 - Na mobile sa zobrazí: "Nová verzia aplikácie je dostupná"
 - Klik na OK = automatický refresh

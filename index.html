@@ -325,7 +325,20 @@
       await addDoc(collection(db, 'zaznamy'), data); window.zavrietModal(); window.loadRecords(); window.showToast('Uložené');
     };
 
-    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+      
+      // Počúvanie na správu o novej verzii zo Service Workera
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'UPDATE_AVAILABLE') {
+          const dialog = document.getElementById('customDialog');
+          document.getElementById('dialogTitle').innerText = 'Aktualizácia';
+          document.getElementById('dialogMessage').innerText = 'Nová verzia (v69) je pripravená. Kliknite na OK pre reštart aplikácie.';
+          document.getElementById('dialogOkBtn').onclick = () => window.location.reload();
+          dialog.style.display = 'flex';
+        }
+      });
+    }
   </script>
 </body>
 </html>
