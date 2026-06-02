@@ -1,10 +1,10 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii:
-- ✅ Aktualizácia produkčnej URL na Vercel
-- ✅ Cache Buster zvýšený na v3.0
-- ✅ Úprava zobrazenia verzie na v3.0
-- ✅ Aktualizácia Service Workera na v3.0
+- ✅ Automatický mesačný archív (záznamy zoskupené podľa mesiaca)
+- ✅ Optimalizácia zobrazenia tabuliek (bez scrollovania do strán)
+- ✅ Úprava zobrazenia verzie na v3.2
+- ✅ Aktualizácia Service Workera na v3.2
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -12,7 +12,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\zdravieplus"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v3.0: Update Vercel URL and versioning"
+git commit -m "Update v3.2: Monthly archive grouping and responsive tables"
 git push origin main --force
 ```
 
