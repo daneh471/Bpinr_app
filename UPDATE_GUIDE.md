@@ -4,7 +4,7 @@
 - ✅ Vynútenie aktualizácie pre všetky zariadenia (Fix cache)
 - ✅ Archív: Aktuálny mesiac + tlačidlo pre staršie mesiace
 - ✅ Premenovanie aplikácie na BP & INR
-- ✅ Responzívna hlavička (Grid layout) a verzia v3.5
+- ✅ Fix: Dokonalé vycentrovanie názvu na malých displejoch (v3.5)
 
 ## POSTUP - Skopíruj do Git Bash:
 
