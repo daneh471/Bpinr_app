@@ -1,6 +1,6 @@
 {
-  "name": "Zdravie+",
-  "short_name": "Zdravie+",
+  "name": "BP & INR",
+  "short_name": "BP & INR",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait-primary",

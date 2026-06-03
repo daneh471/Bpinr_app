@@ -9,8 +9,8 @@
   <meta name="theme-color" content="#1a1a1a" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Zdravie+" />
-  <title>Zdravie+</title>
+  <meta name="apple-mobile-web-app-title" content="BP & INR" />
+  <title>BP & INR</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="favicon.png" />
   <link rel="apple-touch-icon" href="favicon.png" />
@@ -112,11 +112,11 @@
 <body>
   <div class="app-wrapper">
     <div id="splashScreen">
-      <img src="favicon.png" alt="Zdravie+">
+      <img src="favicon.png" alt="BP & INR">
     </div>
     <div id="authScreen">
       <div class="auth-form">
-        <h2>Zdravie+</h2>
+        <h2>BP & INR</h2>
         <div class="tab-buttons">
           <button class="secondary" onclick="window.showLogin()">Prihlásiť sa</button>
           <button class="secondary" onclick="window.showRegister()">Registrácia</button>
@@ -143,7 +143,7 @@
 
     <header style="display:none;">
       <div class="header-logo-container"><img src="favicon.png" class="header-logo" alt="Logo"></div>
-      <span class="header-title">Zdravie+</span>
+      <span class="header-title">BP & INR</span>
       <button onclick="window.toggleDropdown()">☰ Menu</button>
       <div id="dropdown" class="dropdown-content">
         <button onclick="window.zobrazArchiv(); window.toggleDropdown();">📄 Archív</button>
@@ -163,7 +163,7 @@
       <input type="tel" id="pulse" placeholder="PULZ" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" />
       <button class="main" onclick="window.pridatZaznam()">Pridať záznam</button>
       <div style="grid-column: span 2; margin-top: 1rem; display: flex; justify-content: center; opacity: 0.3;">
-        <img src="favicon.png" style="width: 14rem; height: 14rem; object-fit: contain;" alt="Zdravie+ Logo">
+        <img src="favicon.png" style="width: 14rem; height: 14rem; object-fit: contain;" alt="BP & INR Logo">
       </div>
     </div>
 
@@ -226,7 +226,7 @@
     </div></div>
 
     <div id="customDialog" class="modal"><div class="modal-content">
-      <h3 id="dialogTitle">Zdravie+</h3>
+      <h3 id="dialogTitle">BP & INR</h3>
       <p id="dialogMessage"></p>
       <div style="display: flex; gap: 0.5rem; width: 100%;">
         <button id="dialogCancelBtn" class="main" style="background-color: #777; display: none;">Zrušiť</button>
@@ -235,7 +235,7 @@
     </div></div>
 
     <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; z-index: 1000;"></div>
-    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v3.4</div>
+    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v3.5</div>
   </div>
 
   <script type="module">
@@ -282,7 +282,7 @@
         closeBtn: "Schließen", titleArchive: "Eintragshistorie", titleManual: "Manueller Eintrag", titleInfo: "Informationen zu Werten", titleSettings: "Einstellungen",
         menuLang: "Sprache", selectLang: "Sprache wählen", infoTab: "Tablette (Anzahl der Tabletten)", infoLow: "Niedrig", infoNorm: "Normal", infoHigh: "Hoch",
         saved: "Gespeichert", msgOccupied: "Name bereits vergeben.", msgUserNotFound: "Benutzer existiert nicht.", msgWrongPin: "Falscher PIN-Code.",
-        confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?", updateReady: "Update (v3.4) ist bereit.",
+        confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?", updateReady: "Update (v3.5) ist bereit.",
         btnMonthlyArchive: "Monatsarchiv",
         radyTitle: "Tipps",
         radyText: `<strong>📉 Niedriger Blutdruck</strong><br>Symptome: Schwindel, Müdigkeit.<br><br>
@@ -625,7 +625,7 @@
       });
 
       // Používame query parameter na vynútenie stiahnutia nového sw.js prehliadačom
-      navigator.serviceWorker.register('sw.js?v=3.4').then(reg => {
+      navigator.serviceWorker.register('sw.js?v=3.5').then(reg => {
         reg.update();
 
         if (reg.waiting) {
