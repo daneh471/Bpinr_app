@@ -3,8 +3,8 @@
 ## Zmeny v tejto verzii:
 - ✅ Vynútenie aktualizácie pre všetky zariadenia (Fix cache)
 - ✅ Archív: Aktuálny mesiac + tlačidlo pre staršie mesiace
-- ✅ Úprava zobrazenia verzie na v3.4
-- ✅ Aktualizácia Service Workera na v3.4
+- ✅ Premenovanie aplikácie na BP & INR
+- ✅ Aktualizácia Service Workera na v3.5
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -12,7 +12,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\zdravieplus"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v3.4: Force update for all devices"
+git commit -m "Update v3.5: Rename app to BP & INR"
 git push origin main --force
 ```
 

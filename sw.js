@@ -1,4 +1,4 @@
-const CACHE_NAME = 'zdravie-cache-v3.4';
+const CACHE_NAME = 'bp-inr-cache-v3.5';
 const FILES_TO_CACHE = [
   './index.html',
   './favicon.png',

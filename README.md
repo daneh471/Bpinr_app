@@ -1,6 +1,6 @@
-# Zdravie+
+# BP & INR
 
-`Zdravie+` is a lightweight PWA for tracking health metrics such as INR, medication tablets, blood pressure, and pulse, with data synced via Firebase.
+`BP & INR` is a lightweight PWA for tracking health metrics such as INR, medication tablets, blood pressure, and pulse, with data synced via Firebase.
 
 ## Files
 
