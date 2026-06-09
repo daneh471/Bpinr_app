@@ -24,5 +24,6 @@ git push -u origin main --force
 
 ## ✅ Hotovo!
 
-GitHub Pages: https://daneh471.github.io/Zdravie_plus/
-Vercel: zdravie-plus-ma1j.vercel.app
+Hlavná doména: https://app.bpinr.sk/
+Záloha (GitHub Pages): https://daneh471.github.io/Zdravie_plus/
+Záloha (Vercel): https://zdravie-plus-ma1j.vercel.app/
