@@ -827,8 +827,12 @@
         }
       });
 
-      // Registrácia Service Workera bez query parametra pre lepšiu stabilitu updatov
-      navigator.serviceWorker.register('sw.js?v=1.39').then(reg => {
+      // Registrácia Service Workera s vynútenou kontrolou verzie
+      navigator.serviceWorker.register('sw.js?t=' + Date.now()).then(reg => {
+        // Pravidelná kontrola aktualizácií každú hodinu
+        setInterval(() => { reg.update(); }, 1000 * 60 * 60);
+        
+        // Okamžitá kontrola pri načítaní
         reg.update();
 
         // Vynútiť kontrolu aktualizácie pri každom otvorení aplikácie (pre PWA)
