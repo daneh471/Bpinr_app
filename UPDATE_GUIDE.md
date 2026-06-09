@@ -11,7 +11,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.38: Complete sync"
+git commit -m "Update v1.39: Forced cache clear"
 git push -u origin main --force
 ```
 
