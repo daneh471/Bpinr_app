@@ -566,9 +566,8 @@
           let formattedDate = datePart;
           const dateBits = datePart.split('.');
           if (dateBits.length === 3) {
-            let yy = dateBits[2];
-            if (yy.length === 4) yy = yy.slice(-2);
-            formattedDate = `${dateBits[0].padStart(2, '0')}.${dateBits[1].padStart(2, '0')}.${yy} 12:00`;
+            const yy = dateBits[2];
+            formattedDate = `${dateBits[0].padStart(2, '0')}.${dateBits[1].padStart(2, '0')}.${yy.length === 2 ? '20' + yy : yy} 12:00`;
           }
 
           const record = {
@@ -627,7 +626,7 @@
 
       const now = new Date();
       const currentM = String(now.getMonth() + 1).padStart(2, '0');
-      const currentY = String(now.getFullYear()).slice(-2);
+      const currentY = String(now.getFullYear());
       const currentMonthKey = `${currentM}.${currentY}`;
 
       window.groupedOlder = {}; 
@@ -645,13 +644,14 @@
           const t = parts[1] || '00:00';
           const [dd, mm, yy] = d.split('.').map(Number);
           const [hh, mi] = t.split(':').map(Number);
-          return new Date(2000 + yy, mm - 1, dd, hh, mi).getTime();
+          const year = yy < 100 ? 2000 + yy : yy;
+          return new Date(year, mm - 1, dd, hh, mi).getTime();
         };
         return parse(b.datum) - parse(a.datum);
       }).forEach(r => {
         const [d, m, y] = r.datum.split(' ')[0].split('.');
-        const monthKey = `${m}.${y}`;
         const fullYear = (y && y.length === 2) ? `20${y}` : (y || "");
+        const monthKey = `${m}.${fullYear}`;
         
         if (monthKey !== currentMonthKey) {
           if (!window.groupedOlder[monthKey]) {
@@ -781,7 +781,7 @@
 
     window.formatDatum = () => { 
       const d = new Date(); 
-      const date = `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getFullYear()).slice(-2)}`;
+      const date = `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getFullYear())}`;
       const time = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
       return `${date} ${time}`;
     };
@@ -804,7 +804,7 @@
     
     window.ulozitManual = async () => {
       const dateStr = document.getElementById('manualDatum').value;
-      const datePattern = /^(\d{2})\.(\d{2})\.(\d{2}) (\d{2}):(\d{2})$/;
+      const datePattern = /^(\d{2})\.(\d{2})\.(\d{2,4}) (\d{2}):(\d{2})$/;
       const match = dateStr.match(datePattern);
 
       if (!match) {
@@ -813,14 +813,16 @@
 
       const day = parseInt(match[1]);
       const month = parseInt(match[2]);
+      let year = match[3];
       const hour = parseInt(match[4]);
       const min = parseInt(match[5]);
 
       if (day < 1 || day > 31 || month < 1 || month > 12 || hour > 23 || min > 59) {
         return window.showAlert('Neplatné údaje v dátume alebo čase!');
       }
+      if (year.length === 2) year = "20" + year;
 
-      const data = { userId: window.user.uid, datum: dateStr, inr: document.getElementById('manualInr').value, tab: document.getElementById('manualTab').value, sys: document.getElementById('manualSys').value, dia: document.getElementById('manualDia').value, pulse: document.getElementById('manualPulse').value, mode: window.isBpOnly ? 'bp' : 'full' };
+      const data = { userId: window.user.uid, datum: `${match[1]}.${match[2]}.${year} ${match[4]}:${match[5]}`, inr: document.getElementById('manualInr').value, tab: document.getElementById('manualTab').value, sys: document.getElementById('manualSys').value, dia: document.getElementById('manualDia').value, pulse: document.getElementById('manualPulse').value, mode: window.isBpOnly ? 'bp' : 'full' };
       if (![data.inr, data.tab, data.sys, data.dia, data.pulse].some(v => v.trim() !== '')) return;
 
       await addDoc(collection(db, 'zaznamy'), data);
