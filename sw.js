@@ -1,5 +1,5 @@
-// BP & INR Service Worker - Version 1.38
-const CACHE_NAME = 'bp-inr-cache-v1.38';
+// BP & INR Service Worker - Build: 2024-05-23_v1.38
+const CACHE_NAME = 'bp-inr-v1.38-final';
 const FILES_TO_CACHE = [
   'index.html',
   'favicon.png',
