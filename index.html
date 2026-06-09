@@ -269,8 +269,7 @@
     </div></div>
 
     <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; z-index: 1000;"></div>
-    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.39</div>
-    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.40</div>
+    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.41</div>
   </div>
 
   <script type="module">
@@ -311,13 +310,13 @@
         infoTab: "Tabletka (počet tabletiek)", infoLow: "Nízky", infoNorm: "Normálny", infoHigh: "Vysoký", btnExportPdf: "Exportovať PDF",
         saved: "Uložené", msgOccupied: "Meno je už obsadené.", msgUserNotFound: "Užívateľ neexistuje.", msgWrongPin: "Nesprávny PIN kód.",
         confirmDel: "Naozaj chcete vymazať tento záznam?", confirmLogout: "Ste si istý, že sa chcete odhlásiť?",
-        updateReady: "Nová verzia (v1.39) je pripravená:",
-        updateChanges: "• Vynútená aktualizácia cache (Force update)\n• Oprava detekcie novej verzie\n• Stabilizácia offline režimu",
+        updateReady: "Nová verzia (v1.41) je pripravená:",
+        updateChanges: "• Oprava zobrazenia roku v archíve (20undefined)\n• Zlepšené zoskupovanie budúcich mesiacov\n• Oprava duplicitnej verzie v pätičke",
         btnMonthlyArchive: "Mesačný archív",
         confirmModeChange: "Ste si istý, že chcete prepnúť režim?"
       },
       de: {
-        login: "Anmelden", register: "Registrierung", titleLogin: "Login", titleReg: "Neues Konto", namePh: "Dein Name", pinPh: "PIN (4-6 Stellen)", 
+        login: "Anmelden", register: "Registrierung", titleLogin: "Login", titleReg: "Neues Konto", namePh: "Dein Name", pinPh: "PIN (4-6 Stellen)",
         pinConfPh: "PIN wiederholen", createBtn: "Konto erstellen", menuArchive: "📄 Archiv", menuManual: "➕ Manueller Eintrag", menuInfo: "ℹ️ Informationen", 
         menuSettings: "⚙️ Einstellungen", menuLogout: "🚪 Abmelden", addBtn: "Eintrag hinzufügen", backBtn: "Zurück zum Formular", saveBtn: "Speichern", 
         closeBtn: "Schließen", titleArchive: "Eintragshistorie", titleManual: "Manueller Eintrag", titleInfo: "Informationen zu Werten", titleSettings: "Einstellungen",
@@ -325,8 +324,8 @@
         infoTab: "Tablette (Anzahl der Tabletten)", infoLow: "Niedrig", infoNorm: "Normal", infoHigh: "Hoch", btnExportPdf: "PDF Exportieren",
         saved: "Gespeichert", msgOccupied: "Name bereits vergeben.", msgUserNotFound: "Benutzer existiert nicht.", msgWrongPin: "Falscher PIN-Code.",
         confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
-        updateReady: "Neue Version (v1.39) ist bereit:",
-        updateChanges: "• Erzwungenes Cache-Update\n• Korrektur der Versionserkennung\n• Stabilisierung des Offline-Modus",
+        updateReady: "Neue Version (v1.41) ist bereit:",
+        updateChanges: "• Korrektur der Jahresanzeige im Archiv\n• Verbesserte Gruppierung für zukünftige Monate\n• Bereinigung der Fußzeile",
         btnMonthlyArchive: "Monatsarchiv",
         confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?"
       }
@@ -640,18 +639,21 @@
         const parse = (s) => {
           if (!s || typeof s !== 'string') return 0;
           const parts = s.split(' ');
-          const d = parts[0];
+          const d = parts[0] || "";
           const t = parts[1] || '00:00';
           const [dd, mm, yy] = d.split('.').map(Number);
           const [hh, mi] = t.split(':').map(Number);
+          if (!dd || !mm) return 0;
           const year = yy < 100 ? 2000 + yy : yy;
           return new Date(year, mm - 1, dd, hh, mi).getTime();
         };
         return parse(b.datum) - parse(a.datum);
       }).forEach(r => {
-        const [d, m, y] = r.datum.split(' ')[0].split('.');
-        const fullYear = (y && y.length === 2) ? `20${y}` : (y || "");
-        const monthKey = `${m}.${fullYear}`;
+        const dateParts = (r.datum || "").split(' ')[0].split('.');
+        const m = dateParts[1] || "01";
+        const y = dateParts[2] || "";
+        const fullYear = (y && y.length === 2) ? `20${y}` : (y || new Date().getFullYear().toString());
+        const monthKey = `${m.padStart(2, '0')}.${fullYear}`;
         
         if (monthKey !== currentMonthKey) {
           if (!window.groupedOlder[monthKey]) {
