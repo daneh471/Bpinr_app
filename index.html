@@ -835,10 +835,10 @@
     if ('serviceWorker' in navigator) {
       // Ak bola aktualizácia už potvrdená a stránka sa preładowala,
       // vymažeme flag, aby sa pri ďalšej skutočnej aktualizácii znova zobrazila notifikácia.
-      // Toto zabezpečuje, že flag pretrvá len počas jedného cyklu aktualizácie a preładowania.
-      if (sessionStorage.getItem(UPDATE_ACKNOWLEDGED_KEY) === 'true' && !navigator.serviceWorker.controller) {
-        sessionStorage.removeItem(UPDATE_ACKNOWLEDGED_KEY);
+      if (sessionStorage.getItem(UPDATE_ACKNOWLEDGED_KEY) === 'true') {
+        setTimeout(() => sessionStorage.removeItem(UPDATE_ACKNOWLEDGED_KEY), 1000);
       }
+
       let refreshing = false;
       navigator.serviceWorker.addEventListener('controllerchange', () => {
         if (!refreshing) {
@@ -847,8 +847,8 @@
         }
       });
 
-      // Registrácia Service Workera s vynútenou kontrolou verzie
-      navigator.serviceWorker.register('sw.js?t=' + Date.now()).then(reg => {
+      // Registrácia Service Workera - bez dynamického parametra t=
+      navigator.serviceWorker.register('sw.js').then(reg => {
         // Pravidelná kontrola aktualizácií každú hodinu
         setInterval(() => { reg.update(); }, 1000 * 60 * 60);
         
