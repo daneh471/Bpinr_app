@@ -100,7 +100,7 @@
     .auth-form h2 { margin: -1.5rem 0 0.8rem 0; font-size: 1.6rem; }
     .auth-form h3 { margin: 0 0 0.3rem 0; font-size: 1.1rem; }
     .auth-form input { margin-bottom: 0.4rem; }
-    .tab-buttons { display: flex; gap: 0.4rem; margin-bottom: 0.6rem; width: 100%; justify-content: center; }
+    .tab-buttons { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.6rem; width: 100%; justify-content: center; }
 
     .record-list { display: flex; flex-direction: column; width: 100%; border: 1px solid rgba(128,128,128,0.1); border-radius: 0.8rem; overflow-x: auto; margin-top: 0.5rem; padding-bottom: 2rem; }
     .archive-header { display: grid; grid-template-columns: 28% 11% 11% 12% 12% 12% 14%; font-weight: bold; font-size: 9px; text-transform: uppercase; background-color: var(--header); border-bottom: 2px solid rgba(0,0,0,0.1); padding: 8px 1px; text-align: center; width: 100%; min-width: 340px; box-sizing: border-box; gap: 1px; }
@@ -138,6 +138,10 @@
       input { padding: 0.75rem; font-size: 16px !important; } /* Prevencia Safari zoomu */
       button.main { min-height: 3.2rem; padding: 0.8rem; font-size: 1rem; }
       .modal-content { padding: 1.2rem; }
+      
+      /* Presun polí pod seba už na bežných mobiloch, aby sa predišlo prekrývaniu a stláčaniu */
+      .form-container, .modal-form-grid { grid-template-columns: 1fr; gap: 0.5rem; }
+      button.main, #manualDatum, #pulse, #manualPulse { grid-column: span 1; }
     }
 
     /* Podpora pre veľmi úzke ALEBO nízke mobilné obrazovky (Galaxy S, iPhone SE a iné) */
@@ -146,10 +150,11 @@
       .app-wrapper { padding-left: 0.5rem; padding-right: 0.5rem; padding-top: calc(3rem + env(safe-area-inset-top)); }
       .modal { padding: 0.5rem; }
       .modal-content { padding: 1rem; border-radius: 1.2rem; }
-      .form-container, .modal-form-grid { grid-template-columns: 1fr; }
-      button.main, #manualDatum, #pulse, #manualPulse { grid-column: span 1; min-height: 2.8rem; margin: 0.2rem 0; }
-      .header-title { font-size: 1rem; }
-      header { grid-template-columns: 70px 1fr 70px; padding: 0 5px; height: 40px; }
+      button.main { min-height: 2.8rem; margin: 0.2rem 0; }
+      .header-title { font-size: 0.95rem; }
+      /* Užšia mriežka pre header, aby Menu tlačidlo nestláčalo nadpis */
+      header { grid-template-columns: 60px 1fr 75px; padding: 0 5px; height: 40px; }
+      header button { font-size: 0.85rem; padding: 3px; }
       .auth-form h2 { font-size: 1.4rem; }
       .auth-form { width: 100%; }
       .dropdown-content { right: 0.25rem; max-width: 95vw; }
@@ -163,6 +168,13 @@
       #infoModal #info_legend_title { font-size: 0.85rem; margin-bottom: 0.2rem; }
       #infoModal .modal-content > div { font-size: 0.75rem !important; line-height: 1.2 !important; margin-bottom: 0.2rem; }
       #infoModal button.main { min-height: 2.5rem; padding: 0.4rem; margin-top: 0.5rem; font-size: 0.95rem; }
+    }
+
+    /* Extrémne malé displeje (staršie modely do 340px) */
+    @media (max-width: 340px) {
+      html, body { font-size: 12px; }
+      header button { font-size: 0.75rem; }
+      .dropdown-content button { font-size: 0.9rem; padding: 0.5rem; }
     }
   </style>
 </head>
