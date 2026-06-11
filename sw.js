@@ -4,7 +4,9 @@ const FILES_TO_CACHE = [
   './',
   'index.html',
   'favicon.png',
-  'manifest.json'
+  'manifest.json',
+  'bp.png',
+  'bp inr.png'
 ];
 
 // Inštalácia service workera – ukladáme potrebné súbory
