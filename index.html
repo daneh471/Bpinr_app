@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="BP & INR" />
   <title>BP & INR</title>
-  <link rel="manifest" href="manifest.json?v=1.51" />
+  <link rel="manifest" href="manifest.json?v=1.52" />
   <link rel="icon" href="favicon.png" />
   <link rel="apple-touch-icon" href="favicon.png" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -330,6 +330,7 @@
     <div id="settingsModal" class="modal"><div class="modal-content">
       <h3 id="set_title">Nastavenia</h3>
       <button class="main" id="btn_lang_menu" onclick="window.otvoritJazyk()">Jazyk</button>
+      <button class="main" id="btn_force_update" style="background-color: #f39c12; margin-bottom: 0.3rem;" onclick="window.forceUpdateCheck()">🔄 Vynútiť aktualizáciu</button>
       <button id="btn_import" class="main" style="background-color: #607D8B; display: none;" onclick="window.spustitImport()">Importovať dáta</button>
       <button class="main" id="set_close" onclick="window.zavrietNastavenia()">Zatvoriť</button>
     </div></div>
@@ -374,7 +375,7 @@
  
 
     <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; z-index: 1000;"></div>
-    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.51</div>
+    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.52</div>
   </div>
 
   <script type="module">
@@ -438,10 +439,12 @@
         legGreen: "Zelená – hodnoty sú v poriadku",
         legRed: "Červená – vysoké hodnoty",
         legBlue: "Modrá – nízke hodnoty",
-        updateReady: "Nová verzia (v1.51) je pripravená:",
+        updateReady: "Nová verzia (v1.52) je pripravená:",
         updateChanges: "• Vynútená aktualizácia rozhrania pre mobily\n• Vylepšené zobrazenie profilu a liekov",
         btnMonthlyArchive: "Mesačný archív",
-        confirmModeChange: "Ste si istý, že chcete prepnúť režim?"
+        confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
+        menuForceUpdate: "🔄 Vynútiť aktualizáciu",
+        msgCheckUpdate: "Vymazávam cache a aktualizujem..."
       },
       de: {
         login: "Anmelden", register: "Registrierung", titleLogin: "Login", titleReg: "Neues Konto", namePh: "Dein Name", pinPh: "PIN (6 Stellen)",
@@ -475,10 +478,12 @@
         legBlue: "Blau – niedrige Werte",
         confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
         confirmDelMed: "Dieses Medikament wirklich löschen?",
-        updateReady: "Neue Version (v1.51) ist bereit:",
+        updateReady: "Neue Version (v1.52) ist bereit:",
         updateChanges: "• Erzwungenes UI-Update für mobile Geräte\n• Verbesserte Profil- und Medikamentenansicht",
         btnMonthlyArchive: "Monatsarchiv",
-        confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?"
+        confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
+        menuForceUpdate: "🔄 Update erzwingen",
+        msgCheckUpdate: "Cache leeren und aktualisieren..."
       }
     };
 
@@ -571,6 +576,7 @@
       document.getElementById('userDisplay').innerText = window.userName ? `${t.userPrefix}: ${window.userName}` : '';
       document.getElementById('btn_pdf').innerText = t.btnExportPdf;
       document.getElementById('btn_close_month').innerText = t.closeBtn;
+      if (document.getElementById('btn_force_update')) document.getElementById('btn_force_update').innerText = t.menuForceUpdate;
 
       document.querySelectorAll('.t-low').forEach(el => el.innerText = t.infoLow);
       document.querySelectorAll('.t-norm').forEach(el => el.innerText = t.infoNorm);
@@ -1237,6 +1243,23 @@
       window.otvoritProfil(); // Re-open view modal with updated data
     };
 
+    window.forceUpdateCheck = () => {
+      const t = translations[window.currentLang];
+      window.showToast(t.msgCheckUpdate || "Vymazávam cache...");
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+          for (let reg of registrations) {
+            reg.unregister();
+          }
+          setTimeout(() => {
+            window.location.href = window.location.pathname + '?v=' + new Date().getTime();
+          }, 1000);
+        });
+      } else {
+        window.location.href = window.location.pathname + '?v=' + new Date().getTime();
+      }
+    };
+
     if ('serviceWorker' in navigator) {
       // Ak bola aktualizácia už potvrdená a stránka sa preładowala,
       // vymažeme flag, aby sa pri ďalšej skutočnej aktualizácii znova zobrazila notifikácia.
@@ -1247,7 +1270,7 @@
       let refreshing = false;
       navigator.serviceWorker.addEventListener('controllerchange', () => {
         if (!refreshing) {
-          window.location.reload();
+          window.location.href = window.location.pathname + '?updated=true';
           refreshing = true;
         }
       });
@@ -1297,7 +1320,7 @@
         sessionStorage.setItem(UPDATE_ACKNOWLEDGED_KEY, 'true');
         dialog.style.display = 'none';
         if (reg && reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-        else window.location.reload(true);
+        else window.location.href = window.location.pathname + '?updated=true';
       };
       dialog.style.display = 'flex';
     };
