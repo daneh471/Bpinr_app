@@ -235,7 +235,7 @@
         <p style="margin: 0;"><strong><span id="viewProfilePriezviskoLabel">Priezvisko:</span></strong> <span id="viewProfilePriezvisko"></span></p>
         <p style="margin: 0;"><strong><span id="viewProfileVahaLabel">Váha:</span></strong> <span id="viewProfileVaha"></span></p>
         <p style="margin: 0;"><strong><span id="viewProfileVyskaLabel">Výška:</span></strong> <span id="viewProfileVyska"></span></p>
-        <p style="margin: 0.4rem 0 0 0;"><strong><span id="viewProfileKartaLabel">Karta liekov:</span></strong><br><span id="viewProfileKarta" ondblclick="window.otvoritEditKartu()" title="Dvojklik pre úpravu" style="white-space: pre-wrap; font-size: 0.9rem; opacity: 0.9; display: block; margin-top: 2px; padding: 5px; border: 1px dashed transparent; border-radius: 5px; transition: 0.2s;"></span></p>
+        <p style="margin: 0.4rem 0 0 0;"><strong><span id="viewProfileKartaLabel">Karta liekov:</span></strong><br><span id="viewProfileKarta" ondblclick="window.otvoritEditKartu()" title="Dvojklik pre úpravu" style="white-space: pre-wrap; font-size: 0.9rem; opacity: 0.9; display: block; margin-top: 0.15rem; padding: 0.3rem; border: 1px dashed transparent; border-radius: 0.3rem; transition: 0.2s;"></span></p>
       </div>
       <button class="main" id="profile_edit_btn" onclick="window.otvoritEditProfil()">Upraviť profil</button>
       <button class="main" id="edit_med_btn" onclick="window.otvoritEditKartu()" style="background-color: #f39c12;">Upraviť kartu liekov</button>
@@ -255,10 +255,10 @@
       <button class="main" id="edit_profile_close" onclick="window.zavrietEditProfil()" style="background-color: #777;">Zatvoriť</button>
     </div></div>
 
-    <div id="editMedicationModal" class="modal"><div class="modal-content" style="max-width: 315px; width: 100%;">
+    <div id="editMedicationModal" class="modal"><div class="modal-content" style="max-width: 19.5rem;">
       <h3 id="edit_med_title">Upraviť kartu liekov</h3>
       <div class="modal-form-grid" style="grid-template-columns: 1fr; gap: 0.4rem;">
-        <textarea id="profileKartaSolo" placeholder="Zoznam liekov a dávkovanie..." style="width: 100%; height: 30dvh; min-height: 140px; resize: vertical; padding: 0.75rem; border-radius: 0.8rem; background: var(--card); color: var(--text); border: 1px solid #ccc; font-family: inherit; font-size: 16px;"></textarea>
+        <textarea id="profileKartaSolo" placeholder="Zoznam liekov a dávkovanie..." style="width: 100%; height: 30dvh; min-height: 9rem; resize: vertical; padding: 0.75rem; border-radius: 0.8rem; background: var(--card); color: var(--text); border: 1px solid #ccc; font-family: inherit; font-size: 1rem;"></textarea>
       </div>
       <button class="main" id="edit_med_save" onclick="window.ulozitKartu()">Uložiť kartu</button>
       <button class="main" id="edit_med_close" onclick="window.zavrietEditKartu()" style="background-color: #777;">Zatvoriť</button>
