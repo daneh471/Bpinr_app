@@ -276,12 +276,19 @@
         <p style="margin: 0;"><strong><span id="viewProfilePriezviskoLabel">Priezvisko:</span></strong> <span id="viewProfilePriezvisko"></span></p>
         <p style="margin: 0;"><strong><span id="viewProfileVahaLabel">Váha:</span></strong> <span id="viewProfileVaha"></span></p>
         <p style="margin: 0;"><strong><span id="viewProfileVyskaLabel">Výška:</span></strong> <span id="viewProfileVyska"></span></p>
-        <p style="margin: 0.4rem 0 0 0;"><strong><span id="viewProfileKartaLabel">Karta liekov:</span></strong><br><span id="viewProfileKarta" ondblclick="window.otvoritEditKartu()" title="Dvojklik pre úpravu" style="white-space: pre-wrap; font-size: 0.9rem; opacity: 0.9; display: block; margin-top: 2px; padding: 5px; border: 1px dashed transparent; border-radius: 5px; transition: 0.2s;"></span></p>
       </div>
+      <button class="main" id="view_med_btn" onclick="window.otvoritViewKartu()" style="background-color: #3498db; margin-top: 0.5rem;">Zobraziť kartu liekov</button>
       <button class="main" id="profile_edit_btn" onclick="window.otvoritEditProfil()">Upraviť profil</button>
       <button class="main" id="edit_med_btn" onclick="window.otvoritEditKartu()" style="background-color: #f39c12;">Upraviť kartu liekov</button>
       <button class="main" id="view_profile_close" onclick="window.zavrietViewProfil()" style="background-color: #777;">Zatvoriť</button>
       <p style="font-size: 0.7rem; opacity: 0.6; text-align: center; margin-top: 1rem; margin-bottom: 0;">Tieto dáta sú lokálne uložené, nedajú sa vrátiť späť.</p>
+    </div></div>
+
+    <div id="viewMedicationModal" class="modal"><div class="modal-content">
+      <h3 id="view_med_title_modal">Karta liekov</h3>
+      <div id="viewProfileKarta" ondblclick="window.otvoritEditKartuZView()" title="Dvojklik pre úpravu" style="width: 100%; text-align: left; max-height: 60vh; overflow-y: auto; margin-bottom: 1rem; font-size: 0.95rem; padding: 0.5rem; border: 1px dashed rgba(128,128,128,0.3); border-radius: 0.5rem;"></div>
+      <button class="main" id="view_med_edit_btn" onclick="window.otvoritEditKartuZView()" style="background-color: #f39c12; margin-bottom: 0.5rem;">Upraviť kartu liekov</button>
+      <button class="main" onclick="window.zavrietViewKartu()" style="background-color: #777;">Zatvoriť</button>
     </div></div>
 
     <div id="editProfileModal" class="modal"><div class="modal-content">
@@ -458,7 +465,9 @@
         updateReady: "Nová verzia (v1.44) je pripravená:",
         updateChanges: "• Oprava zobrazenia roku v archíve (20undefined)\n• Zlepšené zoskupovanie budúcich mesiacov\n• Oprava duplicitnej verzie v pätičke",
         btnMonthlyArchive: "Mesačný archív",
-        confirmModeChange: "Ste si istý, že chcete prepnúť režim?"
+        confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
+        viewMedBtn: "Zobraziť kartu liekov",
+        titleViewMed: "Karta liekov"
       },
       de: {
         login: "Anmelden", register: "Registrierung", titleLogin: "Login", titleReg: "Neues Konto", namePh: "Dein Name", pinPh: "PIN (6 Stellen)",
@@ -494,7 +503,9 @@
         updateReady: "Neue Version (v1.41) ist bereit:",
         updateChanges: "• Korrektur der Jahresanzeige im Archiv\n• Verbesserte Gruppierung für zukünftige Monate\n• Bereinigung der Fußzeile",
         btnMonthlyArchive: "Monatsarchiv",
-        confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?"
+        confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
+        viewMedBtn: "Medikamentenkarte anzeigen",
+        titleViewMed: "Medikamentenkarte"
       }
     };
 
@@ -543,10 +554,12 @@
       document.getElementById('viewProfilePriezviskoLabel').innerText = t.surnamePhProfile + ':';
       document.getElementById('viewProfileVahaLabel').innerText = t.weightPhProfile.replace(' (kg)', '') + ':'; // Remove (kg) for label
       document.getElementById('viewProfileVyskaLabel').innerText = t.heightPhProfile.replace(' (cm)', '') + ':'; // Remove (cm) for label
-      document.getElementById('viewProfileKartaLabel').innerText = t.medicationCardPh + ':';
       document.getElementById('profile_edit_btn').innerText = t.editBtnProfile;
       document.getElementById('edit_med_btn').innerText = t.editMedBtn;
       document.getElementById('view_profile_close').innerText = t.closeBtn;
+      if (document.getElementById('view_med_btn')) document.getElementById('view_med_btn').innerText = t.viewMedBtn;
+      if (document.getElementById('view_med_title_modal')) document.getElementById('view_med_title_modal').innerText = t.titleViewMed;
+      if (document.getElementById('view_med_edit_btn')) document.getElementById('view_med_edit_btn').innerText = t.editMedBtn;
 
       // Edit Profile Modal
       document.querySelector('#editProfileModal h3').innerText = t.titleEditProfile;
@@ -1235,6 +1248,21 @@
 
     window.zavrietViewProfil = () => document.getElementById('viewProfileModal').style.display = 'none';
     window.zavrietEditProfil = () => document.getElementById('editProfileModal').style.display = 'none';
+
+    window.otvoritViewKartu = () => {
+      document.getElementById('viewProfileModal').style.display = 'none';
+      document.getElementById('viewMedicationModal').style.display = 'flex';
+    };
+
+    window.zavrietViewKartu = () => {
+      document.getElementById('viewMedicationModal').style.display = 'none';
+      document.getElementById('viewProfileModal').style.display = 'flex';
+    };
+
+    window.otvoritEditKartuZView = () => {
+      document.getElementById('viewMedicationModal').style.display = 'none';
+      window.otvoritEditKartu();
+    };
 
     // Saves the profile data from the edit modal
     window.ulozitProfil = () => {
