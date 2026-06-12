@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="BP & INR" />
   <title>BP & INR</title>
-  <link rel="manifest" href="manifest.json?v=1.45" />
+  <link rel="manifest" href="manifest.json?v=1.50" />
   <link rel="icon" href="favicon.png" />
   <link rel="apple-touch-icon" href="favicon.png" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -358,7 +358,7 @@
  
 
     <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; z-index: 1000;"></div>
-    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.45</div>
+    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.50</div>
   </div>
 
   <script type="module">
@@ -422,7 +422,7 @@
         legGreen: "Zelená – hodnoty sú v poriadku",
         legRed: "Červená – vysoké hodnoty",
         legBlue: "Modrá – nízke hodnoty",
-        updateReady: "Nová verzia (v1.45) je pripravená:",
+        updateReady: "Nová verzia (v1.50) je pripravená:",
         updateChanges: "• Vynútená aktualizácia rozhrania pre mobily\n• Vylepšené zobrazenie profilu a liekov",
         btnMonthlyArchive: "Mesačný archív",
         confirmModeChange: "Ste si istý, že chcete prepnúť režim?"
@@ -459,7 +459,7 @@
         legBlue: "Blau – niedrige Werte",
         confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
         confirmDelMed: "Dieses Medikament wirklich löschen?",
-        updateReady: "Neue Version (v1.45) ist bereit:",
+        updateReady: "Neue Version (v1.50) ist bereit:",
         updateChanges: "• Erzwungenes UI-Update für mobile Geräte\n• Verbesserte Profil- und Medikamentenansicht",
         btnMonthlyArchive: "Monatsarchiv",
         confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?"
@@ -1231,7 +1231,7 @@
       });
 
       // Registrácia Service Workera - bez dynamického parametra t=
-      navigator.serviceWorker.register('sw.js').then(reg => {
+      navigator.serviceWorker.register('sw.js?v=1.50').then(reg => {
         // Pravidelná kontrola aktualizácií každú hodinu
         setInterval(() => { reg.update(); }, 1000 * 60 * 60);
         
