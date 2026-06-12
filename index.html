@@ -133,9 +133,13 @@
 
     .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); justify-content: center; align-items: center; padding: 1rem; }
     .modal-content { background-color: var(--card); padding: 1.5rem; border-radius: 1.5rem; width: 90%; max-width: 24rem; max-height: 90dvh; overflow-y: auto; display: flex; flex-direction: column; align-items: center; text-align: center; box-sizing: border-box; }
-    #infoModal .modal-content { justify-content: center; gap: 0.2rem; }
-    #infoModal p { margin: 0.3rem 0; font-size: 0.9rem; line-height: 1.3; }
-    #infoModal small { font-size: 0.7rem; display: inline-block; margin-top: 0.15rem; line-height: 1.15; }
+    #infoModal .modal-content { justify-content: flex-start; gap: 0; align-items: stretch; text-align: left; }
+    #infoModal h3 { width: 100%; text-align: center; margin-bottom: 0.8rem; }
+    #infoModal p { margin: 0.3rem 0; font-size: 0.95rem; line-height: 1.4; width: 100%; word-break: break-word; }
+    #infoModal small { font-size: 0.8rem; display: block; margin-top: 0.2rem; line-height: 1.2; opacity: 0.8; font-style: italic; }
+    #infoModal hr { width: 100%; opacity: 0.1; margin: 0.8rem 0; border: none; border-top: 1px solid var(--text); }
+    #infoModal .legend-container { width: 100%; font-size: 0.85rem; line-height: 1.5; }
+    #infoModal .legend-container > div { display: flex; align-items: flex-start; gap: 0.4rem; margin-bottom: 0.3rem; }
 
     #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 999; }
     #splashScreen img { width: 10rem; height: 10rem; animation: pulse 1.5s infinite; }
@@ -170,13 +174,14 @@
       .dropdown-content { right: 0.25rem; max-width: 95vw; }
 
       /* Špeciálne zmenšenie Informačného modálu pre okamžitú viditeľnosť bez scrollovania */
-      #infoModal .modal-content { padding: 0.8rem; gap: 0; max-height: 95dvh; justify-content: flex-start; }
-      #infoModal h3 { font-size: 1.1rem; margin: 0 0 0.2rem 0; text-align: center; }
-      #infoModal p { font-size: 0.85rem; margin: 0.15rem 0; line-height: 1.15; }
-      #infoModal small { font-size: 0.7rem; display: inline-block; margin-top: 0.1rem; line-height: 1; }
-      #infoModal hr { margin: 0.3rem 0; opacity: 0.15; }
+      #infoModal .modal-content { padding: 0.8rem; gap: 0; max-height: 95dvh; }
+      #infoModal h3 { font-size: 1.1rem; margin-bottom: 0.4rem; }
+      #infoModal p { font-size: 0.85rem; margin: 0.2rem 0; line-height: 1.2; }
+      #infoModal small { font-size: 0.75rem; margin-top: 0.1rem; }
+      #infoModal hr { margin: 0.4rem 0; }
       #infoModal #info_legend_title { font-size: 0.85rem; margin-bottom: 0.2rem; }
-      #infoModal .modal-content > div { font-size: 0.75rem !important; line-height: 1.2 !important; margin-bottom: 0.2rem; }
+      #infoModal .legend-container { font-size: 0.8rem; line-height: 1.2; }
+      #infoModal .legend-container > div { margin-bottom: 0.2rem; }
       #infoModal button.main { min-height: 2.5rem; padding: 0.4rem; margin-top: 0.5rem; font-size: 0.95rem; }
     }
 
@@ -190,13 +195,13 @@
 
       /* Ešte výraznejšie zmenšenie Informačného modálu pre malé mobily */
       #infoModal .modal-content { padding: 0.6rem; }
-      #infoModal h3 { font-size: 0.9rem; margin-bottom: 0.1rem; }
-      #infoModal p { font-size: 0.68rem; margin: 0.08rem 0; line-height: 1.1; }
-      #infoModal small { font-size: 0.55rem; margin-top: 0; }
-      #infoModal hr { margin: 0.15rem 0; }
-      #infoModal #info_legend_title { font-size: 0.68rem; margin-bottom: 0.05rem; }
-      #infoModal .modal-content > div { font-size: 0.62rem !important; line-height: 1.1 !important; margin-bottom: 0.05rem; }
-      #infoModal button.main { min-height: 2rem; padding: 0.2rem; margin-top: 0.3rem; font-size: 0.8rem; }
+      #infoModal h3 { font-size: 1rem; margin-bottom: 0.2rem; }
+      #infoModal p { font-size: 0.75rem; margin: 0.15rem 0; line-height: 1.15; }
+      #infoModal small { font-size: 0.65rem; }
+      #infoModal hr { margin: 0.3rem 0; }
+      #infoModal #info_legend_title { font-size: 0.75rem; }
+      #infoModal .legend-container { font-size: 0.7rem; line-height: 1.15; }
+      #infoModal button.main { min-height: 2rem; padding: 0.2rem; margin-top: 0.4rem; font-size: 0.85rem; }
     }
 
     /* Extrémne malé displeje (staršie modely do 340px) */
@@ -279,7 +284,6 @@
       </div>
       <button class="main" id="view_med_btn" onclick="window.otvoritViewKartu()" style="background-color: #3498db; margin-top: 0.5rem;">Zobraziť kartu liekov</button>
       <button class="main" id="profile_edit_btn" onclick="window.otvoritEditProfil()">Upraviť profil</button>
-      <button class="main" id="edit_med_btn" onclick="window.otvoritEditKartu()" style="background-color: #f39c12;">Upraviť kartu liekov</button>
       <button class="main" id="view_profile_close" onclick="window.zavrietViewProfil()" style="background-color: #777;">Zatvoriť</button>
       <p style="font-size: 0.7rem; opacity: 0.6; text-align: center; margin-top: 1rem; margin-bottom: 0;">Tieto dáta sú lokálne uložené, nedajú sa vrátiť späť.</p>
     </div></div>
@@ -306,9 +310,6 @@
     <div id="editMedicationModal" class="modal"><div class="modal-content">
       <h3 id="edit_med_title">Upraviť kartu liekov</h3>
       <div class="modal-form-grid" style="grid-template-columns: 1fr; gap: 0.4rem; text-align: left;">
-        <div style="display: grid; grid-template-columns: 3fr 2fr 2fr 35px; gap: 4px; font-weight: bold; font-size: 0.8rem; padding: 0 0.2rem;">
-          <div style="text-align: left;">Tabletka</div><div style="text-align: center;">Mg</div><div style="text-align: center;">Kedy</div><div></div>
-        </div>
         <div id="medListContainer" style="display: flex; flex-direction: column; gap: 0.4rem; max-height: 50vh; overflow-y: auto; padding-right: 2px;"></div>
         <button class="secondary" onclick="window.pridatLiek('', '', '')" style="margin-top: 0.2rem; font-weight: bold;">+ Pridať ďalší liek</button>
       </div>
@@ -371,20 +372,20 @@
     <div id="infoModal" class="modal"><div class="modal-content">
       <h3 id="info_title">Informácie</h3>
       <p id="info_tab_row"><strong>TAB:</strong> <span id="info_tab_desc">Tabletka (počet tabletiek)</span></p>
-      <p id="info_inr_row"><strong>INR:</strong> &lt;2 <span class="t-low">Nízky</span> | 2–3 <span class="t-norm">Normálny</span> | &gt;3 <span class="t-high">Vysoký</span><br><small id="info_inr_note" style="opacity: 0.8; font-style: italic;">(Štandardné rozmedzie. Individuálne cieľové hodnoty stanovuje ošetrujúci lekár.)</small></p>
+      <p id="info_inr_row"><strong>INR:</strong> &lt;2 <span class="t-low">Nízky</span> | 2–3 <span class="t-norm">Normálny</span> | &gt;3 <span class="t-high">Vysoký</span><br><small id="info_inr_note">(Štandardné rozmedzie. Individuálne cieľové hodnoty stanovuje ošetrujúci lekár.)</small></p>
       <p><strong>SYS:</strong> &lt;90 <span class="t-low">Nízky</span> | 90–140 <span class="t-norm">Normálny</span> | &gt;140 <span class="t-high">Vysoký</span></p>
       <p><strong>DIA:</strong> &lt;60 <span class="t-low">Nízky</span> | 60–90 <span class="t-norm">Normálny</span> | &gt;90 <span class="t-high">Vysoký</span></p>
       <p><strong>PULZ:</strong> &lt;60 <span class="t-low">Nízky</span> | 60–100 <span class="t-norm">Normálny</span> | &gt;100 <span class="t-high">Vysoký</span></p>
-      <hr style="opacity: 0.1; margin: 0.5rem 0;">
+      <hr>
       <p><strong><span id="info_legend_title">Vysvetlenie farieb:</span></strong></p>
-      <div style="font-size: 0.8rem; line-height: 1.4;">
-        <div id="leg_item_purple"><span style="color:#9c27b0;">■</span> <span id="leg_purple">Fialová – neutrálne (cieľové hodnoty stanovuje lekár)</span></div>
-        <div id="leg_item_yellow"><span style="color:#ffeb3b;">■</span> <span id="leg_yellow">Žltá – neutrálne (hodnoty stanovuje lekár)</span></div>
-        <div><span style="color:#00e676;">■</span> <span id="leg_green">Zelená – hodnoty sú v poriadku</span></div>
-        <div><span style="color:#ff1744;">■</span> <span id="leg_red">Červená – vysoké hodnoty</span></div>
-        <div><span style="color:#2196F3;">■</span> <span id="leg_blue">Modrá – nízke hodnoty</span></div>
+      <div class="legend-container">
+        <div id="leg_item_purple"><span style="color:#9c27b0; font-size: 1.2em;">■</span> <span id="leg_purple">Fialová – neutrálne (cieľové hodnoty stanovuje lekár)</span></div>
+        <div id="leg_item_yellow"><span style="color:#ffeb3b; font-size: 1.2em;">■</span> <span id="leg_yellow">Žltá – neutrálne (hodnoty stanovuje lekár)</span></div>
+        <div><span style="color:#00e676; font-size: 1.2em;">■</span> <span id="leg_green">Zelená – hodnoty sú v poriadku</span></div>
+        <div><span style="color:#ff1744; font-size: 1.2em;">■</span> <span id="leg_red">Červená – vysoké hodnoty</span></div>
+        <div><span style="color:#2196F3; font-size: 1.2em;">■</span> <span id="leg_blue">Modrá – nízke hodnoty</span></div>
       </div>
-      <button class="main" onclick="window.zavrietInfo()">Zatvoriť</button>
+      <button class="main" onclick="window.zavrietInfo()" style="margin-top: 1rem;">Zatvoriť</button>
     </div></div>
 
     <div id="customDialog" class="modal"><div class="modal-content">
@@ -555,7 +556,7 @@
       document.getElementById('viewProfileVahaLabel').innerText = t.weightPhProfile.replace(' (kg)', '') + ':'; // Remove (kg) for label
       document.getElementById('viewProfileVyskaLabel').innerText = t.heightPhProfile.replace(' (cm)', '') + ':'; // Remove (cm) for label
       document.getElementById('profile_edit_btn').innerText = t.editBtnProfile;
-      document.getElementById('edit_med_btn').innerText = t.editMedBtn;
+      if (document.getElementById('edit_med_btn')) document.getElementById('edit_med_btn').innerText = t.editMedBtn;
       document.getElementById('view_profile_close').innerText = t.closeBtn;
       if (document.getElementById('view_med_btn')) document.getElementById('view_med_btn').innerText = t.viewMedBtn;
       if (document.getElementById('view_med_title_modal')) document.getElementById('view_med_title_modal').innerText = t.titleViewMed;
@@ -1202,12 +1203,40 @@
       const container = document.getElementById('medListContainer');
       const row = document.createElement('div');
       row.className = 'med-row';
-      row.style.cssText = 'display: grid; grid-template-columns: 3fr 2fr 2fr 35px; gap: 4px; align-items: center;';
+      row.style.cssText = 'display: flex; flex-direction: column; gap: 0.5rem; background: rgba(128,128,128,0.05); padding: 0.6rem; border-radius: 0.5rem; border: 1px solid rgba(128,128,128,0.2);';
+      
+      let val = mg, unit = 'mg';
+      const match = mg.match(/^([\d.,]+)\s*(mg|g|ml|ks)$/i);
+      if (match) { val = match[1]; unit = match[2].toLowerCase(); }
+      
+      const kedyOptions = ["Ráno", "Obed", "Večer", "Noc", "Ráno, Večer", "Ráno, Obed, Večer", "Podľa potreby"];
+      let kedyHtml = '<option value="">Kedy?</option>';
+      let foundKedy = false;
+      kedyOptions.forEach(opt => {
+        const selected = (kedy.toLowerCase() === opt.toLowerCase()) ? 'selected' : '';
+        if (selected) foundKedy = true;
+        kedyHtml += `<option value="${opt}" ${selected}>${opt}</option>`;
+      });
+      if (kedy && !foundKedy) {
+        kedyHtml += `<option value="${kedy.replace(/"/g, '&quot;')}" selected>${kedy}</option>`;
+      }
+
       row.innerHTML = `
-        <input type="text" class="med-tab" placeholder="Liek" value="${tab.replace(/"/g, '&quot;')}" style="padding: 0.5rem; font-size: 16px !important; border-radius: 0.4rem; text-align: left;">
-        <input type="text" class="med-mg" placeholder="Mg" value="${mg.replace(/"/g, '&quot;')}" style="padding: 0.5rem 0.2rem; font-size: 16px !important; border-radius: 0.4rem; text-align: center;">
-        <input type="text" class="med-kedy" placeholder="Kedy" value="${kedy.replace(/"/g, '&quot;')}" style="padding: 0.5rem 0.2rem; font-size: 16px !important; border-radius: 0.4rem; text-align: center;">
-        <button onclick="this.parentElement.remove()" style="background: #ff1744; color: white; border: none; border-radius: 0.4rem; padding: 0.5rem 0; height: 100%; cursor: pointer; font-weight: bold;">X</button>
+        <div style="display: flex; gap: 0.4rem; align-items: center;">
+          <input type="text" class="med-tab" placeholder="Názov lieku" value="${tab.replace(/"/g, '&quot;')}" style="flex: 1; padding: 0.6rem; font-size: 16px !important; border-radius: 0.4rem; border: 1px solid #ccc; background: var(--card); color: var(--text);">
+          <button onclick="this.parentElement.parentElement.remove()" style="background: #ff1744; color: white; border: none; border-radius: 0.4rem; width: 2.6rem; height: 2.6rem; cursor: pointer; font-weight: bold; flex-shrink: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">X</button>
+        </div>
+        <div style="display: flex; gap: 0.4rem;">
+          <div style="display: flex; flex: 1; border: 1px solid #ccc; border-radius: 0.4rem; overflow: hidden; background: var(--card);">
+            <input type="tel" class="med-mg-val" placeholder="Množstvo" value="${val.replace(/"/g, '&quot;')}" inputmode="decimal" style="width: 55%; border: none; border-radius: 0; padding: 0.6rem; font-size: 16px !important; color: var(--text); background: transparent;">
+            <select class="med-mg-unit" style="width: 45%; border: none; border-left: 1px solid #ccc; background: transparent; padding: 0.6rem; color: var(--text); font-size: 16px !important; outline: none; -webkit-appearance: none;">
+              <option value="mg" ${unit==='mg'?'selected':''}>mg</option><option value="g" ${unit==='g'?'selected':''}>g</option><option value="ml" ${unit==='ml'?'selected':''}>ml</option><option value="ks" ${unit==='ks'?'selected':''}>ks</option>
+            </select>
+          </div>
+          <select class="med-kedy" style="flex: 1; padding: 0.6rem; border: 1px solid #ccc; border-radius: 0.4rem; background: var(--card); color: var(--text); font-size: 16px !important; outline: none; -webkit-appearance: none;">
+            ${kedyHtml}
+          </select>
+        </div>
       `;
       container.appendChild(row);
     };
@@ -1238,7 +1267,12 @@
       const rows = document.querySelectorAll('#medListContainer .med-row');
       const finalLines = [];
       rows.forEach(row => {
-        const tab = row.querySelector('.med-tab').value.trim(); const mg = row.querySelector('.med-mg').value.trim(); const kedy = row.querySelector('.med-kedy').value.trim();
+        const tab = row.querySelector('.med-tab').value.trim(); 
+        const mgVal = row.querySelector('.med-mg-val').value.trim();
+        const mgUnit = row.querySelector('.med-mg-unit').value;
+        const mg = mgVal ? `${mgVal} ${mgUnit}` : '';
+        const kedy = row.querySelector('.med-kedy').value.trim();
+        
         if (tab || mg || kedy) finalLines.push(`${tab} | ${mg} | ${kedy}`);
       });
       localStorage.setItem('userProfile_karta', finalLines.join('\n'));
