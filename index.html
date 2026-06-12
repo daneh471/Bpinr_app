@@ -75,7 +75,7 @@
     }
     .header-logo-container { height: 100%; display: flex; align-items: center; justify-content: flex-start; overflow: hidden; flex: 0 0 auto; }
     .header-logo { height: 70%; max-height: 2rem; width: auto; object-fit: contain; pointer-events: none; }
-    .header-title { flex-grow: 1; text-align: center; font-weight: 800; font-size: 1.1rem; background: linear-gradient(45deg, #FF8800, #ffb366); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0 2px; position: relative; top: -3px; }
+    .header-title { flex-grow: 1; text-align: center; font-weight: 800; font-size: 1.1rem; background: linear-gradient(45deg, #FF8800, #ffb366); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0 0.1rem; position: relative; top: -0.2rem; }
     header button { background-color: transparent; border: none; font-size: 1rem; cursor: pointer; padding: 0.4rem 0.6rem; color: var(--text); display: flex; align-items: center; white-space: nowrap; flex: 0 0 auto; }
     
   .dropdown-content { display: none; position: absolute; right: 0.5rem; top: calc(3.8rem + env(safe-area-inset-top)); background-color: var(--card); width: max-content; max-width: 90vw; box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.3); z-index: 1001; border-radius: 1rem; overflow: hidden; max-height: calc(100dvh - 5rem); flex-direction: column; padding: 0.5rem; box-sizing: border-box; border: 1px solid rgba(128,128,128,0.2); }
@@ -131,7 +131,7 @@
       .record-row div:last-child { display: none; } /* Skryť ikonu koša */
     }
 
-    .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); justify-content: center; align-items: center; padding: 1rem; }
+    .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(0.25rem); justify-content: center; align-items: center; padding: 1rem; }
     .modal-content { background-color: var(--card); padding: 1.5rem; border-radius: 1.5rem; width: 90%; max-width: 24rem; max-height: 90dvh; overflow-y: auto; display: flex; flex-direction: column; align-items: center; text-align: center; box-sizing: border-box; }
     #infoModal .modal-content { justify-content: flex-start; gap: 0; align-items: stretch; text-align: left; }
     #infoModal h3 { width: 100%; text-align: center; margin-bottom: 0.8rem; }
@@ -310,7 +310,7 @@
     <div id="editMedicationModal" class="modal"><div class="modal-content">
       <h3 id="edit_med_title">Upraviť kartu liekov</h3>
       <div class="modal-form-grid" style="grid-template-columns: 1fr; gap: 0.4rem; text-align: left;">
-        <div id="medListContainer" style="display: flex; flex-direction: column; gap: 0.4rem; max-height: 50vh; overflow-y: auto; padding-right: 2px;"></div>
+        <div id="medListContainer" style="display: flex; flex-direction: column; gap: 0.4rem; max-height: 50vh; overflow-y: auto; padding-right: 0.1rem;"></div>
         <button class="secondary" onclick="window.pridatLiek('', '', '')" style="margin-top: 0.2rem; font-weight: bold;">+ Pridať ďalší liek</button>
       </div>
       <button class="main" id="edit_med_save" onclick="window.ulozitKartu()">Uložiť kartu</button>
@@ -1172,12 +1172,12 @@
       const kartaRaw = localStorage.getItem('userProfile_karta') || '-';
       if (kartaRaw !== '-' && kartaRaw.includes(' | ')) {
         const sanitize = (str) => { const div = document.createElement('div'); div.textContent = str; return div.innerHTML; };
-        let kartaHtml = '<table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; margin-top: 5px;">';
-        kartaHtml += '<tr style="border-bottom: 1px solid rgba(128,128,128,0.2);"><th style="padding: 2px 0;">Tabletka</th><th style="padding: 2px 0; text-align: center;">Mg</th><th style="padding: 2px 0; text-align: center;">Kedy</th></tr>';
+        let kartaHtml = '<table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; margin-top: 0.3rem;">';
+        kartaHtml += '<tr style="border-bottom: 1px solid rgba(128,128,128,0.2);"><th style="padding: 0.15rem 0;">Tabletka</th><th style="padding: 0.15rem 0; text-align: center;">Mg</th><th style="padding: 0.15rem 0; text-align: center;">Kedy</th></tr>';
         kartaRaw.split('\n').forEach(line => {
           const parts = line.split(' | ');
-          if (parts.length >= 3) kartaHtml += `<tr style="border-bottom: 1px solid rgba(128,128,128,0.1);"><td style="padding: 4px 0;">${sanitize(parts[0])}</td><td style="padding: 4px 0; text-align: center;">${sanitize(parts[1])}</td><td style="padding: 4px 0; text-align: center;">${sanitize(parts[2])}</td></tr>`;
-          else if (line.trim() !== '') kartaHtml += `<tr><td colspan="3" style="padding: 4px 0;">${sanitize(line)}</td></tr>`;
+          if (parts.length >= 3) kartaHtml += `<tr style="border-bottom: 1px solid rgba(128,128,128,0.1);"><td style="padding: 0.25rem 0;">${sanitize(parts[0])}</td><td style="padding: 0.25rem 0; text-align: center;">${sanitize(parts[1])}</td><td style="padding: 0.25rem 0; text-align: center;">${sanitize(parts[2])}</td></tr>`;
+          else if (line.trim() !== '') kartaHtml += `<tr><td colspan="3" style="padding: 0.25rem 0;">${sanitize(line)}</td></tr>`;
         });
         kartaHtml += '</table>';
         document.getElementById('viewProfileKarta').innerHTML = kartaHtml;
@@ -1231,7 +1231,7 @@
       row.innerHTML = `
         <div style="display: flex; gap: 0.4rem; align-items: center;">
           <input type="text" class="med-tab" placeholder="Názov lieku" value="${tab.replace(/"/g, '&quot;')}" style="flex: 1; padding: 0.6rem; font-size: 16px !important; border-radius: 0.4rem; border: 1px solid #ccc; background: var(--card); color: var(--text);">
-          <button onclick="this.parentElement.parentElement.remove()" style="background: #ff1744; color: white; border: none; border-radius: 0.4rem; width: 2.6rem; height: 2.6rem; cursor: pointer; font-weight: bold; flex-shrink: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">X</button>
+          <button onclick="this.parentElement.parentElement.remove()" style="background: #ff1744; color: white; border: none; border-radius: 0.4rem; width: 2.6rem; height: 2.6rem; cursor: pointer; font-weight: bold; flex-shrink: 0; box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.1);">X</button>
         </div>
         <div style="display: flex; gap: 0.4rem;">
           <div style="display: flex; flex: 1; border: 1px solid #ccc; border-radius: 0.4rem; overflow: hidden; background: var(--card);">
