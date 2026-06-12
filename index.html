@@ -283,6 +283,7 @@
         <p style="margin: 0;"><strong><span id="viewProfileVyskaLabel">Výška:</span></strong> <span id="viewProfileVyska"></span></p>
       </div>
       <button class="main" id="view_med_btn" onclick="window.otvoritViewKartu()" style="background-color: #3498db; margin-top: 0.5rem;">Zobraziť kartu liekov</button>
+      <button class="main" id="view_weight_history_btn" onclick="window.otvoritWeightHistory()" style="background-color: #9c27b0;">História váhy</button>
       <button class="main" id="profile_edit_btn" onclick="window.otvoritEditProfil()">Upraviť profil</button>
       <button class="main" id="view_profile_close" onclick="window.zavrietViewProfil()" style="background-color: #777;">Zatvoriť</button>
       <p style="font-size: 0.7rem; opacity: 0.6; text-align: center; margin-top: 1rem; margin-bottom: 0;">Tieto dáta sú lokálne uložené, nedajú sa vrátiť späť.</p>
@@ -293,6 +294,12 @@
       <div id="viewProfileKarta" ondblclick="window.otvoritEditKartuZView()" title="Dvojklik pre úpravu" style="width: 100%; text-align: left; max-height: 60vh; overflow-y: auto; margin-bottom: 1rem; font-size: 0.95rem; padding: 0.5rem; border: 1px dashed rgba(128,128,128,0.3); border-radius: 0.5rem;"></div>
       <button class="main" id="view_med_edit_btn" onclick="window.otvoritEditKartuZView()" style="background-color: #f39c12; margin-bottom: 0.5rem;">Upraviť kartu liekov</button>
       <button class="main" onclick="window.zavrietViewKartu()" style="background-color: #777;">Zatvoriť</button>
+    </div></div>
+
+    <div id="weightHistoryModal" class="modal"><div class="modal-content">
+      <h3 id="weight_history_title">História váhy</h3>
+      <div id="weightHistoryList" class="record-list" style="max-height: 60vh; overflow-y: auto; padding-right: 0.2rem; border: none;"></div>
+      <button class="main" onclick="window.zavrietWeightHistory()" style="background-color: #777; margin-top: 1rem;">Zatvoriť</button>
     </div></div>
 
     <div id="editProfileModal" class="modal"><div class="modal-content">
@@ -467,8 +474,10 @@
         updateChanges: "• Oprava zobrazenia roku v archíve (20undefined)\n• Zlepšené zoskupovanie budúcich mesiacov\n• Oprava duplicitnej verzie v pätičke",
         btnMonthlyArchive: "Mesačný archív",
         confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
-        viewMedBtn: "Zobraziť kartu liekov",
-        titleViewMed: "Karta liekov"
+        viewMedBtn: "Karta liekov",
+        titleViewMed: "Karta liekov",
+        btnWeightHistory: "História váhy",
+        titleWeightHistory: "História váhy"
       },
       de: {
         login: "Anmelden", register: "Registrierung", titleLogin: "Login", titleReg: "Neues Konto", namePh: "Dein Name", pinPh: "PIN (6 Stellen)",
@@ -505,8 +514,10 @@
         updateChanges: "• Korrektur der Jahresanzeige im Archiv\n• Verbesserte Gruppierung für zukünftige Monate\n• Bereinigung der Fußzeile",
         btnMonthlyArchive: "Monatsarchiv",
         confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
-        viewMedBtn: "Medikamentenkarte anzeigen",
-        titleViewMed: "Medikamentenkarte"
+        viewMedBtn: "Medikamentenkarte",
+        titleViewMed: "Medikamentenkarte",
+        btnWeightHistory: "Gewichtsverlauf",
+        titleWeightHistory: "Gewichtsverlauf"
       }
     };
 
@@ -561,6 +572,8 @@
       if (document.getElementById('view_med_btn')) document.getElementById('view_med_btn').innerText = t.viewMedBtn;
       if (document.getElementById('view_med_title_modal')) document.getElementById('view_med_title_modal').innerText = t.titleViewMed;
       if (document.getElementById('view_med_edit_btn')) document.getElementById('view_med_edit_btn').innerText = t.editMedBtn;
+      if (document.getElementById('view_weight_history_btn')) document.getElementById('view_weight_history_btn').innerText = t.btnWeightHistory;
+      if (document.getElementById('weight_history_title')) document.getElementById('weight_history_title').innerText = t.titleWeightHistory;
 
       // Edit Profile Modal
       document.querySelector('#editProfileModal h3').innerText = t.titleEditProfile;
@@ -1027,7 +1040,35 @@
       const tInfo = translations[window.currentLang];
       const pMeno = localStorage.getItem('userProfile_meno') || '';
       const pPriezvisko = localStorage.getItem('userProfile_priezvisko') || '';
-      const pVaha = localStorage.getItem('userProfile_vaha') ? localStorage.getItem('userProfile_vaha') + ' kg' : '-';
+      
+      let pVaha = localStorage.getItem('userProfile_vaha') ? localStorage.getItem('userProfile_vaha') + ' kg' : '-';
+      try {
+        const historyKey = `weight_history_${window.user ? window.user.uid : 'local'}`;
+        let history = JSON.parse(localStorage.getItem(historyKey) || '[]');
+        if (history.length > 0) {
+          // Nájsť absolútne posledný záznam podľa dátumu v histórii
+          history.sort((a,b) => {
+            const parse = s => { 
+              if (!s || typeof s !== 'string') return 0; 
+              const parts = s.split(' '); 
+              const d = parts[0] || ""; 
+              const t = parts[1] || '00:00'; 
+              const [dd, mm, yy] = d.split('.').map(Number); 
+              const [hh, mi] = t.split(':').map(Number); 
+              if (!dd || !mm) return 0; 
+              const year = yy < 100 ? 2000 + yy : yy; 
+              return new Date(year, mm - 1, dd, hh, mi).getTime(); 
+            };
+            return parse(b.datum) - parse(a.datum);
+          });
+          const latestRec = history[0];
+          const diff = parseFloat(latestRec.rozdiel) || 0;
+          const arrow = diff > 0 ? '↗' : (diff < 0 ? '↘' : '');
+          const diffStr = diff > 0 ? `+${diff}` : `${diff}`;
+          pVaha = diff !== 0 ? `${latestRec.vaha} kg (${arrow} ${diffStr} kg)` : `${latestRec.vaha} kg`;
+        }
+      } catch (err) {}
+
       const pVyska = localStorage.getItem('userProfile_vyska') ? localStorage.getItem('userProfile_vyska') + ' cm' : '-';
       let fullName = `${pMeno} ${pPriezvisko}`.trim();
       if (!fullName) fullName = userName || '-';
@@ -1306,17 +1347,102 @@
     };
 
     // Saves the profile data from the edit modal
-    window.ulozitProfil = () => {
+    window.ulozitProfil = async () => {
       const t = translations[window.currentLang];
       if (window.user) localStorage.setItem('userProfile_uid', window.user.uid);
+      
+      const staravahaStr = localStorage.getItem('userProfile_vaha');
+      const staraVaha = staravahaStr ? parseFloat(staravahaStr.replace(',','.')) : null;
+      
+      const novaVahaStr = document.getElementById('profileVaha').value.trim();
+      const novaVaha = novaVahaStr ? parseFloat(novaVahaStr.replace(',','.')) : null;
+
       localStorage.setItem('userProfile_meno', document.getElementById('profileMeno').value.trim());
       localStorage.setItem('userProfile_priezvisko', document.getElementById('profilePriezvisko').value.trim());
-      localStorage.setItem('userProfile_vaha', document.getElementById('profileVaha').value.trim());
+      localStorage.setItem('userProfile_vaha', novaVahaStr);
       localStorage.setItem('userProfile_vyska', document.getElementById('profileVyska').value.trim());
+      
+      // Automatický zápis do histórie váhy (Lokálne)
+      if (novaVaha !== null && staraVaha !== novaVaha) {
+        try {
+          const rozdiel = staraVaha !== null ? (novaVaha - staraVaha).toFixed(1) : 0;
+          const historyKey = `weight_history_${window.user ? window.user.uid : 'local'}`;
+          let history = JSON.parse(localStorage.getItem(historyKey) || '[]');
+          history.push({
+            id: Date.now().toString(),
+            datum: window.formatDatum(),
+            vaha: novaVaha,
+            rozdiel: rozdiel
+          });
+          localStorage.setItem(historyKey, JSON.stringify(history));
+        } catch (err) {
+          console.error("Chyba pri ukladaní do lokálnej histórie váhy:", err);
+        }
+      }
+
       window.showToast(t.saved || 'Uložené');
       window.zavrietEditProfil(); // Close edit modal
       window.otvoritProfil(); // Re-open view modal with updated data
     };
+    
+    window.otvoritWeightHistory = async () => {
+      document.getElementById('viewProfileModal').style.display = 'none';
+      document.getElementById('weightHistoryModal').style.display = 'flex';
+      const list = document.getElementById('weightHistoryList');
+      list.innerHTML = '<p style="text-align: center; opacity: 0.6; font-size: 0.9rem;">Načítavam...</p>';
+      
+      try {
+        const historyKey = `weight_history_${window.user ? window.user.uid : 'local'}`;
+        let history = JSON.parse(localStorage.getItem(historyKey) || '[]');
+        
+        // Zoradiť podľa času od najnovšieho
+        history.sort((a,b) => {
+          const parse = s => { 
+            if (!s || typeof s !== 'string') return 0; 
+            const parts = s.split(' '); 
+            const d = parts[0] || ""; 
+            const t = parts[1] || '00:00'; 
+            const [dd, mm, yy] = d.split('.').map(Number); 
+            const [hh, mi] = t.split(':').map(Number); 
+            if (!dd || !mm) return 0; 
+            const year = yy < 100 ? 2000 + yy : yy; 
+            return new Date(year, mm - 1, dd, hh, mi).getTime(); 
+          };
+          return parse(b.datum) - parse(a.datum);
+        });
+
+        if (history.length === 0) { list.innerHTML = '<p style="text-align: center; opacity: 0.6; font-size: 0.9rem;">Zatiaľ žiadne záznamy.</p>'; return; }
+        
+        let html = '';
+        history.forEach(r => {
+          const diff = parseFloat(r.rozdiel) || 0;
+          const diffStr = diff > 0 ? `+${diff} kg` : (diff < 0 ? `${diff} kg` : `0 kg`);
+          const arrow = diff > 0 ? '↗' : (diff < 0 ? '↘' : '→');
+          const color = diff > 0 ? 'color: #ff1744;' : (diff < 0 ? 'color: #00e676;' : 'opacity: 0.6;');
+          
+          html += `<div class="record-row" style="display: flex; justify-content: space-between; padding: 0.8rem 0.4rem; border-bottom: 1px solid rgba(128,128,128,0.1);">
+            <div style="flex: 2; text-align: left; font-size: 0.85rem; opacity: 0.8;">${r.datum || '-'}</div>
+            <div style="flex: 1; font-weight: bold; font-size: 0.95rem;">${r.vaha} kg</div>
+            <div style="flex: 1.5; text-align: right; font-weight: bold; font-size: 0.9rem; ${color}">${arrow} ${diffStr}</div>
+            <div style="flex: 0.5; text-align: right; cursor: pointer; font-size: 0.9rem; padding-left: 0.5rem;" onclick="window.showConfirm('${translations[window.currentLang].confirmDel}', () => window.vymazatVahu('${r.id}'))">🗑️</div>
+          </div>`;
+        });
+        list.innerHTML = html;
+      } catch (err) {
+        console.error("Chyba histórie váhy:", err);
+        list.innerHTML = `<p style="text-align: center; color: #ff1744; font-size: 0.9rem; padding: 1rem;">Nepodarilo sa načítať lokálne dáta.</p>`;
+      }
+    };
+
+    window.vymazatVahu = (id) => {
+      const historyKey = `weight_history_${window.user ? window.user.uid : 'local'}`;
+      let history = JSON.parse(localStorage.getItem(historyKey) || '[]');
+      history = history.filter(item => item.id !== id);
+      localStorage.setItem(historyKey, JSON.stringify(history));
+      window.otvoritWeightHistory();
+    };
+
+    window.zavrietWeightHistory = () => { document.getElementById('weightHistoryModal').style.display = 'none'; document.getElementById('viewProfileModal').style.display = 'flex'; };
 
     if ('serviceWorker' in navigator) {
       // Ak bola aktualizácia už potvrdená a stránka sa preładowala,
