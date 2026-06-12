@@ -1246,7 +1246,7 @@
       const container = document.getElementById('medListContainer');
       const row = document.createElement('div');
       row.className = 'med-row';
-      row.style.cssText = 'display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: rgba(128,128,128,0.05); padding: 0.6rem; border-radius: 0.5rem; border: 1px solid rgba(128,128,128,0.2);';
+      row.style.cssText = 'display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: rgba(128,128,128,0.05); padding: 0.6rem; border-radius: 0.5rem; border: 1px solid rgba(128,128,128,0.2); width: 100%; max-width: 100%; box-sizing: border-box;';
       
       let val = mg, unit = 'mg';
       const match = mg.match(/^([\d.,]+)\s*(mg|g|ml|ks)$/i);
@@ -1272,17 +1272,21 @@
       }
 
       row.innerHTML = `
-        <input type="text" class="med-tab" placeholder="Názov lieku" value="${tab.replace(/"/g, '&quot;')}" style="flex: 1 1 200px; padding: 0.6rem; font-size: 16px !important; border-radius: 0.4rem; border: 1px solid #ccc; background: var(--card); color: var(--text); min-width: 0;">
-        <div style="display: flex; flex: 1 1 150px; border: 1px solid #ccc; border-radius: 0.4rem; overflow: hidden; background: var(--card); min-width: 0;">
-          <input type="tel" class="med-mg-val" placeholder="Množstvo" value="${val.replace(/"/g, '&quot;')}" inputmode="decimal" style="flex: 1 1 auto; border: none; border-radius: 0; padding: 0.6rem; font-size: 16px !important; color: var(--text); background: transparent; min-width: 0;">
-          <select class="med-mg-unit" style="flex: 1 1 auto; border: none; border-left: 1px solid #ccc; background: transparent; padding: 0.6rem; color: var(--text); font-size: 16px !important; outline: none; -webkit-appearance: none; min-width: 0;">
-            <option value="mg" ${unit==='mg'?'selected':''}>mg</option><option value="g" ${unit==='g'?'selected':''}>g</option><option value="ml" ${unit==='ml'?'selected':''}>ml</option><option value="ks" ${unit==='ks'?'selected':''}>ks</option>
+        <div style="display: flex; gap: 0.4rem; flex: 1 1 100%; width: 100%; box-sizing: border-box;">
+          <input type="text" class="med-tab" placeholder="Názov lieku" value="${tab.replace(/"/g, '&quot;')}" style="flex: 1 1 50%; min-width: 0; padding: 0.6rem; font-size: 16px !important; border-radius: 0.4rem; border: 1px solid #ccc; background: var(--card); color: var(--text); box-sizing: border-box;">
+          <button onclick="this.parentElement.parentElement.remove()" style="flex: 0 0 2.6rem; width: 2.6rem; height: 2.6rem; background: #ff1744; color: white; border: none; border-radius: 0.4rem; cursor: pointer; font-weight: bold; box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.1); box-sizing: border-box;">X</button>
+        </div>
+        <div style="display: flex; gap: 0.4rem; flex: 1 1 100%; width: 100%; box-sizing: border-box; flex-wrap: wrap;">
+          <div style="display: flex; flex: 1 1 130px; min-width: 0; border: 1px solid #ccc; border-radius: 0.4rem; overflow: hidden; background: var(--card); box-sizing: border-box;">
+            <input type="tel" class="med-mg-val" placeholder="Množstvo" value="${val.replace(/"/g, '&quot;')}" inputmode="decimal" style="flex: 1 1 50%; min-width: 0; border: none; border-radius: 0; padding: 0.6rem; font-size: 16px !important; color: var(--text); background: transparent; box-sizing: border-box;">
+            <select class="med-mg-unit" style="flex: 1 1 50%; min-width: 0; border: none; border-left: 1px solid #ccc; background: transparent; padding: 0.6rem; color: var(--text); font-size: 16px !important; outline: none; -webkit-appearance: none; box-sizing: border-box;">
+              <option value="mg" ${unit==='mg'?'selected':''}>mg</option><option value="g" ${unit==='g'?'selected':''}>g</option><option value="ml" ${unit==='ml'?'selected':''}>ml</option><option value="ks" ${unit==='ks'?'selected':''}>ks</option>
+            </select>
+          </div>
+          <select class="med-kedy" style="flex: 1 1 130px; min-width: 0; padding: 0.6rem; border: 1px solid #ccc; border-radius: 0.4rem; background: var(--card); color: var(--text); font-size: 16px !important; outline: none; -webkit-appearance: none; box-sizing: border-box;">
+            ${kedyHtml}
           </select>
         </div>
-        <select class="med-kedy" style="flex: 1 1 150px; padding: 0.6rem; border: 1px solid #ccc; border-radius: 0.4rem; background: var(--card); color: var(--text); font-size: 16px !important; outline: none; -webkit-appearance: none; min-width: 0;">
-          ${kedyHtml}
-        </select>
-        <button onclick="this.parentElement.remove()" style="background: #ff1744; color: white; border: none; border-radius: 0.4rem; flex: 0 0 2.6rem; height: 2.6rem; cursor: pointer; font-weight: bold; box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.1);">X</button>
       `;
       container.appendChild(row);
     };
