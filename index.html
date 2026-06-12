@@ -1209,7 +1209,14 @@
       const match = mg.match(/^([\d.,]+)\s*(mg|g|ml|ks)$/i);
       if (match) { val = match[1]; unit = match[2].toLowerCase(); }
       
-      const kedyOptions = ["Ráno", "Obed", "Večer", "Noc", "Ráno, Večer", "Ráno, Obed, Večer", "Podľa potreby"];
+      const kedyOptions = [
+        "Ráno", "Obed", "Večer", "Noc", 
+        "Ráno, Obed", "Ráno, Večer", "Ráno, Noc", 
+        "Obed, Večer", "Večer, Noc", 
+        "Ráno, Obed, Večer", "Ráno, Obed, Večer, Noc", 
+        "Každých 8 hodín", "Každých 12 hodín", "Raz týždenne",
+        "Podľa potreby"
+      ];
       let kedyHtml = '<option value="">Kedy?</option>';
       let foundKedy = false;
       kedyOptions.forEach(opt => {
