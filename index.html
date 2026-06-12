@@ -314,14 +314,16 @@
       <button class="main" id="edit_profile_close" onclick="window.zavrietEditProfil()" style="background-color: #777;">Zatvoriť</button>
     </div></div>
 
-    <div id="editMedicationModal" class="modal"><div class="modal-content">
-      <h3 id="edit_med_title">Upraviť kartu liekov</h3>
-      <div class="modal-form-grid" style="grid-template-columns: 1fr; gap: 0.4rem; text-align: left;">
-        <div id="medListContainer" style="display: flex; flex-direction: column; gap: 0.4rem; max-height: 50vh; overflow-y: auto; padding-right: 0.1rem;"></div>
-        <button class="secondary" onclick="window.pridatLiek('', '', '')" style="margin-top: 0.2rem; font-weight: bold;">+ Pridať ďalší liek</button>
+    <div id="editMedicationModal" class="modal"><div class="modal-content" style="max-height: 85vh; display: flex; flex-direction: column;">
+      <h3 id="edit_med_title" style="flex-shrink: 0;">Upraviť kartu liekov</h3>
+      <div class="modal-form-grid" style="display: flex; flex-direction: column; gap: 0.4rem; text-align: left; flex: 1; overflow: hidden;">
+        <div id="medListContainer" style="display: flex; flex-direction: column; gap: 0.4rem; overflow-y: auto; padding-right: 0.2rem; flex: 1;"></div>
+        <button class="secondary" onclick="window.pridatLiek('', '', '')" style="margin-top: 0.2rem; font-weight: bold; flex-shrink: 0;">+ Pridať ďalší liek</button>
       </div>
-      <button class="main" id="edit_med_save" onclick="window.ulozitKartu()">Uložiť kartu</button>
-      <button class="main" id="edit_med_close" onclick="window.zavrietEditKartu()" style="background-color: #777;">Zatvoriť</button>
+      <div style="display: flex; flex-direction: column; gap: 0.4rem; margin-top: 1rem; flex-shrink: 0;">
+        <button class="main" id="edit_med_save" onclick="window.ulozitKartu()">Uložiť kartu</button>
+        <button class="main" id="edit_med_close" onclick="window.zavrietEditKartu()" style="background-color: #777;">Zatvoriť</button>
+      </div>
     </div></div>
 
     <div id="archiv" style="display:none; width: 100%;">
@@ -1244,7 +1246,7 @@
       const container = document.getElementById('medListContainer');
       const row = document.createElement('div');
       row.className = 'med-row';
-      row.style.cssText = 'display: flex; flex-direction: column; gap: 0.5rem; background: rgba(128,128,128,0.05); padding: 0.6rem; border-radius: 0.5rem; border: 1px solid rgba(128,128,128,0.2);';
+      row.style.cssText = 'display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: rgba(128,128,128,0.05); padding: 0.6rem; border-radius: 0.5rem; border: 1px solid rgba(128,128,128,0.2);';
       
       let val = mg, unit = 'mg';
       const match = mg.match(/^([\d.,]+)\s*(mg|g|ml|ks)$/i);
@@ -1270,21 +1272,17 @@
       }
 
       row.innerHTML = `
-        <div style="display: flex; gap: 0.4rem; align-items: center;">
-          <input type="text" class="med-tab" placeholder="Názov lieku" value="${tab.replace(/"/g, '&quot;')}" style="flex: 1; padding: 0.6rem; font-size: 16px !important; border-radius: 0.4rem; border: 1px solid #ccc; background: var(--card); color: var(--text);">
-          <button onclick="this.parentElement.parentElement.remove()" style="background: #ff1744; color: white; border: none; border-radius: 0.4rem; width: 2.6rem; height: 2.6rem; cursor: pointer; font-weight: bold; flex-shrink: 0; box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.1);">X</button>
-        </div>
-        <div style="display: flex; gap: 0.4rem;">
-          <div style="display: flex; flex: 1; border: 1px solid #ccc; border-radius: 0.4rem; overflow: hidden; background: var(--card);">
-            <input type="tel" class="med-mg-val" placeholder="Množstvo" value="${val.replace(/"/g, '&quot;')}" inputmode="decimal" style="width: 55%; border: none; border-radius: 0; padding: 0.6rem; font-size: 16px !important; color: var(--text); background: transparent;">
-            <select class="med-mg-unit" style="width: 45%; border: none; border-left: 1px solid #ccc; background: transparent; padding: 0.6rem; color: var(--text); font-size: 16px !important; outline: none; -webkit-appearance: none;">
-              <option value="mg" ${unit==='mg'?'selected':''}>mg</option><option value="g" ${unit==='g'?'selected':''}>g</option><option value="ml" ${unit==='ml'?'selected':''}>ml</option><option value="ks" ${unit==='ks'?'selected':''}>ks</option>
-            </select>
-          </div>
-          <select class="med-kedy" style="flex: 1; padding: 0.6rem; border: 1px solid #ccc; border-radius: 0.4rem; background: var(--card); color: var(--text); font-size: 16px !important; outline: none; -webkit-appearance: none;">
-            ${kedyHtml}
+        <input type="text" class="med-tab" placeholder="Názov lieku" value="${tab.replace(/"/g, '&quot;')}" style="flex: 1 1 200px; padding: 0.6rem; font-size: 16px !important; border-radius: 0.4rem; border: 1px solid #ccc; background: var(--card); color: var(--text); min-width: 0;">
+        <div style="display: flex; flex: 1 1 150px; border: 1px solid #ccc; border-radius: 0.4rem; overflow: hidden; background: var(--card); min-width: 0;">
+          <input type="tel" class="med-mg-val" placeholder="Množstvo" value="${val.replace(/"/g, '&quot;')}" inputmode="decimal" style="flex: 1 1 auto; border: none; border-radius: 0; padding: 0.6rem; font-size: 16px !important; color: var(--text); background: transparent; min-width: 0;">
+          <select class="med-mg-unit" style="flex: 1 1 auto; border: none; border-left: 1px solid #ccc; background: transparent; padding: 0.6rem; color: var(--text); font-size: 16px !important; outline: none; -webkit-appearance: none; min-width: 0;">
+            <option value="mg" ${unit==='mg'?'selected':''}>mg</option><option value="g" ${unit==='g'?'selected':''}>g</option><option value="ml" ${unit==='ml'?'selected':''}>ml</option><option value="ks" ${unit==='ks'?'selected':''}>ks</option>
           </select>
         </div>
+        <select class="med-kedy" style="flex: 1 1 150px; padding: 0.6rem; border: 1px solid #ccc; border-radius: 0.4rem; background: var(--card); color: var(--text); font-size: 16px !important; outline: none; -webkit-appearance: none; min-width: 0;">
+          ${kedyHtml}
+        </select>
+        <button onclick="this.parentElement.remove()" style="background: #ff1744; color: white; border: none; border-radius: 0.4rem; flex: 0 0 2.6rem; height: 2.6rem; cursor: pointer; font-weight: bold; box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.1);">X</button>
       `;
       container.appendChild(row);
     };
