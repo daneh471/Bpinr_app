@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="BP & INR" />
   <title>BP & INR</title>
-  <link rel="manifest" href="manifest.json?v=1.47" />
+  <link rel="manifest" href="manifest.json?v=1.48" />
   <link rel="icon" href="favicon.png" />
   <link rel="apple-touch-icon" href="favicon.png" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -289,7 +289,7 @@
       <p style="font-size: 0.7rem; opacity: 0.6; text-align: center; margin-top: 1rem; margin-bottom: 0;">Tieto dáta sú lokálne uložené, nedajú sa vrátiť späť.</p>
     </div></div>
 
-    <div id="viewMedicationModal" class="modal"><div class="modal-content">
+    <div id="viewMedicationModal" class="modal"><div class="modal-content" style="width: 95%; max-width: 30rem;">
       <h3 id="view_med_title_modal">Karta liekov</h3>
       <div id="viewProfileKarta" ondblclick="window.otvoritEditKartuZView()" title="Dvojklik pre úpravu" style="width: 100%; text-align: left; max-height: 60vh; overflow-y: auto; margin-bottom: 1rem; font-size: 0.95rem; padding: 0.5rem; border: 1px dashed rgba(128,128,128,0.3); border-radius: 0.5rem;"></div>
       <button class="main" id="view_med_edit_btn" onclick="window.otvoritEditKartuZView()" style="background-color: #f39c12; margin-bottom: 0.5rem;">Upraviť kartu liekov</button>
@@ -314,7 +314,7 @@
       <button class="main" id="edit_profile_close" onclick="window.zavrietEditProfil()" style="background-color: #777;">Zatvoriť</button>
     </div></div>
 
-    <div id="editMedicationModal" class="modal"><div class="modal-content" style="max-height: 85vh; display: flex; flex-direction: column;">
+    <div id="editMedicationModal" class="modal"><div class="modal-content" style="width: 95%; max-width: 30rem; max-height: 85vh; display: flex; flex-direction: column;">
       <h3 id="edit_med_title" style="flex-shrink: 0;">Upraviť kartu liekov</h3>
       <div class="modal-form-grid" style="display: flex; flex-direction: column; gap: 0.4rem; text-align: left; flex: 1; overflow: hidden;">
         <div id="medListContainer" style="display: flex; flex-direction: column; gap: 0.4rem; overflow-y: auto; padding-right: 0.2rem; flex: 1;"></div>
@@ -409,7 +409,7 @@
  
 
     <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; z-index: 1000;"></div>
-    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.47</div>
+    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.48</div>
   </div>
 
   <script type="module">
@@ -472,8 +472,8 @@
         legGreen: "Zelená – hodnoty sú v poriadku",
         legRed: "Červená – vysoké hodnoty",
         legBlue: "Modrá – nízke hodnoty",
-        updateReady: "Nová verzia (v1.47) je pripravená:",
-        updateChanges: "• Optimalizované zobrazenie úpravy liekov pre malé obrazovky",
+        updateReady: "Nová verzia (v1.48) je pripravená:",
+        updateChanges: "• Zväčšenie šírky modálu Karty liekov pre lepšiu prehľadnosť",
         btnMonthlyArchive: "Mesačný archív",
         confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
         viewMedBtn: "Karta liekov",
@@ -512,8 +512,8 @@
         legRed: "Rot – hohe Werte",
         legBlue: "Blau – niedrige Werte",
         confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
-        updateReady: "Neue Version (v1.47) ist bereit:",
-        updateChanges: "• Optimierte Anzeige der Medikamentenbearbeitung für kleine Bildschirme",
+        updateReady: "Neue Version (v1.48) ist bereit:",
+        updateChanges: "• Breiteres Modal für die Medikamentenkarte für bessere Übersicht",
         btnMonthlyArchive: "Monatsarchiv",
         confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
         viewMedBtn: "Medikamentenkarte",
@@ -524,10 +524,10 @@
     };
 
     // Aktualizácia prekladu pre novú verziu
-    translations.sk.updateReady = "Nová verzia (v1.47) je pripravená:";
-    translations.sk.updateChanges = "• Optimalizované zobrazenie úpravy liekov pre malé obrazovky";
-    translations.de.updateReady = "Neue Version (v1.47) ist bereit:";
-    translations.de.updateChanges = "• Optimierte Anzeige der Medikamentenbearbeitung für kleine Bildschirme";
+    translations.sk.updateReady = "Nová verzia (v1.48) je pripravená:";
+    translations.sk.updateChanges = "• Zväčšenie šírky modálu Karty liekov pre lepšiu prehľadnosť";
+    translations.de.updateReady = "Neue Version (v1.48) ist bereit:";
+    translations.de.updateChanges = "• Breiteres Modal für die Medikamentenkarte für bessere Übersicht";
 
     const UPDATE_ACKNOWLEDGED_KEY = 'bp_inr_update_acknowledged';
 
