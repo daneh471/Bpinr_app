@@ -135,7 +135,7 @@
     @media (max-width: 480px) {
       html, body { font-size: 14px; }
       .app-wrapper { padding-left: 0.6rem; padding-right: 0.6rem; }
-      input, textarea { padding: 0.75rem; font-size: 16px !important; } /* Prevencia Safari zoomu */
+      input, textarea { padding: 0.65rem; font-size: 16px !important; } /* Prevencia Safari zoomu */
       button.main { min-height: 3.2rem; padding: 0.8rem; font-size: 1rem; }
       .modal-content { padding: 1.2rem; }
     }
@@ -146,8 +146,8 @@
       .app-wrapper { padding-left: 0.5rem; padding-right: 0.5rem; padding-top: calc(3rem + env(safe-area-inset-top)); }
       .modal { padding: 0.5rem; }
       .modal-content { padding: 1rem; border-radius: 1.2rem; }
-      .form-container, .modal-form-grid { grid-template-columns: 1fr; }
-      button.main, #manualDatum, #pulse, #manualPulse { grid-column: span 1; min-height: 2.8rem; margin: 0.2rem 0; }
+      .form-container, .modal-form-grid { grid-template-columns: repeat(2, 1fr); gap: 0.4rem; }
+      button.main, #manualDatum, #pulse, #manualPulse { grid-column: span 2; min-height: 2.6rem; margin: 0.1rem 0; }
       .header-title { font-size: 1rem; }
       header { grid-template-columns: 70px 1fr 70px; padding: 0 5px; height: 40px; }
       .auth-form h2 { font-size: 1.4rem; }
@@ -238,21 +238,25 @@
         <p style="margin: 0.4rem 0 0 0;"><strong><span id="viewProfileKartaLabel">Karta liekov:</span></strong><br><span id="viewProfileKarta" ondblclick="window.otvoritEditKartu()" title="Dvojklik pre úpravu" style="white-space: pre-wrap; font-size: 0.9rem; opacity: 0.9; display: block; margin-top: 0.15rem; padding: 0.3rem; border: 1px dashed transparent; border-radius: 0.3rem; transition: 0.2s;"></span></p>
       </div>
       <button class="main" id="profile_edit_btn" onclick="window.otvoritEditProfil()">Upraviť profil</button>
-      <button class="main" id="edit_med_btn" onclick="window.otvoritEditKartu()" style="background-color: #f39c12;">Upraviť kartu liekov</button>
-      <button class="main" id="view_profile_close" onclick="window.zavrietViewProfil()" style="background-color: #777;">Zatvoriť</button>
+      <div style="display: flex; gap: 0.4rem; width: 100%;">
+        <button class="main" id="edit_med_btn" onclick="window.otvoritEditKartu()" style="background-color: #f39c12; margin: 0; flex: 1; font-size: 0.85rem; padding: 0.5rem; line-height: 1.1;">Upraviť kartu</button>
+        <button class="main" id="view_profile_close" onclick="window.zavrietViewProfil()" style="background-color: #777; margin: 0; flex: 1;">Zatvoriť</button>
+      </div>
       <p style="font-size: 0.7rem; opacity: 0.6; text-align: center; margin-top: 1rem; margin-bottom: 0;">Tieto dáta sú lokálne uložené, nedajú sa vrátiť späť.</p>
     </div></div>
 
     <div id="editProfileModal" class="modal"><div class="modal-content">
       <h3 id="edit_profile_title">Upraviť Profil</h3>
-      <div class="modal-form-grid" style="grid-template-columns: 1fr; gap: 0.4rem;">
-        <input type="text" id="profileMeno" placeholder="Meno">
-        <input type="text" id="profilePriezvisko" placeholder="Priezvisko">
+      <div class="modal-form-grid" style="grid-template-columns: repeat(2, 1fr); gap: 0.4rem;">
+        <input type="text" id="profileMeno" placeholder="Meno" style="grid-column: span 2;">
+        <input type="text" id="profilePriezvisko" placeholder="Priezvisko" style="grid-column: span 2;">
         <input type="tel" id="profileVaha" placeholder="Váha (kg)" inputmode="decimal">
         <input type="tel" id="profileVyska" placeholder="Výška (cm)" inputmode="decimal">
       </div>
-      <button class="main" id="edit_profile_save" onclick="window.ulozitProfil()">Uložiť profil</button>
-      <button class="main" id="edit_profile_close" onclick="window.zavrietEditProfil()" style="background-color: #777;">Zatvoriť</button>
+      <div style="display: flex; gap: 0.4rem; width: 100%; margin-top: 0.4rem;">
+        <button class="main" id="edit_profile_save" onclick="window.ulozitProfil()" style="margin: 0; flex: 1;">Uložiť profil</button>
+        <button class="main" id="edit_profile_close" onclick="window.zavrietEditProfil()" style="background-color: #777; margin: 0; flex: 1;">Zatvoriť</button>
+      </div>
     </div></div>
 
     <div id="editMedicationModal" class="modal"><div class="modal-content" style="max-width: 19.5rem;">
@@ -260,8 +264,10 @@
       <div class="modal-form-grid" style="grid-template-columns: 1fr; gap: 0.4rem;">
         <textarea id="profileKartaSolo" placeholder="Zoznam liekov a dávkovanie..." style="width: 100%; height: 30dvh; min-height: 9rem; resize: vertical; padding: 0.75rem; border-radius: 0.8rem; background: var(--card); color: var(--text); border: 1px solid #ccc; font-family: inherit; font-size: 16px;"></textarea>
       </div>
-      <button class="main" id="edit_med_save" onclick="window.ulozitKartu()">Uložiť kartu</button>
-      <button class="main" id="edit_med_close" onclick="window.zavrietEditKartu()" style="background-color: #777;">Zatvoriť</button>
+      <div style="display: flex; gap: 0.4rem; width: 100%; margin-top: 0.4rem;">
+        <button class="main" id="edit_med_save" onclick="window.ulozitKartu()" style="margin: 0; flex: 1;">Uložiť kartu</button>
+        <button class="main" id="edit_med_close" onclick="window.zavrietEditKartu()" style="background-color: #777; margin: 0; flex: 1;">Zatvoriť</button>
+      </div>
     </div></div>
 
     <div id="archiv" style="display:none; width: 100%;">
@@ -295,9 +301,11 @@
         <input type="tel" id="manualSys" placeholder="SYS" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false">
         <input type="tel" id="manualDia" placeholder="DIA" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false">
         <input type="tel" id="manualPulse" placeholder="PULZ" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false">
-        <button class="main" onclick="window.ulozitManual()">Uložiť</button>
       </div>
-      <button class="main" onclick="window.zavrietModal()">Zatvoriť</button>
+      <div style="display: flex; gap: 0.4rem; width: 100%; margin-top: 0.4rem;">
+        <button class="main" onclick="window.ulozitManual()" style="margin: 0; flex: 1;">Uložiť</button>
+        <button class="main" onclick="window.zavrietModal()" style="margin: 0; flex: 1; background-color: #777;">Zatvoriť</button>
+      </div>
     </div></div>
 
     <div id="settingsModal" class="modal"><div class="modal-content">
@@ -1226,3 +1234,4 @@
   </script>
 </body>
 </html>
+
