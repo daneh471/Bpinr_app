@@ -240,7 +240,6 @@
       <button class="main" id="profile_edit_btn" onclick="window.otvoritEditProfil()">Upraviť profil</button>
       <div style="display: flex; gap: 0.4rem; width: 100%;">
         <button class="main" id="edit_med_btn" onclick="window.otvoritEditKartu()" style="background-color: #f39c12; margin: 0; flex: 1; font-size: 0.85rem; padding: 0.5rem; line-height: 1.1;">Pridať liek</button>
-        <button class="main" onclick="window.vymazatKartu()" style="background-color: #e74c3c; margin: 0; flex: 0.8; font-size: 0.85rem; padding: 0.5rem; line-height: 1.1;">Vymazať</button>
         <button class="main" id="view_profile_close" onclick="window.zavrietViewProfil()" style="background-color: #777; margin: 0; flex: 1;">Zatvoriť</button>
       </div>
       <p style="font-size: 0.7rem; opacity: 0.6; text-align: center; margin-top: 1rem; margin-bottom: 0;">Tieto dáta sú lokálne uložené, nedajú sa vrátiť späť.</p>
@@ -400,6 +399,7 @@
         infoTab: "Tabletka (počet tabletiek)", infoLow: "Nízky", infoNorm: "Normálny", infoHigh: "Vysoký", btnExportPdf: "Exportovať PDF",
         saved: "Uložené", msgOccupied: "Meno je už obsadené.", msgUserNotFound: "Užívateľ neexistuje.", msgWrongPin: "Nesprávny PIN kód.",
         confirmDel: "Naozaj chcete vymazať tento záznam?", confirmLogout: "Ste si istý, že sa chcete odhlásiť?",
+        confirmDelMed: "Naozaj chcete vymazať tento liek?",
         infoInrNote: "(Štandardné rozmedzie. Individuálne cieľové hodnoty stanovuje ošetrujúci lekár.)",
         legendTitle: "Vysvetlenie farieb:",
         menuProfile: "👤 Profil",
@@ -458,6 +458,7 @@
         legRed: "Rot – hohe Werte",
         legBlue: "Blau – niedrige Werte",
         confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
+        confirmDelMed: "Dieses Medikament wirklich löschen?",
         updateReady: "Neue Version (v1.41) ist bereit:",
         updateChanges: "• Korrektur der Jahresanzeige im Archiv\n• Verbesserte Gruppierung für zukünftige Monate\n• Bereinigung der Fußzeile",
         btnMonthlyArchive: "Monatsarchiv",
