@@ -242,7 +242,6 @@
         <button class="main" id="edit_med_btn" onclick="window.otvoritEditKartu()" style="background-color: #f39c12; margin: 0; flex: 1; font-size: 0.85rem; padding: 0.5rem; min-height: 2.5rem; line-height: 1.1;">Pridať lieky</button>
         <button class="main" id="view_profile_close" onclick="window.zavrietViewProfil()" style="background-color: #777; margin: 0; flex: 1; font-size: 0.85rem; padding: 0.5rem; min-height: 2.5rem; line-height: 1.1;">Zatvoriť</button>
       </div>
-      <p style="font-size: 0.7rem; opacity: 0.6; text-align: center; margin-top: 1rem; margin-bottom: 0;">Tieto dáta sú lokálne uložené, nedajú sa vrátiť späť.</p>
     </div></div>
 
     <div id="editProfileModal" class="modal"><div class="modal-content">
@@ -259,13 +258,33 @@
       </div>
     </div></div>
 
-    <div id="editMedicationModal" class="modal"><div class="modal-content" style="max-width: 19.5rem;">
+    <div id="editMedicationModal" class="modal"><div class="modal-content" style="max-width: 24rem;">
       <h3 id="edit_med_title">Pridať liek</h3>
       <!-- Rozdelenie na 50% (2fr) pre Názov, 25% (1fr) pre Množstvo a 25% (1fr) pre mg -->
       <div class="modal-form-grid" style="grid-template-columns: 2fr 1fr 1fr; gap: 0.4rem;">
+      <div class="modal-form-grid" style="grid-template-columns: 2fr 1fr 1.5fr; gap: 0.4rem;">
         <input type="text" id="medName" placeholder="Názov lieku" autocomplete="off">
         <input type="tel" id="medQty" placeholder="Množ." autocomplete="off">
         <input type="tel" id="medMg" placeholder="mg" autocomplete="off">
+        <div style="display: flex; border: 1px solid #ccc; border-radius: 0.8rem; background-color: var(--card); overflow: hidden;">
+          <input type="tel" id="medMg" placeholder="Sila" autocomplete="off" style="border: none; border-radius: 0; min-width: 0; width: 60%; padding: 0.75rem 0.2rem 0.75rem 0.4rem;">
+          <select id="medUnit" style="border: none; background-color: var(--header); color: var(--text); padding: 0 0.2rem; min-width: 0; width: 40%; font-size: 0.8rem; outline: none; cursor: pointer;">
+            <option value="mg">mg</option>
+            <option value="g">g</option>
+            <option value="ml">ml</option>
+          </select>
+        </div>
+        <select id="medDosage" style="grid-column: span 3; padding: 0.75rem; font-size: 16px; background-color: var(--card); color: var(--text); border: 1px solid #ccc; border-radius: 0.8rem; width: 100%; outline: none;">
+          <option value="">-- Dávkovanie (voliteľné) --</option>
+          <option value="Ráno">Ráno</option>
+          <option value="Obed">Obed</option>
+          <option value="Večer">Večer</option>
+          <option value="Noc">Noc</option>
+          <option value="Ráno, Večer">Ráno, Večer</option>
+          <option value="Ráno, Obed, Večer">Ráno, Obed, Večer</option>
+          <option value="Ráno, Obed, Večer, Noc">Ráno, Obed, Večer, Noc</option>
+          <option value="Podľa potreby">Podľa potreby</option>
+        </select>
       </div>
       <div style="display: flex; gap: 0.4rem; width: 100%; margin-top: 0.6rem;">
         <button class="main" id="edit_med_save" onclick="window.ulozitKartu()" style="margin: 0; flex: 1;">Uložiť</button>
@@ -1161,6 +1180,8 @@
       document.getElementById('medName').value = '';
       document.getElementById('medQty').value = '';
       document.getElementById('medMg').value = '';
+      document.getElementById('medUnit').value = 'mg';
+      document.getElementById('medDosage').value = '';
       document.getElementById('viewProfileModal').style.display = 'none';
       document.getElementById('editMedicationModal').style.display = 'flex';
     };
@@ -1174,11 +1195,15 @@
       const name = document.getElementById('medName').value.trim();
       const qty = document.getElementById('medQty').value.trim();
       const mg = document.getElementById('medMg').value.trim();
+      const unit = document.getElementById('medUnit').value;
+      const dosage = document.getElementById('medDosage').value;
       if (!name) return window.showAlert("Zadajte aspoň názov lieku!");
       
       let novyLiek = name;
       if (qty) novyLiek += ` (${qty})`;
       if (mg) novyLiek += ` - ${mg} mg`;
+      if (mg) novyLiek += ` - ${mg} ${unit}`;
+      if (dosage) novyLiek += ` [${dosage}]`;
       
       let staraKarta = localStorage.getItem('userProfile_karta') || '';
       let novaKarta = staraKarta ? staraKarta + '\n• ' + novyLiek : '• ' + novyLiek;
