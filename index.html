@@ -1121,7 +1121,33 @@
       document.getElementById('viewProfilePriezvisko').innerText = localStorage.getItem('userProfile_priezvisko') || '-';
       document.getElementById('viewProfileVaha').innerText = (localStorage.getItem('userProfile_vaha') ? localStorage.getItem('userProfile_vaha') + ' kg' : '-');
       document.getElementById('viewProfileVyska').innerText = (localStorage.getItem('userProfile_vyska') ? localStorage.getItem('userProfile_vyska') + ' cm' : '-');
-      document.getElementById('viewProfileKarta').innerText = localStorage.getItem('userProfile_karta') || '-';
+      
+      const kartaContainer = document.getElementById('viewProfileKarta');
+      kartaContainer.innerHTML = ''; // Vyčistiť predchádzajúci obsah
+      const kartaText = localStorage.getItem('userProfile_karta') || '';
+
+      if (kartaText) {
+        const lieky = kartaText.split('\n').filter(l => l.trim() !== '');
+        lieky.forEach((liek, index) => {
+          const liekElement = document.createElement('div');
+          liekElement.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 0.1rem 0;';
+
+          const textSpan = document.createElement('span');
+          textSpan.innerText = liek;
+
+          const deleteSpan = document.createElement('span');
+          deleteSpan.innerHTML = '&times;'; // 'x' symbol
+          deleteSpan.style.cssText = 'cursor: pointer; margin-left: 0.5rem; font-size: 1.2rem; font-weight: bold; color: #e74c3c; line-height: 1; padding: 0 0.2rem;';
+          deleteSpan.title = 'Vymazať liek';
+          deleteSpan.onclick = () => window.vymazatLiek(index);
+
+          liekElement.appendChild(textSpan);
+          liekElement.appendChild(deleteSpan);
+          kartaContainer.appendChild(liekElement);
+        });
+      } else {
+        kartaContainer.innerText = '-';
+      }
       document.getElementById('viewProfileModal').style.display = 'flex';
     };
 
@@ -1167,9 +1193,13 @@
       window.zavrietEditKartu();
     };
 
-    window.vymazatKartu = () => {
-      window.showConfirm(window.currentLang === 'de' ? "Gesamte Karte löschen?" : "Naozaj chcete vymazať celú kartu liekov?", () => {
-        localStorage.removeItem('userProfile_karta');
+    window.vymazatLiek = (index) => {
+      const t = translations[window.currentLang];
+      window.showConfirm(t.confirmDelMed || "Naozaj chcete vymazať tento liek?", () => {
+        let kartaText = localStorage.getItem('userProfile_karta') || '';
+        let lieky = kartaText.split('\n').filter(l => l.trim() !== '');
+        lieky.splice(index, 1);
+        localStorage.setItem('userProfile_karta', lieky.join('\n'));
         window.otvoritProfil();
       });
     };
