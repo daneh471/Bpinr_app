@@ -1472,7 +1472,6 @@
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
         deferredPrompt = null;
-        document.getElementById('installBtn').style.display = 'none';
       } else {
         const t = translations[window.currentLang];
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -1485,7 +1484,6 @@
     };
 
     window.addEventListener('appinstalled', () => {
-      document.getElementById('installBtn').style.display = 'none';
       deferredPrompt = null;
     });
   </script>
