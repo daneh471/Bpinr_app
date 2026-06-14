@@ -127,7 +127,7 @@
     .info-card { background-color: var(--card); padding: 1rem; border-radius: 1rem; text-align: left; border: 1px solid rgba(128,128,128,0.1); box-shadow: 0 0.2rem 0.5rem rgba(0,0,0,0.05); margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.2rem; }
     #infoModal p { margin: 0.3rem 0; font-size: 0.9rem; line-height: 1.3; }
 
-    #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 999; }
+    #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 999; }
     #splashScreen img { width: 10rem; height: 10rem; animation: pulse 1.5s infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.1); } }
     #dialogMessage { white-space: pre-line; }
@@ -520,8 +520,8 @@
         legGreen: "Zelená – hodnoty sú v poriadku",
         legRed: "Červená – vysoké hodnoty",
         legBlue: "Modrá – nízke hodnoty",
-        updateReady: "Nová verzia (v1.54) je pripravená:",
-        updateChanges: "• Odstránené tlačidlo inštalácie z menu",
+        updateReady: "Nová verzia (v1.55) je pripravená:",
+        updateChanges: "• Oprava priehľadnosti ikony na ploche",
         btnMonthlyArchive: "Mesačný archív",
         confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
         menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -563,8 +563,8 @@
         legBlue: "Blau – niedrige Werte",
         confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
         confirmDelMed: "Dieses Medikament wirklich löschen?",
-        updateReady: "Neue Version (v1.54) ist bereit:",
-        updateChanges: "• Installations-Schaltfläche aus dem Menü entfernt",
+        updateReady: "Neue Version (v1.55) ist bereit:",
+        updateChanges: "• Transparenz des App-Symbols auf dem Startbildschirm behoben",
         btnMonthlyArchive: "Monatsarchiv",
         confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
         menuForceUpdate: "🔄 Update erzwingen",
@@ -1407,7 +1407,7 @@
       });
 
       // Registrácia Service Workera - s aktuálnou verziou
-      navigator.serviceWorker.register('sw.js?v=1.54').then(reg => {
+      navigator.serviceWorker.register('sw.js?v=1.55').then(reg => {
         // Pravidelná kontrola aktualizácií každú hodinu
         setInterval(() => { reg.update(); }, 1000 * 60 * 60);
         
