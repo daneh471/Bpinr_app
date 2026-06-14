@@ -216,7 +216,6 @@
         <button onclick="window.otvoritInfo(); window.toggleDropdown();">ℹ️ Informácie</button>
         <button style="display: none;" onclick="window.otvoritNastavenia(); window.toggleDropdown();">⚙️ Nastavenia</button>
         <button id="toggleBtn" onclick="window.toggleViewMode(); window.toggleDropdown();"></button>
-        <button id="installBtn" onclick="window.installPWA(); window.toggleDropdown();">⬇️ Inštalovať aplikáciu</button>
         <button onclick="window.logout(); window.toggleDropdown();">🚪 Odhlásiť sa</button>
       </div>
     </header>
@@ -521,8 +520,8 @@
         legGreen: "Zelená – hodnoty sú v poriadku",
         legRed: "Červená – vysoké hodnoty",
         legBlue: "Modrá – nízke hodnoty",
-        updateReady: "Nová verzia (v1.53) je pripravená:",
-        updateChanges: "• Skrytie inštalačného tlačidla priamo v aplikácii",
+        updateReady: "Nová verzia (v1.54) je pripravená:",
+        updateChanges: "• Odstránené tlačidlo inštalácie z menu",
         btnMonthlyArchive: "Mesačný archív",
         confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
         menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -564,8 +563,8 @@
         legBlue: "Blau – niedrige Werte",
         confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
         confirmDelMed: "Dieses Medikament wirklich löschen?",
-        updateReady: "Neue Version (v1.53) ist bereit:",
-        updateChanges: "• Ausblenden der Schaltfläche in der installierten App",
+        updateReady: "Neue Version (v1.54) ist bereit:",
+        updateChanges: "• Installations-Schaltfläche aus dem Menü entfernt",
         btnMonthlyArchive: "Monatsarchiv",
         confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
         menuForceUpdate: "🔄 Update erzwingen",
@@ -607,10 +606,6 @@
         if (menuBtns[7]) menuBtns[7].innerText = t.menuLogout;  // 🚪 Odhlásiť sa
       }
       if (document.getElementById('toggleBtn')) document.getElementById('toggleBtn').innerText = window.isBpOnly ? t.menuToggleFull : t.menuToggleBp;
-      if (document.getElementById('installBtn')) document.getElementById('installBtn').innerText = t.menuInstall || "⬇️ Inštalovať aplikáciu";
-
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-      if (document.getElementById('installBtn')) document.getElementById('installBtn').style.display = isStandalone ? 'none' : 'block';
 
       // View Profile Modal
       document.querySelector('#viewProfileModal h2').innerText = t.titleViewProfile;
@@ -1412,7 +1407,7 @@
       });
 
       // Registrácia Service Workera - s aktuálnou verziou
-      navigator.serviceWorker.register('sw.js?v=1.53').then(reg => {
+      navigator.serviceWorker.register('sw.js?v=1.54').then(reg => {
         // Pravidelná kontrola aktualizácií každú hodinu
         setInterval(() => { reg.update(); }, 1000 * 60 * 60);
         
@@ -1460,34 +1455,6 @@
       };
       dialog.style.display = 'flex';
     };
-
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-    });
-
-    window.installPWA = async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        deferredPrompt = null;
-        if (outcome === 'accepted' && document.getElementById('installBtn')) document.getElementById('installBtn').style.display = 'none';
-      } else {
-        const t = translations[window.currentLang];
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if (isIOS) {
-          window.showAlert(t.installIOS);
-        } else {
-          window.showAlert(t.installOther);
-        }
-      }
-    };
-
-    window.addEventListener('appinstalled', () => {
-      deferredPrompt = null;
-      if (document.getElementById('installBtn')) document.getElementById('installBtn').style.display = 'none';
-    });
   </script>
 </body>
 </html>
