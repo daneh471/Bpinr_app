@@ -1,0 +1,1192 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getAuth, signOut, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, query, where, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDlzYqLEcy1OzZMcGOlidQRr8tNdZNXsSk",
+  authDomain: "zdravie-plus-5193f.firebaseapp.com",
+  projectId: "zdravie-plus-5193f",
+  storageBucket: "zdravie-plus-5193f.appspot.com",
+  messagingSenderId: "21608089094",
+  appId: "1:21608089094:web:53b5f9fc60d51ae96ba587"
+};
+
+window.exportMedCardPDF = () => {
+  const tInfo = translations[window.currentLang];
+  const pMeno = localStorage.getItem('userProfile_meno') || '-';
+  const pPriezvisko = localStorage.getItem('userProfile_priezvisko') || '-';
+  const pVaha = localStorage.getItem('userProfile_vaha') ? localStorage.getItem('userProfile_vaha') + ' kg' : '-';
+  const pVyska = localStorage.getItem('userProfile_vyska') ? localStorage.getItem('userProfile_vyska') + ' cm' : '-';
+
+  const pdfWrapper = document.createElement('div');
+  pdfWrapper.style.padding = '30px';
+  pdfWrapper.style.backgroundColor = '#ffffff';
+  pdfWrapper.style.color = '#000000';
+  pdfWrapper.style.fontFamily = 'Arial, sans-serif';
+
+  const header = document.createElement('h2');
+  header.innerText = tInfo.medicationCardPh || 'Karta liekov';
+  header.innerText = tInfo.pdfMedTitle || 'Môj prehľad liekov';
+  header.style.textAlign = 'center';
+  header.style.marginBottom = '20px';
+  header.style.borderBottom = '2px solid #eee';
+  header.style.paddingBottom = '10px';
+  pdfWrapper.appendChild(header);
+
+  const infoDiv = document.createElement('div');
+  infoDiv.innerHTML = `<p style="margin: 5px 0;"><strong>${tInfo.namePhProfile}:</strong> ${pMeno}</p><p style="margin: 5px 0;"><strong>${tInfo.surnamePhProfile}:</strong> ${pPriezvisko}</p><p style="margin: 5px 0;"><strong>${tInfo.weightPhProfile.replace(' (kg)', '')}:</strong> ${pVaha}</p><p style="margin: 5px 0;"><strong>${tInfo.heightPhProfile.replace(' (cm)', '')}:</strong> ${pVyska}</p>`;
+  infoDiv.style.marginBottom = '25px';
+  infoDiv.style.fontSize = '14px';
+  pdfWrapper.appendChild(infoDiv);
+
+  const medsTitle = document.createElement('h3');
+  medsTitle.innerText = 'Zoznam:';
+  medsTitle.style.marginBottom = '10px';
+  pdfWrapper.appendChild(medsTitle);
+
+  const kartaText = localStorage.getItem('userProfile_karta') || '';
+  const lieky = kartaText.split('\n').filter(l => l.trim() !== '');
+  
+  if (lieky.length > 0) {
+    const ul = document.createElement('ul');
+    ul.style.listStyleType = 'none';
+    ul.style.paddingLeft = '0';
+    lieky.forEach(liek => {
+      const cistyLiek = liek.replace(/^•\s*/, '');
+      const li = document.createElement('li');
+      li.innerText = '• ' + cistyLiek;
+      li.style.padding = '8px 0';
+      li.style.borderBottom = '1px solid #f5f5f5';
+      ul.appendChild(li);
+    });
+    pdfWrapper.appendChild(ul);
+  } else {
+    const emptyMsg = document.createElement('p');
+    emptyMsg.innerText = 'Žiadne lieky.';
+    emptyMsg.style.fontStyle = 'italic';
+    emptyMsg.style.color = '#666';
+    pdfWrapper.appendChild(emptyMsg);
+  }
+
+  const opt = {
+    margin: 10,
+    filename: `Karta_liekov_${pMeno}_${pPriezvisko}.pdf`.replace(/\s+/g, '_'),
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  html2pdf().set(opt).from(pdfWrapper).save();
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// Cache pre záznamy, aby sme ich neťahali z Firebase pri každom prepnutí okna
+window.zaznamy = [];
+window.loadRecords = async function() {
+  if (!window.user) return;
+  const q = query(collection(db, 'zaznamy'), where('userId', '==', window.user.uid));
+  const snap = await getDocs(q);
+  window.zaznamy = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  if (document.getElementById('archiv').style.display === 'block') window.zobrazArchiv();
+};
+
+window.skrytVsetko = () => {
+  ['formular', 'archiv', 'viewProfileModal', 'editProfileModal', 'editMedicationModal', 'infoModal', 'manualModal', 'settingsModal', 'languageModal', 'monthlyArchiveListModal', 'monthDetailModal', 'archivVahyModal'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = 'none';
+  });
+};
+
+window.getVahaHistory = () => {
+  if (!window.user) return [];
+  const localKey = 'vaha_historia_' + window.user.uid;
+  let stored = localStorage.getItem(localKey);
+  let history = stored ? JSON.parse(stored) : [];
+  
+  // Jednorazová migrácia starších váh z Firebase do lokálnej pamäte (aby sa nič nestratilo)
+  if (!localStorage.getItem(localKey + '_migrated') && window.zaznamy) {
+    const fbWeights = window.zaznamy.filter(r => r.vaha && r.vaha.trim() !== '' && r.mode === 'vaha');
+    if (fbWeights.length > 0) {
+      fbWeights.forEach(fw => { if (!history.find(h => h.id === fw.id)) history.push({ id: fw.id, datum: fw.datum, vaha: fw.vaha }); });
+      localStorage.setItem(localKey, JSON.stringify(history));
+    }
+    localStorage.setItem(localKey + '_migrated', 'true');
+  }
+  return history;
+};
+
+const translations = {
+  sk: {
+    login: "Prihlásiť sa", register: "Registrácia", titleLogin: "Prihlásenie", titleReg: "Nový účet", namePh: "Tvoje meno", pinPh: "PIN (6 číslic)", 
+    pinConfPh: "Zopakuj PIN", createBtn: "Vytvoriť účet", menuArchive: "📄 Archív", menuManual: "➕ Manuálny záznam", menuInfo: "ℹ️ Informácie", 
+    menuSettings: "⚙️ Nastavenia", menuLogout: "🚪 Odhlásiť sa", addBtn: "Pridať záznam", backBtn: "Späť na formulár", saveBtn: "Uložiť", 
+    closeBtn: "Zatvoriť", titleArchive: "Archív záznamov", titleManual: "Manuálny záznam", titleInfo: "Informácie o hodnotách", titleSettings: "Nastavenia",
+    menuLang: "Jazyk", selectLang: "Vybrať jazyk", menuToggleBp: "Prepnúť na: Iba Tlak", menuToggleFull: "Prepnúť na: INR + Tlak", userPrefix: "Používateľ",
+    infoTab: "Tabletka (počet tabletiek)", infoLow: "Nízky", infoNorm: "Normálny", infoHigh: "Vysoký", btnExportPdf: "Exportovať PDF",
+    saved: "Uložené", msgOccupied: "Meno už je obsadené.", msgUserNotFound: "Používateľ neexistuje.", msgWrongPin: "Nesprávny PIN kód.",
+    confirmDel: "Naozaj chcete vymazať tento záznam?", confirmLogout: "Ste si istý, že sa chcete odhlásiť?",
+    confirmDelMed: "Naozaj chcete vymazať tento liek?",
+    confirmPdf: "Ste si istý, že chcete stiahnuť PDF?",
+    infoInrNote: "(Štandardné rozmedzie. Individuálne cieľové hodnoty stanovuje ošetrujúci lekár.)",
+    legendTitle: "Vysvetlenie farieb:",
+    menuProfile: "👤 Profil",
+    titleProfile: "Môj Profil",
+    namePhProfile: "Meno",
+    surnamePhProfile: "Priezvisko",
+    weightPhProfile: "Váha (kg)",
+    heightPhProfile: "Výška (cm)",
+    medicationCardPh: "Karta liekov",
+    editMedBtn: "Pridať lieky",
+    saveBtnProfile: "Uložiť profil",
+    titleViewProfile: "Môj Profil",
+    titleEditProfile: "Upraviť Profil",
+    editBtnProfile: "Upraviť profil",
+    titleEditMed: "Pridať lieky",
+    legPurple: "Fialová – neutrálne (cieľové hodnoty stanovuje lekár)",
+    legYellow: "Žltá – neutrálne (hodnoty stanovuje lekár)",
+    legGreen: "Zelená – hodnoty sú v poriadku",
+    legRed: "Červená – vysoké hodnoty",
+    legBlue: "Modrá – nízke hodnoty",
+    updateReady: "Nová verzia (v1.64) je pripravená:",
+    updateChanges: "• Váha sa ukladá len lokálne a v PDF sa zobrazí podľa konkrétneho mesiaca",
+    btnMonthlyArchive: "Mesačný archív",
+    confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
+    menuForceUpdate: "🔄 Vynútiť aktualizáciu",
+    msgCheckUpdate: "Vymazávam cache a aktualizujem...",
+    pdfMedTitle: "Môj prehľad liekov",
+    btnWeightArchive: "Archív váhy",
+    titleWeightArchive: "Archív váhy",
+    newWeightPh: "Nová váha (kg)",
+    addBtnShort: "Pridať"
+  },
+  de: {
+    login: "Anmelden", register: "Registrierung", titleLogin: "Login", titleReg: "Neues Konto", namePh: "Dein Name", pinPh: "PIN (6 Stellen)",
+    pinConfPh: "PIN wiederholen", createBtn: "Konto erstellen", menuArchive: "📄 Archiv", menuManual: "➕ Manueller Eintrag", menuInfo: "ℹ️ Informationen", 
+    menuSettings: "⚙️ Einstellungen", menuLogout: "🚪 Abmelden", addBtn: "Eintrag hinzufügen", backBtn: "Zurück zum Formular", saveBtn: "Speichern", 
+    closeBtn: "Schließen", titleArchive: "Eintragshistorie", titleManual: "Manueller Eintrag", titleInfo: "Informationen zu Werten", titleSettings: "Einstellungen",
+    menuLang: "Sprache", selectLang: "Sprache wählen", menuToggleBp: "Nur Blutdruck", menuToggleFull: "INR + Blutdruck", userPrefix: "Benutzer",
+    infoTab: "Tablette (Anzahl der Tabletten)", infoLow: "Niedrig", infoNorm: "Normal", infoHigh: "Hoch", btnExportPdf: "PDF Exportieren",
+    saved: "Gespeichert", msgOccupied: "Name bereits vergeben.", msgUserNotFound: "Benutzer existiert nicht.", msgWrongPin: "Falscher PIN-Code.",
+    infoInrNote: "(Standardbereich. Individuelle Zielwerte werden vom behandelnden Arzt festgelegt.)",
+    legendTitle: "Farberklärung:",
+    legPurple: "Violett – neutral (Zielwerte werden vom Arzt festgelegt)",
+    menuProfile: "👤 Profil",
+    titleProfile: "Mein Profil",
+    namePhProfile: "Vorname",
+    surnamePhProfile: "Nachname",
+    weightPhProfile: "Gewicht (kg)",
+    heightPhProfile: "Größe (cm)",
+    medicationCardPh: "Medikamentenkarte",
+    editMedBtn: "Medikamente hinzufügen",
+    saveBtnProfile: "Profil speichern",
+    titleViewProfile: "Mein Profil",
+    titleEditProfile: "Profil bearbeiten",
+    editBtnProfile: "Profil bearbeiten",
+    titleEditMed: "Medikamente hinzufügen",
+    legYellow: "Gelb – neutral (Werte werden vom Arzt festgelegt)",
+    legGreen: "Grün – Werte sind in Ordnung",
+    legRed: "Rot – hohe Werte",
+    legBlue: "Blau – niedrige Werte",
+    confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
+    confirmDelMed: "Dieses Medikament wirklich löschen?",
+    confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
+    updateReady: "Neue Version (v1.64) ist bereit:",
+    updateChanges: "• Gewicht wird nur lokal gespeichert und PDF-Export an den jeweiligen Monat angepasst\n• App-Design wurde aktualisiert",
+    btnMonthlyArchive: "Monatsarchiv",
+    confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
+    menuForceUpdate: "🔄 Update erzwingen",
+    msgCheckUpdate: "Cache leeren und aktualisieren...",
+    pdfMedTitle: "Meine Medikamentenübersicht",
+    btnWeightArchive: "Gewichtsarchiv",
+    titleWeightArchive: "Gewichtsarchiv",
+    newWeightPh: "Neues Gewicht (kg)",
+    addBtnShort: "Hinzufügen"
+  }
+};
+
+const UPDATE_ACKNOWLEDGED_KEY = 'bp_inr_update_acknowledged';
+
+window.isBpOnly = localStorage.getItem('zdravie_bp_only') === 'true';
+window.currentLang = localStorage.getItem('zdravie_lang') || 'sk';
+
+if (window.isBpOnly) document.body.classList.add('bp-only');
+
+window.updateUI = () => {
+  const t = translations[window.currentLang] || translations['sk'];
+  document.querySelectorAll('.tab-buttons .secondary')[0].innerText = t.login;
+  document.querySelectorAll('.tab-buttons .secondary')[1].innerText = t.register;
+  document.querySelector('#loginForm h3').innerText = t.titleLogin;
+  document.querySelector('#registerForm h3').innerText = t.titleReg;
+  document.getElementById('loginName').placeholder = t.namePh;
+  document.getElementById('loginPin').placeholder = t.pinPh;
+  document.getElementById('regName').placeholder = t.namePh;
+  document.getElementById('regPin').placeholder = t.pinPh;
+  document.getElementById('regPinConfirm').placeholder = t.pinConfPh;
+  document.querySelectorAll('#loginForm .main')[0].innerText = t.login;
+  document.querySelectorAll('#registerForm .main')[0].innerText = t.createBtn;
+  
+  const menuBtns = document.querySelectorAll('#dropdown button');
+  if (menuBtns && menuBtns.length > 0) {
+    if (menuBtns[0]) menuBtns[0].innerText = t.menuProfile;
+    if (menuBtns[1]) menuBtns[1].innerText = t.menuArchive;
+    if (menuBtns[2]) menuBtns[2].innerText = t.menuManual;
+    if (menuBtns[3]) menuBtns[3].innerText = t.menuInfo;
+    if (menuBtns[4]) menuBtns[4].innerText = t.menuSettings;
+    if (menuBtns[7]) menuBtns[7].innerText = t.menuLogout;
+  }
+  if (document.getElementById('toggleBtn')) document.getElementById('toggleBtn').innerText = window.isBpOnly ? t.menuToggleFull : t.menuToggleBp;
+
+  document.querySelector('#viewProfileModal h2').innerText = t.titleViewProfile;
+  document.getElementById('viewProfileMenoLabel').innerText = t.namePhProfile + ':';
+  document.getElementById('viewProfilePriezviskoLabel').innerText = t.surnamePhProfile + ':';
+  document.getElementById('viewProfileVahaLabel').innerText = t.weightPhProfile.replace(' (kg)', '') + ':'; 
+  document.getElementById('viewProfileVyskaLabel').innerText = t.heightPhProfile.replace(' (cm)', '') + ':'; 
+  document.getElementById('viewProfileKartaLabel').innerText = t.medicationCardPh + ':';
+  document.getElementById('profile_edit_btn').innerText = t.editBtnProfile;
+  document.getElementById('edit_med_btn').innerText = t.editMedBtn;
+  document.getElementById('view_profile_close').innerText = t.closeBtn;
+
+  document.querySelector('#editProfileModal h2').innerText = t.titleEditProfile;
+  document.getElementById('profileMeno').placeholder = t.namePhProfile;
+  document.getElementById('profilePriezvisko').placeholder = t.surnamePhProfile;
+  document.getElementById('profileVaha').placeholder = t.weightPhProfile;
+  document.getElementById('profileVyska').placeholder = t.heightPhProfile;
+  document.getElementById('edit_profile_save').innerText = t.saveBtnProfile;
+  document.getElementById('edit_profile_close').innerText = t.closeBtn;
+
+  document.getElementById('edit_med_title').innerText = t.titleEditMed;
+  document.getElementById('edit_med_save').innerText = t.saveBtn;
+  document.getElementById('edit_med_close').innerText = t.closeBtn;
+
+  document.querySelector('#formular .main').innerText = t.addBtn;
+  document.querySelector('#archiv h2').innerText = t.titleArchive;
+  if (document.getElementById('btn_back_form')) document.getElementById('btn_back_form').innerText = t.backBtn;
+  if (document.getElementById('btn_open_monthly_archive')) document.getElementById('btn_open_monthly_archive').innerText = t.btnMonthlyArchive;
+  
+  document.querySelector('#manualModal h2').innerText = t.titleManual;
+  document.getElementById('manualDatum').placeholder = "Dátum a čas (dd.mm.rr hh:mm)";
+  document.querySelector('#manualModal .main').innerText = t.saveBtn;
+  document.querySelectorAll('#manualModal .main')[1].innerText = t.closeBtn;
+
+  document.querySelector('#settingsModal h3').innerText = t.titleSettings;
+  document.getElementById('btn_lang_menu').innerText = t.menuLang;
+  document.getElementById('set_close').innerText = t.closeBtn;
+  document.getElementById('lang_title').innerText = t.selectLang;
+  document.getElementById('lang_close').innerText = t.closeBtn;
+
+  document.querySelector('#infoModal h2').innerText = t.titleInfo;
+  document.querySelector('#infoModal .main').innerText = t.closeBtn;
+  document.getElementById('info_tab_desc').innerText = t.infoTab;
+  document.getElementById('info_inr_note').innerText = t.infoInrNote;
+
+  document.getElementById('info_legend_title').innerText = t.legendTitle;
+  document.getElementById('leg_purple').innerText = t.legPurple;
+  document.getElementById('leg_yellow').innerText = t.legYellow;
+  document.getElementById('leg_green').innerText = t.legGreen;
+  document.getElementById('leg_red').innerText = t.legRed;
+  document.getElementById('leg_blue').innerText = t.legBlue;
+
+  document.getElementById('userDisplay').innerText = window.userName ? `${t.userPrefix}: ${window.userName}` : '';
+  document.getElementById('btn_pdf').innerText = t.btnExportPdf;
+  document.getElementById('btn_close_month').innerText = t.closeBtn;
+  if (document.getElementById('btn_force_update')) document.getElementById('btn_force_update').innerText = t.menuForceUpdate;
+
+  document.querySelectorAll('.t-low').forEach(el => el.innerText = t.infoLow);
+  document.querySelectorAll('.t-norm').forEach(el => el.innerText = t.infoNorm);
+  document.querySelectorAll('.t-high').forEach(el => el.innerText = t.infoHigh);
+
+  ['inr','tab','sys','dia','pulse'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.placeholder = id.toUpperCase();
+  });
+};
+
+window.changeLanguage = (lang) => {
+  window.currentLang = lang;
+  localStorage.setItem('zdravie_lang', lang);
+  window.updateUI();
+  window.zavrietJazyk();
+};
+
+window.toggleViewMode = () => {
+  window.showConfirm(translations[window.currentLang].confirmModeChange, () => {
+    window.isBpOnly = !window.isBpOnly;
+    localStorage.setItem('zdravie_bp_only', window.isBpOnly);
+    document.body.classList.toggle('bp-only', window.isBpOnly);
+    window.updateUI();
+    if (document.getElementById('archiv').style.display === 'block') window.zobrazArchiv();
+  });
+};
+
+window.otvoritNastavenia = () => document.getElementById('settingsModal').style.display = 'flex';
+window.zavrietNastavenia = () => document.getElementById('settingsModal').style.display = 'none';
+window.otvoritJazyk = () => { document.getElementById('settingsModal').style.display = 'none'; document.getElementById('languageModal').style.display = 'flex'; };
+window.zavrietJazyk = () => { document.getElementById('languageModal').style.display = 'none'; document.getElementById('settingsModal').style.display = 'flex'; };
+
+window.showAlert = (msg) => {
+  const dialog = document.getElementById('customDialog');
+  document.getElementById('dialogTitle').innerText = 'BP & INR';
+  document.getElementById('dialogMessage').innerText = msg;
+  document.getElementById('dialogCancelBtn').style.display = 'none';
+  document.getElementById('dialogOkBtn').onclick = () => dialog.style.display = 'none';
+  dialog.style.display = 'flex';
+};
+
+window.showConfirm = (msg, onOk) => {
+  const dialog = document.getElementById('customDialog');
+  document.getElementById('dialogTitle').innerText = 'BP & INR';
+  document.getElementById('dialogMessage').innerText = msg;
+  document.getElementById('dialogCancelBtn').style.display = 'block';
+  document.getElementById('dialogCancelBtn').onclick = () => dialog.style.display = 'none';
+  document.getElementById('dialogOkBtn').onclick = () => {
+    dialog.style.display = 'none';
+    onOk();
+  };
+  dialog.style.display = 'flex';
+};
+
+window.showLogin = () => { document.getElementById('loginForm').style.display = 'block'; document.getElementById('registerForm').style.display = 'none'; document.getElementById('loginError').innerText = ''; };
+window.showRegister = () => { document.getElementById('loginForm').style.display = 'none'; document.getElementById('registerForm').style.display = 'block'; document.getElementById('regError').innerText = ''; };
+
+window.registerUser = async function() {
+  const name = document.getElementById('regName').value.trim();
+  const pin = document.getElementById('regPin').value;
+  const confirmPin = document.getElementById('regPinConfirm').value;
+  const errorEl = document.getElementById('regError');
+  errorEl.innerText = '';
+
+  if (!name || pin.length < 4) return window.showAlert('Meno a PIN (min 4 číslice)!');
+  if (!name || pin.length !== 6) return window.showAlert('Meno a PIN (presne 6 číslic)!');
+  if (pin !== confirmPin) return window.showAlert('PIN sa nezhodujú!');
+  try {
+    const snap = await getDocs(collection(db, 'users'));
+    const nameLower = name.toLowerCase();
+    const userExists = snap.docs.some(doc => doc.data().name && doc.data().name.toLowerCase() === nameLower);
+    if (userExists) {
+      errorEl.innerText = translations[window.currentLang].msgOccupied;
+      return window.showAlert(translations[window.currentLang].msgOccupied);
+    }
+    const safeEmailPrefix = name.replace(/\s+/g, '').toLowerCase();
+    const email = `${safeEmailPrefix}${Date.now()}@bpinr.local`;
+    window.isRegistering = true;
+    const res = await createUserWithEmailAndPassword(auth, email, pin);
+    await addDoc(collection(db, 'users'), { uid: res.user.uid, name: name, nameLower: nameLower, email: email });
+    await signOut(auth);
+    window.isRegistering = false;
+    
+    document.getElementById('regName').value = '';
+    document.getElementById('regPin').value = '';
+    document.getElementById('regPinConfirm').value = '';
+    document.getElementById('loginName').value = name; 
+    
+    window.showLogin();
+    window.showAlert('Účet úspešne vytvorený! Teraz sa môžete prihlásiť.');
+  } catch (e) { window.isRegistering = false; errorEl.innerText = 'Chyba pri registrácii.'; window.showAlert(e.message); }
+};
+
+window.loginUser = async function() {
+  const name = document.getElementById('loginName').value.trim();
+  const pin = document.getElementById('loginPin').value;
+  const errorEl = document.getElementById('loginError');
+  errorEl.innerText = '';
+
+  try {
+    const snap = await getDocs(collection(db, 'users'));
+    const nameLower = name.toLowerCase();
+    const userDoc = snap.docs.find(doc => doc.data().name && doc.data().name.toLowerCase() === nameLower);
+    if (!userDoc) {
+      errorEl.innerText = translations[window.currentLang].msgUserNotFound;
+      return window.showAlert(translations[window.currentLang].msgUserNotFound);
+    }
+    await signInWithEmailAndPassword(auth, userDoc.data().email, pin);
+  } catch (e) { 
+    errorEl.innerText = translations[window.currentLang].msgWrongPin;
+    window.showAlert(translations[window.currentLang].msgWrongPin); 
+  }
+};
+
+onAuthStateChanged(auth, (user) => {
+  if (window.isRegistering) return;
+
+  document.getElementById('splashScreen').style.opacity = '0';
+  setTimeout(() => document.getElementById('splashScreen').style.display = 'none', 500);
+  if (user) {
+    window.user = user;
+    getDocs(query(collection(db, 'users'), where('uid', '==', user.uid))).then(snap => {
+      if (!snap.empty) {
+        const userData = snap.docs[0].data();
+        window.userName = userData.name;
+        window.userRole = userData.role || userData.isadmin || 'user';
+
+        const storedUid = localStorage.getItem('userProfile_uid');
+        if (storedUid && storedUid !== user.uid) {
+          localStorage.removeItem('userProfile_meno');
+          localStorage.removeItem('userProfile_priezvisko');
+          localStorage.removeItem('userProfile_vaha');
+          localStorage.removeItem('userProfile_vyska');
+          localStorage.removeItem('userProfile_karta');
+        }
+        localStorage.setItem('userProfile_uid', user.uid);
+
+        const storedMeno = localStorage.getItem('userProfile_meno');
+        const storedPriezvisko = localStorage.getItem('userProfile_priezvisko');
+
+        if (!storedMeno && !storedPriezvisko && window.userName) {
+          const nameParts = window.userName.split(' ');
+          const firstName = nameParts[0] || '';
+          const lastName = nameParts.slice(1).join(' ') || '';
+          localStorage.setItem('userProfile_meno', firstName);
+          localStorage.setItem('userProfile_priezvisko', lastName);
+        }
+        
+        document.getElementById('btn_import').style.display = (window.userRole === 'admin') ? 'block' : 'none';
+        window.updateUI();
+      }
+    });
+    document.getElementById('authScreen').style.display = 'none';
+    document.querySelector('header').style.display = 'grid';
+    document.getElementById('formular').style.display = 'block';
+    window.loadRecords();
+    window.updateUI();
+  } else {
+    window.user = null; 
+    window.userName = null;
+    document.getElementById('authScreen').style.display = 'flex';
+    document.getElementById('btn_import').style.display = 'none';
+    document.querySelector('header').style.display = 'none';
+    document.getElementById('formular').style.display = 'none';
+    document.getElementById('archiv').style.display = 'none';
+    document.getElementById('viewProfileModal').style.display = 'none';
+    document.getElementById('editProfileModal').style.display = 'none';
+    document.getElementById('editMedicationModal').style.display = 'none';
+    document.getElementById('infoModal').style.display = 'none';
+    window.skrytVsetko();
+    window.updateUI();
+  }
+});
+
+window.updateUI(); 
+
+window.pridatZaznam = async function() {
+  const data = {
+    userId: window.user.uid,
+    datum: window.formatDatum(),
+    inr: document.getElementById('inr').value,
+    tab: document.getElementById('tab').value,
+    sys: document.getElementById('sys').value,
+    dia: document.getElementById('dia').value,
+    pulse: document.getElementById('pulse').value,
+    mode: window.isBpOnly ? 'bp' : 'full'
+  };
+  if (![data.inr, data.tab, data.sys, data.dia, data.pulse].some(v => v.trim() !== '')) return;
+  await addDoc(collection(db, 'zaznamy'), data);
+  ['inr','tab','sys','dia','pulse'].forEach(id => document.getElementById(id).value = '');
+  window.showToast(translations[window.currentLang].saved || 'Uložené');
+  window.loadRecords();
+};
+
+window.pridatVahu = async function() {
+  try {
+    const val = document.getElementById('novaVaha').value.trim();
+    if (!val) return;
+    
+    const history = window.getVahaHistory();
+    const data = { id: Date.now().toString(), datum: window.formatDatum(), vaha: val };
+    history.push(data);
+    localStorage.setItem('vaha_historia_' + window.user.uid, JSON.stringify(history));
+    
+    document.getElementById('novaVaha').value = '';
+    localStorage.setItem('userProfile_vaha', val); 
+    if (document.getElementById('viewProfileVaha')) document.getElementById('viewProfileVaha').innerText = val + ' kg';
+    window.showToast(translations[window.currentLang].saved || 'Uložené');
+    if (document.getElementById('archivVahyModal').style.display !== 'none') {
+      window.vykreslitArchivVahy();
+    }
+  } catch(e) {
+    window.showAlert("Chyba pri ukladaní váhy: " + e.message);
+  }
+};
+
+window.vymazatVahu = async function(id) {
+  window.showConfirm(translations[window.currentLang].confirmDel, async () => {
+    try {
+      if (id.length > 15) { try { await deleteDoc(doc(db, 'zaznamy', id)); } catch(e) {} } 
+      
+      let history = window.getVahaHistory();
+      history = history.filter(h => h.id !== id);
+      localStorage.setItem('vaha_historia_' + window.user.uid, JSON.stringify(history));
+      
+      if (history.length > 0) {
+         const sorted = history.sort((a, b) => parseInt(b.id) - parseInt(a.id));
+         localStorage.setItem('userProfile_vaha', sorted[0].vaha);
+      } else {
+         localStorage.removeItem('userProfile_vaha');
+      }
+      if (document.getElementById('viewProfileVaha')) document.getElementById('viewProfileVaha').innerText = localStorage.getItem('userProfile_vaha') ? localStorage.getItem('userProfile_vaha') + ' kg' : '-';
+      window.vykreslitArchivVahy();
+    } catch(e) {
+      window.showAlert("Chyba pri mazaní: " + e.message);
+    }
+  });
+};
+
+window.otvoritArchivVahy = function() {
+  window.skrytVsetko();
+  window.vykreslitArchivVahy();
+  document.getElementById('archivVahyModal').style.display = 'block';
+};
+
+window.zavrietArchivVahy = function() {
+  document.getElementById('archivVahyModal').style.display = 'none';
+  window.otvoritProfil();
+};
+
+window.vykreslitArchivVahy = function() {
+  const list = document.getElementById('archivVahyList');
+  const vahaZaznamy = window.getVahaHistory();
+  
+  if (vahaZaznamy.length === 0) {
+     list.innerHTML = '<div class="empty-records">Žiadne záznamy</div>';
+     return;
+  }
+  const sorted = vahaZaznamy.sort((a, b) => {
+    const parse = (s) => {
+      if (!s || typeof s !== 'string') return 0;
+      const parts = s.split(' ');
+      const d = parts[0] || "";
+      const t = parts[1] || '00:00';
+      const [dd, mm, yy] = d.split('.').map(Number);
+      const [hh, mi] = t.split(':').map(Number);
+      if (!dd || !mm) return 0;
+      const year = yy < 100 ? 2000 + yy : yy;
+      return new Date(year, mm - 1, dd, hh, mi).getTime();
+    };
+    return parse(b.datum) - parse(a.datum);
+  });
+
+  let html = '<div class="archive-header weight-row"><div>Dátum/Čas</div><div>Váha (kg)</div><div></div></div>';
+  for (let i = 0; i < sorted.length; i++) {
+    const r = sorted[i];
+    let trend = '';
+    
+    if (i < sorted.length - 1) {
+      const currentVaha = parseFloat(r.vaha.replace(',', '.'));
+      const prevVaha = parseFloat(sorted[i+1].vaha.replace(',', '.'));
+      if (!isNaN(currentVaha) && !isNaN(prevVaha)) {
+        if (currentVaha > prevVaha) {
+          trend = ' <span class="trend-up">↑</span>';
+        } else if (currentVaha < prevVaha) {
+          trend = ' <span class="trend-down">↓</span>';
+        } else {
+          trend = ' <span class="trend-flat">=</span>';
+        }
+      }
+    }
+
+    html += `<div class="record-row weight-row">
+      <div>${r.datum}</div>
+      <div class="weight-val">${r.vaha}${trend}</div>
+      <div class="weight-del" onclick="window.vymazatVahu('${r.id}')">🗑️</div>
+    </div>`;
+  }
+  list.innerHTML = html;
+};
+
+window.spustitImport = async function() {
+  let targetUserId = window.user.uid;
+
+  if (window.userRole === 'admin') {
+    const targetName = prompt("Zadajte MENO používateľa, ktorému chcete importovať dáta (nechajte prázdne pre seba):");
+    if (targetName && targetName.trim() !== "") {
+      const q = query(collection(db, 'users'), where('name', '==', targetName.trim()));
+      const snap = await getDocs(q);
+      if (snap.empty) return window.showAlert("Používateľ s týmto menom nebol nájdený!");
+      targetUserId = snap.docs[0].data().uid;
+    }
+  }
+
+  const rawData = prompt("Sem vložte textové záznamy. Vzor: 07.08.2025 — INR: 2.4 | TAB: 1 | SYS: 95 | DIA: 65 | PULZ: 86");
+  if (!rawData) return;
+  
+  try {
+    window.showToast("Importujem...");
+    const lines = rawData.split(/\r?\n/);
+    let count = 0;
+
+    for (let line of lines) {
+      line = line.trim();
+      const parts = line.split(/\s+[-—]\s+/);
+      if (parts.length < 2) continue;
+
+      const datePart = parts[0].trim();
+      const valuesPart = parts[1].trim();
+
+      let formattedDate = datePart;
+      const dateBits = datePart.split('.');
+      if (dateBits.length === 3) {
+        const yy = dateBits[2];
+        formattedDate = `${dateBits[0].padStart(2, '0')}.${dateBits[1].padStart(2, '0')}.${yy.length === 2 ? '20' + yy : yy} 12:00`;
+      }
+
+      const record = {
+        userId: targetUserId,
+        datum: formattedDate,
+        inr: '', tab: '', sys: '', dia: '', pulse: '',
+        mode: 'bp'
+      };
+
+      valuesPart.split('|').forEach(p => {
+        const [key, val] = p.split(':').map(s => s.trim());
+        if (!key || !val) return;
+        const k = key.toLowerCase();
+        if (k === 'inr') { record.inr = val; record.mode = 'full'; }
+        else if (k === 'tab') { record.tab = val; record.mode = 'full'; }
+        else if (k === 'sys') record.sys = val;
+        else if (k === 'dia') record.dia = val;
+        else if (k === 'pulz' || k === 'pulse') record.pulse = val;
+      });
+
+      await addDoc(collection(db, 'zaznamy'), record);
+      count++;
+    }
+    window.showAlert(`Import úspešne dokončený! Pridaných ${count} záznamov.`);
+    window.loadRecords();
+  } catch (e) {
+    window.showAlert("Chyba pri importe: " + e.message);
+  }
+};
+
+window.getColorClass = (valStr, type) => {
+  const val = parseFloat(valStr?.replace(',','.'));
+  if (isNaN(val)) return '';
+
+  if (type === 'inr') return 'val-purple';
+  if (type === 'tab') return 'val-yellow';
+
+  let low, high;
+  if (type === 'sys') { low = 90; high = 140; }
+  else if (type === 'dia') { low = 60; high = 90; }
+  else if (type === 'pulse') { low = 60; high = 100; }
+  else return '';
+  if (val < low) return 'val-blue';
+  if (val > high) return 'val-red';
+  return 'val-green';
+};
+
+window.zobrazArchiv = function() {
+  document.getElementById('formular').style.display = 'none';
+  window.skrytVsetko();
+  document.getElementById('archiv').style.display = 'block';
+  const list = document.getElementById('archivList');
+  list.innerHTML = '';
+  
+  const monthNames = {
+    sk: ["Január", "Február", "Marec", "Apríl", "Máj", "Jún", "Júl", "August", "September", "Október", "November", "December"],
+    de: ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"]
+  };
+
+  const now = new Date();
+  const currentM = String(now.getMonth() + 1).padStart(2, '0');
+  const currentY = String(now.getFullYear());
+  const currentMonthKey = `${currentM}.${currentY}`;
+
+  window.groupedOlder = {}; 
+  let currentMonthHtml = '';
+
+  window.zaznamy.filter(r => {
+    const recordMode = r.mode || (r.inr || r.tab ? 'full' : 'bp');
+    return recordMode === (window.isBpOnly ? 'bp' : 'full');
+  }).sort((a, b) => {
+    const parse = (s) => {
+      if (!s || typeof s !== 'string') return 0;
+      const parts = s.split(' ');
+      const d = parts[0] || "";
+      const t = parts[1] || '00:00';
+      const [dd, mm, yy] = d.split('.').map(Number);
+      const [hh, mi] = t.split(':').map(Number);
+      if (!dd || !mm) return 0;
+      const year = yy < 100 ? 2000 + yy : yy;
+      return new Date(year, mm - 1, dd, hh, mi).getTime();
+    };
+    return parse(b.datum) - parse(a.datum);
+  }).forEach(r => {
+    const dateParts = (r.datum || "").split(' ')[0].split('.');
+    const m = dateParts[1] || "01";
+    const y = dateParts[2] || "";
+    const fullYear = (y && y.length === 2) ? `20${y}` : (y || new Date().getFullYear().toString());
+    const monthKey = `${m.padStart(2, '0')}.${fullYear}`;
+    
+    if (monthKey !== currentMonthKey) {
+      if (!window.groupedOlder[monthKey]) {
+         const monthName = monthNames[window.currentLang][parseInt(m) - 1];
+         window.groupedOlder[monthKey] = { title: `${monthName} ${fullYear}`, html: '' };
+         window.groupedOlder[monthKey].html += '<div class="archive-header"><div>Dátum/Čas</div><div class="col-inr">INR</div><div class="col-tab">Tab</div><div>Sys</div><div>Dia</div><div>Pulz</div><div></div></div>';
+      }
+    }
+
+    if (monthKey === currentMonthKey && !currentMonthHtml.includes('archive-header')) {
+      const monthName = monthNames[window.currentLang][parseInt(m) - 1];
+      currentMonthHtml += `<div class="month-header">
+        <h3>${monthName} ${fullYear}</h3>
+        <button class="main pdf-export-btn" onclick="window.potvrditExportPDF(true, '${currentMonthKey}')">PDF Export</button>
+      </div>`;
+      currentMonthHtml += '<div class="archive-header"><div>Dátum/Čas</div><div class="col-inr">INR</div><div class="col-tab">Tab</div><div>Sys</div><div>Dia</div><div>Pulz</div><div></div></div>';
+    }
+
+    const rowHtml = `<div class="record-row">
+      <div>${r.datum}</div>
+      <div class="col-inr ${window.getColorClass(r.inr,'inr')}">${r.inr||'-'}</div>
+      <div class="col-tab ${window.getColorClass(r.tab,'tab')}">${r.tab||'-'}</div>
+      <div class="col-sys ${window.getColorClass(r.sys,'sys')}">${r.sys||'-'}</div>
+      <div class="col-dia ${window.getColorClass(r.dia,'dia')}">${r.dia||'-'}</div>
+      <div class="${window.getColorClass(r.pulse,'pulse')}">${r.pulse||'-'}</div>
+      <div class="delete-icon" onclick="window.vymazatZaznam('${r.id}')">🗑️</div>
+    </div>`;
+
+    if (monthKey === currentMonthKey) {
+      currentMonthHtml += rowHtml;
+    } else {
+      window.groupedOlder[monthKey].html += rowHtml;
+    }
+  });
+
+  list.innerHTML = currentMonthHtml;
+
+  if (Object.keys(window.groupedOlder).length > 0) {
+    document.getElementById('btn_open_monthly_archive').style.display = 'block';
+  } else {
+    document.getElementById('btn_open_monthly_archive').style.display = 'none';
+    list.innerHTML += `<button class="main btn-monthly-archive" onclick="window.otvoritMesacnyArchivList()">${translations[window.currentLang].btnMonthlyArchive}</button>`;
+  }
+};
+
+window.otvoritMesacnyArchivList = () => {
+  const container = document.getElementById('monthlyArchiveButtons');
+  container.innerHTML = '';
+  const olderKeys = Object.keys(window.groupedOlder).sort((a,b) => {
+    const [ma, ya] = a.split('.').map(Number);
+    const [mb, yb] = b.split('.').map(Number);
+    return (yb*12+mb) - (ya*12+ma);
+  });
+  olderKeys.forEach(key => {
+    container.innerHTML += `<button class="main month-btn" onclick="window.otvoritMesacnyDetail('${key}')">${window.groupedOlder[key].title}</button>`;
+  });
+  document.getElementById('monthlyArchiveListModal').style.display = 'flex';
+};
+
+window.zavrietMesacnyArchivList = () => document.getElementById('monthlyArchiveListModal').style.display = 'none';
+
+window.otvoritMesacnyDetail = (key) => {
+  window.currentExportMonthKey = key;
+  const data = window.groupedOlder[key];
+  document.getElementById('monthDetailTitle').innerText = data.title;
+  document.getElementById('monthDetailContent').innerHTML = data.html;
+  document.getElementById('monthDetailModal').style.display = 'flex';
+  window.zavrietMesacnyArchivList();
+};
+
+window.zavrietMesacnyDetail = () => document.getElementById('monthDetailModal').style.display = 'none';
+
+window.potvrditExportPDF = (isCurrent, key = null) => {
+  if (key) window.currentExportMonthKey = key;
+  window.showConfirm(translations[window.currentLang].confirmPdf, () => window.exportToPDF(isCurrent));
+};
+
+window.exportToPDF = (isCurrent = false) => {
+  let title, sourceNode;
+  if (isCurrent === true) {
+     title = document.querySelector('#archivList h3') ? document.querySelector('#archivList h3').innerText : 'Archív';
+     sourceNode = document.getElementById('archivList');
+  } else {
+     title = document.getElementById('monthDetailTitle').innerText;
+     sourceNode = document.getElementById('monthDetailContent');
+  }
+  const userName = window.userName || '';
+  
+  const pdfWrapper = document.createElement('div');
+  pdfWrapper.style.padding = '20px';
+  pdfWrapper.style.backgroundColor = '#ffffff';
+  pdfWrapper.style.color = '#000000';
+  pdfWrapper.style.fontFamily = 'Arial, sans-serif';
+  pdfWrapper.style.position = 'relative';
+  pdfWrapper.style.minHeight = '277mm'; 
+
+  const watermark = document.createElement('img');
+  watermark.src = window.isBpOnly ? 'bp.png' : 'bp inr.png';
+  watermark.style.position = 'absolute';
+  watermark.style.top = '138.5mm'; 
+  watermark.style.left = '50%';
+  watermark.style.transform = 'translate(-50%, -50%)';
+  watermark.style.opacity = '0.1'; 
+  watermark.style.width = '75%';
+  watermark.style.maxWidth = '400px';
+  watermark.style.zIndex = '999'; 
+  watermark.style.pointerEvents = 'none';
+  pdfWrapper.appendChild(watermark);
+
+  const h1 = document.createElement('h2');
+  h1.innerText = title;
+  h1.style.textAlign = 'center';
+  h1.style.marginBottom = '5px';
+  pdfWrapper.appendChild(h1);
+
+  const tInfo = translations[window.currentLang];
+  const pMeno = localStorage.getItem('userProfile_meno') || '';
+  const pPriezvisko = localStorage.getItem('userProfile_priezvisko') || '';
+  
+  let pVaha = '-';
+  if (window.currentExportMonthKey) {
+    const history = window.getVahaHistory();
+    const monthWeights = history.filter(h => {
+      const parts = h.datum.split(' ')[0].split('.'); 
+      if (parts.length === 3) {
+        const y = parts[2].length === 2 ? '20' + parts[2] : parts[2];
+        return `${parts[1]}.${y}` === window.currentExportMonthKey;
+      }
+      return false;
+    });
+    if (monthWeights.length > 0) {
+      monthWeights.sort((a,b) => parseInt(b.id) - parseInt(a.id));
+      pVaha = monthWeights[0].vaha + ' kg';
+    }
+  } else {
+    pVaha = localStorage.getItem('userProfile_vaha') ? localStorage.getItem('userProfile_vaha') + ' kg' : '-';
+  }
+  
+  const pVyska = localStorage.getItem('userProfile_vyska') ? localStorage.getItem('userProfile_vyska') + ' cm' : '-';
+  let fullName = `${pMeno} ${pPriezvisko}`.trim();
+  if (!fullName) fullName = userName || '-';
+
+  const sub = document.createElement('div');
+  sub.innerHTML = `<strong>${tInfo.namePhProfile}:</strong> ${fullName} &nbsp;|&nbsp; <strong>${tInfo.weightPhProfile.replace(' (kg)', '')}:</strong> ${pVaha} &nbsp;|&nbsp; <strong>${tInfo.heightPhProfile.replace(' (cm)', '')}:</strong> ${pVyska}`;
+  sub.style.fontSize = '12px';
+  sub.style.textAlign = 'left';
+  sub.style.marginBottom = '15px';
+  sub.style.borderBottom = '1px solid #eee';
+  sub.style.paddingBottom = '5px';
+  pdfWrapper.appendChild(sub);
+
+  const tableClone = sourceNode.cloneNode(true);
+  tableClone.style.border = '1px solid #eee';
+  
+  if (isCurrent === true) {
+     tableClone.querySelectorAll('h3, button, .main').forEach(el => el.remove());
+  }
+  
+  tableClone.querySelectorAll('.record-row, .archive-header').forEach(row => {
+    row.style.backgroundColor = row.classList.contains('archive-header') ? '#f0f0f0' : '#ffffff';
+    row.style.color = '#000000';
+
+    if (window.isBpOnly) {
+      row.querySelectorAll('.col-inr, .col-tab').forEach(el => el.remove());
+    }
+
+    const cells = Array.from(row.children);
+    if (cells.length > 0) cells[cells.length - 1].remove(); 
+    row.style.gridTemplateColumns = window.isBpOnly ? '40% 20% 20% 20%' : '30% 14% 14% 14% 14% 14%';
+  });
+
+  pdfWrapper.appendChild(tableClone);
+
+  const t = translations[window.currentLang];
+  const legendDiv = document.createElement('div');
+  legendDiv.style.marginTop = '15px';
+  legendDiv.style.padding = '10px';
+  legendDiv.style.border = '1px solid #eee';
+  legendDiv.style.fontSize = '10px';
+  legendDiv.style.lineHeight = '1.4';
+
+  const legHeader = document.createElement('div');
+  legHeader.style.fontWeight = 'bold';
+  legHeader.style.marginBottom = '5px';
+  legHeader.innerText = t.legendTitle;
+  legendDiv.appendChild(legHeader);
+
+  let colors = [{c:'#9c27b0', l:t.legPurple}, {c:'#ffeb3b', l:t.legYellow}, {c:'#00e676', l:t.legGreen}, {c:'#ff1744', l:t.legRed}, {c:'#2196F3', l:t.legBlue}];
+  if (window.isBpOnly) {
+    colors = colors.filter(c => c.c !== '#9c27b0' && c.c !== '#ffeb3b');
+  }
+  colors.forEach(item => {
+    const row = document.createElement('div');
+    row.innerHTML = `<span style="color:${item.c}; font-size: 12px; vertical-align: middle;">■</span> ${item.l}`;
+    legendDiv.appendChild(row);
+  });
+  pdfWrapper.appendChild(legendDiv);
+
+  const opt = {
+    margin: [10, 5, 10, 5],
+    filename: `Zaznamy_${title.replace(/\s+/g, '_')}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  const generatePdf = () => html2pdf().set(opt).from(pdfWrapper).save();
+
+  if (watermark.complete) {
+    generatePdf();
+  } else {
+    watermark.onload = generatePdf;
+    watermark.onerror = generatePdf; 
+  }
+};
+
+window.vymazatZaznam = (id) => {
+  window.showConfirm(translations[window.currentLang].confirmDel, async () => {
+    await deleteDoc(doc(db, 'zaznamy', id));
+    window.loadRecords();
+    window.zobrazArchiv();
+  });
+};
+
+window.formatDatum = () => { 
+  const d = new Date(); 
+  const date = `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getFullYear())}`;
+  const time = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  return `${date} ${time}`;
+};
+window.skrytArchiv = () => { window.skrytVsetko(); document.getElementById('formular').style.display = 'block'; };
+
+window.logout = () => {
+  window.showConfirm(translations[window.currentLang].confirmLogout, () => signOut(auth));
+};
+
+window.toggleDropdown = () => { const d = document.getElementById('dropdown'); d.style.display = (d.style.display === 'flex') ? 'none' : 'flex'; };
+window.otvoritModal = () => {
+  window.skrytVsetko();
+  document.getElementById('manualModal').style.display = 'block';
+};
+window.zavrietModal = () => {
+  window.skrytVsetko();
+  document.getElementById('formular').style.display = 'block';
+};
+window.otvoritInfo = () => {
+  window.skrytVsetko();
+  document.getElementById('infoModal').style.display = 'block';
+};
+window.zavrietInfo = () => {
+  window.skrytVsetko();
+  document.getElementById('formular').style.display = 'block';
+};
+window.showToast = (m) => { const t = document.getElementById('toast'); t.innerText = m; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); };
+
+window.ulozitManual = async () => {
+  const dateStr = document.getElementById('manualDatum').value;
+  const datePattern = /^(\d{2})\.(\d{2})\.(\d{2,4}) (\d{2}):(\d{2})$/;
+  const match = dateStr.match(datePattern);
+
+  if (!match) {
+    return window.showAlert('Dátum a čas musí byť v tvare dd.mm.rr hh:mm (napr. 25.12.24 14:30)');
+  }
+
+  const day = parseInt(match[1]);
+  const month = parseInt(match[2]);
+  let year = match[3];
+  const hour = parseInt(match[4]);
+  const min = parseInt(match[5]);
+
+  if (day < 1 || day > 31 || month < 1 || month > 12 || hour > 23 || min > 59) {
+    return window.showAlert('Neplatné údaje v dátume alebo čase!');
+  }
+  if (year.length === 2) year = "20" + year;
+
+  const data = { userId: window.user.uid, datum: `${match[1]}.${match[2]}.${year} ${match[4]}:${match[5]}`, inr: document.getElementById('manualInr').value, tab: document.getElementById('manualTab').value, sys: document.getElementById('manualSys').value, dia: document.getElementById('manualDia').value, pulse: document.getElementById('manualPulse').value, mode: window.isBpOnly ? 'bp' : 'full' };
+  if (![data.inr, data.tab, data.sys, data.dia, data.pulse].some(v => v.trim() !== '')) return;
+
+  await addDoc(collection(db, 'zaznamy'), data);
+  ['manualDatum','manualInr','manualTab','manualSys','manualDia','manualPulse'].forEach(id => document.getElementById(id).value = '');
+  window.zavrietModal(); window.loadRecords(); window.showToast(translations[window.currentLang].saved);
+};
+
+window.otvoritProfil = () => {
+  const t = translations[window.currentLang];
+  document.getElementById('viewProfileMeno').innerText = localStorage.getItem('userProfile_meno') || '-';
+  document.getElementById('viewProfilePriezvisko').innerText = localStorage.getItem('userProfile_priezvisko') || '-';
+  document.getElementById('viewProfileVaha').innerText = (localStorage.getItem('userProfile_vaha') ? localStorage.getItem('userProfile_vaha') + ' kg' : '-');
+  document.getElementById('viewProfileVyska').innerText = (localStorage.getItem('userProfile_vyska') ? localStorage.getItem('userProfile_vyska') + ' cm' : '-');
+  
+  const kartaContainer = document.getElementById('viewProfileKarta');
+  kartaContainer.innerHTML = ''; 
+  const kartaText = localStorage.getItem('userProfile_karta') || '';
+
+  if (kartaText) {
+    const lieky = kartaText.split('\n').filter(l => l.trim() !== '');
+    lieky.forEach((liek, index) => {
+      const cistyLiek = liek.replace(/^•\s*/, ''); 
+      const liekElement = document.createElement('div');
+      liekElement.className = index % 2 === 0 ? 'med-item even' : 'med-item odd';
+
+      const textSpan = document.createElement('span');
+      textSpan.innerText = cistyLiek;
+
+      const deleteSpan = document.createElement('span');
+      deleteSpan.innerHTML = '&times;'; 
+      deleteSpan.className = 'med-delete-btn';
+      deleteSpan.title = 'Vymazať liek';
+      deleteSpan.onclick = () => window.vymazatLiek(index);
+
+      liekElement.appendChild(textSpan);
+      liekElement.appendChild(deleteSpan);
+      kartaContainer.appendChild(liekElement);
+    });
+  } else {
+    kartaContainer.innerHTML = '<div class="empty-meds">Žiadne lieky. (Dvojklik pre pridanie)</div>';
+  }
+  document.getElementById('formular').style.display = 'none';
+  document.getElementById('archiv').style.display = 'none';
+  window.skrytVsetko();
+  document.getElementById('viewProfileModal').style.display = 'block';
+};
+
+window.otvoritEditProfil = () => {
+  document.getElementById('profileMeno').value = localStorage.getItem('userProfile_meno') || '';
+  document.getElementById('profilePriezvisko').value = localStorage.getItem('userProfile_priezvisko') || '';
+  document.getElementById('profileVaha').value = localStorage.getItem('userProfile_vaha') || '';
+  document.getElementById('profileVyska').value = localStorage.getItem('userProfile_vyska') || '';
+  document.getElementById('viewProfileModal').style.display = 'none'; 
+  document.getElementById('editProfileModal').style.display = 'block'; 
+};
+
+window.otvoritEditKartu = () => {
+  document.getElementById('medName').value = '';
+  document.getElementById('medQty').value = '';
+  document.getElementById('medMg').value = '';
+  document.getElementById('medUnit').value = 'mg';
+  document.getElementById('medDosage').value = '';
+  document.getElementById('viewProfileModal').style.display = 'none';
+  document.getElementById('editMedicationModal').style.display = 'block';
+};
+
+window.zavrietEditKartu = () => {
+  document.getElementById('editMedicationModal').style.display = 'none';
+  window.otvoritProfil();
+};
+
+window.ulozitKartu = () => {
+  const name = document.getElementById('medName').value.trim();
+  const qty = document.getElementById('medQty').value.trim();
+  const mg = document.getElementById('medMg').value.trim();
+  const unit = document.getElementById('medUnit').value;
+  const dosage = document.getElementById('medDosage').value;
+  if (!name) return window.showAlert("Zadajte aspoň názov lieku!");
+  
+  let novyLiek = name;
+  if (qty && qty.length > 0) novyLiek += ` - ${qty} ks`;
+  if (mg && mg.length > 0) novyLiek += ` (${mg} ${unit})`;
+  if (dosage && dosage.length > 0) novyLiek += ` [${dosage}]`;
+  
+  let staraKarta = localStorage.getItem('userProfile_karta') || '';
+  let novaKarta = staraKarta ? staraKarta + '\n' + novyLiek : novyLiek;
+  localStorage.setItem('userProfile_karta', novaKarta);
+  if (window.user) localStorage.setItem('userProfile_uid', window.user.uid);
+  window.showToast(translations[window.currentLang].saved || 'Uložené');
+  window.zavrietEditKartu();
+};
+
+window.vymazatLiek = (index) => {
+  const t = translations[window.currentLang];
+  window.showConfirm(t.confirmDelMed || "Naozaj chcete vymazať tento liek?", () => {
+    let kartaText = localStorage.getItem('userProfile_karta') || '';
+    let lieky = kartaText.split('\n').filter(l => l.trim() !== '');
+    lieky.splice(index, 1);
+    localStorage.setItem('userProfile_karta', lieky.join('\n'));
+    window.otvoritProfil();
+  });
+};
+
+window.zavrietViewProfil = () => {
+  document.getElementById('viewProfileModal').style.display = 'none';
+  window.skrytVsetko();
+  document.getElementById('formular').style.display = 'block';
+};
+window.zavrietEditProfil = () => {
+  document.getElementById('editProfileModal').style.display = 'none';
+  window.otvoritProfil();
+};
+
+window.ulozitProfil = () => {
+  const t = translations[window.currentLang];
+  if (window.user) localStorage.setItem('userProfile_uid', window.user.uid);
+  localStorage.setItem('userProfile_meno', document.getElementById('profileMeno').value.trim());
+  localStorage.setItem('userProfile_priezvisko', document.getElementById('profilePriezvisko').value.trim());
+  localStorage.setItem('userProfile_vaha', document.getElementById('profileVaha').value.trim());
+  localStorage.setItem('userProfile_vyska', document.getElementById('profileVyska').value.trim());
+  window.showToast(t.saved || 'Uložené');
+  window.zavrietEditProfil(); 
+};
+
+window.forceUpdateCheck = () => {
+  const t = translations[window.currentLang];
+  window.showToast(t.msgCheckUpdate || "Vymazávam cache...");
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(registrations => {
+      for (let reg of registrations) {
+        reg.unregister();
+      }
+      setTimeout(() => {
+        window.location.href = window.location.pathname + '?v=' + new Date().getTime();
+      }, 1000);
+    });
+  } else {
+    window.location.href = window.location.pathname + '?v=' + new Date().getTime();
+  }
+};
+
+if ('serviceWorker' in navigator) {
+  if (sessionStorage.getItem(UPDATE_ACKNOWLEDGED_KEY) === 'true') {
+    setTimeout(() => sessionStorage.removeItem(UPDATE_ACKNOWLEDGED_KEY), 1000);
+  }
+
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!refreshing) {
+      window.location.href = window.location.pathname + '?updated=true';
+      refreshing = true;
+    }
+  });
+
+  navigator.serviceWorker.register('sw.js?v=1.64').then(reg => {
+    setInterval(() => { reg.update(); }, 1000 * 60 * 60);
+    reg.update();
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        reg.update();
+      }
+    });
+
+    if (reg.waiting) {
+      window.showUpdateUI(reg);
+    }
+
+    reg.onupdatefound = () => {
+      const installingWorker = reg.installing;
+      installingWorker.onstatechange = () => {
+        if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          window.showUpdateUI(reg);
+        }
+      };
+    };
+  });
+}
+
+window.showUpdateUI = (reg) => {
+  if (sessionStorage.getItem(UPDATE_ACKNOWLEDGED_KEY) === 'true') {
+    return;
+  }
+  const dialog = document.getElementById('customDialog');
+  const t = translations[window.currentLang];
+  document.getElementById('dialogTitle').innerText = 'Nová verzia';
+  document.getElementById('dialogMessage').innerText = t.updateReady + '\n' + t.updateChanges;
+  document.getElementById('dialogCancelBtn').style.display = 'none';
+  document.getElementById('dialogOkBtn').onclick = () => {
+    sessionStorage.setItem(UPDATE_ACKNOWLEDGED_KEY, 'true');
+    dialog.style.display = 'none';
+    if (reg && reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+    else window.location.href = window.location.pathname + '?updated=true';
+  };
+  dialog.style.display = 'flex';
+};

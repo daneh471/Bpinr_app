@@ -1,9 +1,14 @@
-// BP & INR Service Worker - Build: 2024-05-23_v1.39
-const CACHE_NAME = 'bp-inr-v1.39-force-update';
+// BP & INR Service Worker - Build: v1.64
+const CACHE_NAME = 'bp-inr-v1.64';
 const FILES_TO_CACHE = [
+  './',
   'index.html',
+  'style.css',
+  'app.js',
   'favicon.png',
-  'manifest.json'
+  'manifest.json',
+  'bp.png',
+  'bp inr.png'
 ];
 
 // Inštalácia service workera – ukladáme potrebné súbory
@@ -28,13 +33,14 @@ self.addEventListener('activate', function (e) {
       );
     }).then(() => self.clients.claim()) // Okamžité prevzatie kontroly
   );
-  
 });
 
 // Počúvame na správu o preskočení čakania (vynútený update)
 self.addEventListener('message', function (e) {
-  if (e.data && e.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
+  if (e.data) {
+    if (e.data.type === 'SKIP_WAITING') {
+      self.skipWaiting();
+    }
   }
 });
 
@@ -55,7 +61,7 @@ self.addEventListener('fetch', function(e) {
         }
         const clone = response.clone();
         caches.open(CACHE_NAME).then(function(cache) {
-          cache.put(e.request, clone).catch(err => console.warn('Cache put failed:', err));
+          cache.put(e.request, clone);
         });
         return response;
       })
