@@ -1,3 +1,19 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getAuth, signOut, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, query, where, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDlzYqLEcy1OzZMcGOlidQRr8tNdZNXsSk",
+  authDomain: "zdravie-plus-5193f.firebaseapp.com",
+  projectId: "zdravie-plus-5193f",
+  storageBucket: "zdravie-plus-5193f.appspot.com",
+  messagingSenderId: "21608089094",
+  appId: "1:21608089094:web:53b5f9fc60d51ae96ba587"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
 window.exportMedCardPDF = () => {
   const tInfo = translations[window.currentLang];
   const pMeno = localStorage.getItem('userProfile_meno') || '-';
@@ -95,73 +111,25 @@ window.loadRecords = async function() {
   const localKey = 'zaznamy_historia_' + window.user.uid;
   let stored = localStorage.getItem(localKey);
   window.zaznamy = stored ? JSON.parse(stored) : [];
-  
-  if (document.getElementById('archiv').style.display === 'block') window.zobrazArchiv();
-};
 
-window.checkMigration = () => {
-  if (!window.user) return;
-  const localKey = 'zaznamy_historia_' + window.user.uid;
+  // Jednorazová migrácia záznamov z Firebase do lokálnej pamäte
   if (!localStorage.getItem(localKey + '_migrated')) {
-    document.getElementById('migrationModal').style.display = 'flex';
-  }
-};
-
-window.startMigration = async () => {
-  const btn = document.getElementById('mig_btn');
-  const progressEl = document.getElementById('mig_progress');
-  const t = translations[window.currentLang];
-  
-  btn.style.display = 'none';
-  progressEl.style.display = 'block';
-  progressEl.innerText = "Sťahujem zo servera...";
-
-  try {
+    window.showToast("Sťahujem históriu do zariadenia...");
     const q = query(collection(db, 'zaznamy'), where('userId', '==', window.user.uid));
     const snap = await getDocs(q);
     const fbRecords = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     
-    const localKey = 'zaznamy_historia_' + window.user.uid;
-    const total = fbRecords.length;
-    
-    if (total === 0) {
-      progressEl.innerText = t.migNoData;
-      setTimeout(() => finishMigration(localKey), 1500);
-      return;
-    }
-
-    let current = 0;
-    progressEl.innerText = `${t.migProcess}: 0 / ${total}`;
-
-    const processChunk = () => {
-      const chunkSize = Math.max(1, Math.ceil(total / 20)); // Plynulý vizuál v 20 krokoch
-      const chunk = fbRecords.slice(current, current + chunkSize);
-      chunk.forEach(fr => {
+    if (fbRecords.length > 0) {
+      fbRecords.forEach(fr => {
         if (!window.zaznamy.find(h => h.id === fr.id)) window.zaznamy.push(fr);
       });
-      current += chunk.length;
-      progressEl.innerText = `${t.migProcess}: ${current} / ${total}`;
-      
-      if (current < total) {
-        setTimeout(processChunk, 40);
-      } else {
-        localStorage.setItem(localKey, JSON.stringify(window.zaznamy));
-        progressEl.innerText = t.migDone;
-        setTimeout(() => finishMigration(localKey), 1500);
-      }
-    };
-    processChunk();
-  } catch (e) {
-    progressEl.innerText = t.migError + e.message;
-    btn.style.display = 'block';
-    btn.innerText = "Znova / Retry";
+      localStorage.setItem(localKey, JSON.stringify(window.zaznamy));
+    }
+    localStorage.setItem(localKey + '_migrated', 'true');
+    setTimeout(() => window.showToast("Údaje sú stiahnuté a bezpečne uložené."), 1000);
   }
-};
-
-const finishMigration = (localKey) => {
-  localStorage.setItem(localKey + '_migrated', 'true');
-  document.getElementById('migrationModal').style.display = 'none';
-  window.loadRecords();
+  
+  if (document.getElementById('archiv').style.display === 'block') window.zobrazArchiv();
 };
 
 window.skrytVsetko = () => {
@@ -231,14 +199,7 @@ const translations = {
     btnWeightArchive: "Archív váhy",
     titleWeightArchive: "Archív váhy",
     newWeightPh: "Nová váha (kg)",
-    addBtnShort: "Pridať",
-    migTitle: "Prechod na Offline režim",
-    migDesc: "Aplikácia sa prepína na bleskový lokálny režim. Vaše údaje budú stiahnuté a bezpečne uložené vo vašom zariadení.",
-    migBtn: "Stiahnuť dáta",
-    migProcess: "Spracovávam",
-    migDone: "Hotovo! Dáta sú uložené.",
-    migNoData: "Žiadne dáta na stiahnutie.",
-    migError: "Chyba: "
+    addBtnShort: "Pridať"
   },
   de: {
     login: "Anmelden", register: "Registrierung", titleLogin: "Login", titleReg: "Neues Konto", namePh: "Dein Name", pinPh: "PIN (6 Stellen)",
@@ -281,14 +242,7 @@ const translations = {
     btnWeightArchive: "Gewichtsarchiv",
     titleWeightArchive: "Gewichtsarchiv",
     newWeightPh: "Neues Gewicht (kg)",
-    addBtnShort: "Hinzufügen",
-    migTitle: "Übergang zum Offline-Modus",
-    migDesc: "Die App wechselt in einen schnellen lokalen Modus. Ihre Daten werden heruntergeladen und sicher auf Ihrem Gerät gespeichert.",
-    migBtn: "Daten herunterladen",
-    migProcess: "Verarbeite",
-    migDone: "Fertig! Daten sind gespeichert.",
-    migNoData: "Keine Daten zum Herunterladen.",
-    migError: "Fehler: "
+    addBtnShort: "Hinzufügen"
   }
 };
 
@@ -387,10 +341,6 @@ window.updateUI = () => {
     const el = document.getElementById(id);
     if(el) el.placeholder = id.toUpperCase();
   });
-
-  if(document.getElementById('mig_title')) document.getElementById('mig_title').innerText = t.migTitle;
-  if(document.getElementById('mig_desc')) document.getElementById('mig_desc').innerText = t.migDesc;
-  if(document.getElementById('mig_btn')) document.getElementById('mig_btn').innerText = t.migBtn;
 };
 
 window.changeLanguage = (lang) => {
@@ -559,7 +509,6 @@ onAuthStateChanged(auth, (user) => {
     document.querySelector('header').style.display = 'grid';
     document.getElementById('formular').style.display = 'block';
     window.loadRecords();
-    window.checkMigration();
     window.updateUI();
   } else {
     window.user = null; 
@@ -1068,7 +1017,7 @@ window.skrytArchiv = () => { window.skrytVsetko(); document.getElementById('form
 window.logout = () => {
   window.showConfirm(translations[window.currentLang].confirmLogout, () => {
     localStorage.removeItem('currentUserUid');
-    window.checkLocalAuth();
+    signOut(auth);
   });
 };
 
