@@ -49,6 +49,10 @@
           <button class="main" onclick="window.registerUser(); return false;">Vytvoriť účet</button>
           <p id="regError" style="color: red; font-size: 0.9rem;"></p>
         </div>
+        
+        <div style="margin-top: 1.5rem; text-align: center;">
+          <a href="#" onclick="window.otvoritTerms(); return false;" id="auth_terms_link" style="font-size: 0.8rem; color: #888; text-decoration: underline;">Podmienky používania a súkromie</a>
+        </div>
       </div>
     </div>
 
@@ -62,6 +66,7 @@
         <button onclick="window.otvoritModal(); window.toggleDropdown();">➕ Manuálny záznam</button>
         <button onclick="window.otvoritInfo(); window.toggleDropdown();">ℹ️ Informácie</button>
         <button style="display: none;" onclick="window.otvoritNastavenia(); window.toggleDropdown();">⚙️ Nastavenia</button>
+        <button onclick="window.otvoritTerms(); window.toggleDropdown();" id="menu_terms">📜 Podmienky</button>
         <button id="toggleBtn" onclick="window.toggleViewMode(); window.toggleDropdown();"></button>
         <button onclick="window.logout(); window.toggleDropdown();">🚪 Odhlásiť sa</button>
       </div>
@@ -199,6 +204,17 @@
         <button class="secondary" onclick="window.changeLanguage('de')">DE</button>
       </div>
       <button class="main" id="lang_close" onclick="window.zavrietJazyk()">Zatvoriť</button>
+    </div></div>
+
+    <div id="termsModal" class="modal"><div class="modal-content" style="text-align: left; overflow-y: auto; max-height: 85vh;">
+      <h3 id="terms_title" style="margin-top:0;">Podmienky používania a Ochrana súkromia</h3>
+      <div style="font-size: 0.9rem; line-height: 1.5; color: var(--text); opacity: 0.9;">
+        <p><strong id="t1_title">1. Lokálne úložisko:</strong> <span id="t1_desc">Vaše zdravotné záznamy sú ukladané výhradne vo vašom zariadení (v prehliadači). Aplikácia neodosiela ani nezálohuje vaše dáta na žiadne externé servery.</span></p>
+        <p><strong id="t2_title">2. Riziko straty dát:</strong> <span id="t2_desc" style="color: #ff1744;">Ak vymažete vyrovnávaciu pamäť prehliadača (cache), odinštalujete aplikáciu alebo stratíte zariadenie, vaše údaje budú natrvalo stratené a nebude možné ich obnoviť.</span></p>
+        <p><strong id="t3_title">3. Zálohovanie:</strong> <span id="t3_desc">Za zálohovanie svojich údajov (napríklad pomocou pravidelného exportu do PDF) je plne zodpovedný používateľ.</span></p>
+        <p><strong id="t4_title">4. Zdravotné upozornenie:</strong> <span id="t4_desc">Aplikácia slúži výlučne na informatívne účely a evidenciu hodnôt. Nenahrádza odbornú lekársku starostlivosť.</span></p>
+      </div>
+      <button class="main" id="terms_close" onclick="window.zavrietTerms()" style="background-color: #4CAF50; margin-top: 1rem;">Rozumiem</button>
     </div></div>
 
     <div id="infoModal" style="display:none; width: 100%;">

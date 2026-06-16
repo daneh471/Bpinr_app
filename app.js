@@ -133,7 +133,7 @@ window.loadRecords = async function() {
 };
 
 window.skrytVsetko = () => {
-  ['formular', 'archiv', 'viewProfileModal', 'editProfileModal', 'editMedicationModal', 'infoModal', 'manualModal', 'settingsModal', 'languageModal', 'monthlyArchiveListModal', 'monthDetailModal', 'archivVahyModal'].forEach(id => {
+  ['formular', 'archiv', 'viewProfileModal', 'editProfileModal', 'editMedicationModal', 'infoModal', 'manualModal', 'settingsModal', 'languageModal', 'monthlyArchiveListModal', 'monthDetailModal', 'archivVahyModal', 'termsModal'].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.style.display = 'none';
   });
@@ -199,7 +199,14 @@ const translations = {
     btnWeightArchive: "Archív váhy",
     titleWeightArchive: "Archív váhy",
     newWeightPh: "Nová váha (kg)",
-    addBtnShort: "Pridať"
+    addBtnShort: "Pridať",
+    termsMenu: "📜 Podmienky",
+    termsTitle: "Podmienky používania a Ochrana súkromia",
+    t1T: "1. Lokálne úložisko:", t1D: "Vaše zdravotné záznamy sú ukladané výhradne vo vašom zariadení. Aplikácia neodosiela ani nezálohuje vaše dáta na externé servery.",
+    t2T: "2. Riziko straty dát:", t2D: "Ak vymažete vyrovnávaciu pamäť prehliadača (cache), odinštalujete aplikáciu alebo stratíte zariadenie, vaše údaje budú natrvalo stratené.",
+    t3T: "3. Zálohovanie:", t3D: "Za zálohovanie svojich údajov (napríklad pomocou pravidelného exportu do PDF) ste plne zodpovedný vy.",
+    t4T: "4. Zdravotné upozornenie:", t4D: "Aplikácia slúži výlučne na informatívne účely a evidenciu hodnôt. Nenahrádza odbornú lekársku starostlivosť.",
+    btnUnderstand: "Rozumiem / Zatvoriť"
   },
   de: {
     login: "Anmelden", register: "Registrierung", titleLogin: "Login", titleReg: "Neues Konto", namePh: "Dein Name", pinPh: "PIN (6 Stellen)",
@@ -242,7 +249,14 @@ const translations = {
     btnWeightArchive: "Gewichtsarchiv",
     titleWeightArchive: "Gewichtsarchiv",
     newWeightPh: "Neues Gewicht (kg)",
-    addBtnShort: "Hinzufügen"
+    addBtnShort: "Hinzufügen",
+    termsMenu: "📜 Bedingungen",
+    termsTitle: "Nutzungsbedingungen & Datenschutz",
+    t1T: "1. Lokaler Speicher:", t1D: "Ihre Gesundheitsdaten werden ausschließlich auf Ihrem Gerät gespeichert. Die App sendet oder sichert keine Daten auf externen Servern.",
+    t2T: "2. Risiko von Datenverlust:", t2D: "Wenn Sie den Browser-Cache löschen, die App deinstallieren oder das Gerät verlieren, gehen Ihre Daten dauerhaft verloren.",
+    t3T: "3. Datensicherung:", t3D: "Sie sind für die Sicherung Ihrer Daten (z. B. durch regelmäßigen PDF-Export) selbst verantwortlich.",
+    t4T: "4. Medizinischer Hinweis:", t4D: "Die App dient ausschließlich zu Informationszwecken und ersetzt keine professionelle medizinische Betreuung.",
+    btnUnderstand: "Verstanden / Schließen"
   }
 };
 
@@ -274,7 +288,8 @@ window.updateUI = () => {
     if (menuBtns[2]) menuBtns[2].innerText = t.menuManual;
     if (menuBtns[3]) menuBtns[3].innerText = t.menuInfo;
     if (menuBtns[4]) menuBtns[4].innerText = t.menuSettings;
-    if (menuBtns[7]) menuBtns[7].innerText = t.menuLogout;
+    if (document.getElementById('menu_terms')) document.getElementById('menu_terms').innerText = t.termsMenu;
+    if (menuBtns[8]) menuBtns[8].innerText = t.menuLogout;
   }
   if (document.getElementById('toggleBtn')) document.getElementById('toggleBtn').innerText = window.isBpOnly ? t.menuToggleFull : t.menuToggleBp;
 
@@ -328,6 +343,18 @@ window.updateUI = () => {
   document.getElementById('leg_red').innerText = t.legRed;
   document.getElementById('leg_blue').innerText = t.legBlue;
 
+  if (document.getElementById('auth_terms_link')) document.getElementById('auth_terms_link').innerText = t.termsTitle;
+  if (document.getElementById('terms_title')) document.getElementById('terms_title').innerText = t.termsTitle;
+  if (document.getElementById('t1_title')) document.getElementById('t1_title').innerText = t.t1T;
+  if (document.getElementById('t1_desc')) document.getElementById('t1_desc').innerText = t.t1D;
+  if (document.getElementById('t2_title')) document.getElementById('t2_title').innerText = t.t2T;
+  if (document.getElementById('t2_desc')) document.getElementById('t2_desc').innerText = t.t2D;
+  if (document.getElementById('t3_title')) document.getElementById('t3_title').innerText = t.t3T;
+  if (document.getElementById('t3_desc')) document.getElementById('t3_desc').innerText = t.t3D;
+  if (document.getElementById('t4_title')) document.getElementById('t4_title').innerText = t.t4T;
+  if (document.getElementById('t4_desc')) document.getElementById('t4_desc').innerText = t.t4D;
+  if (document.getElementById('terms_close')) document.getElementById('terms_close').innerText = t.btnUnderstand;
+
   document.getElementById('userDisplay').innerText = window.userName ? `${t.userPrefix}: ${window.userName}` : '';
   document.getElementById('btn_pdf').innerText = t.btnExportPdf;
   document.getElementById('btn_close_month').innerText = t.closeBtn;
@@ -364,6 +391,9 @@ window.otvoritNastavenia = () => document.getElementById('settingsModal').style.
 window.zavrietNastavenia = () => document.getElementById('settingsModal').style.display = 'none';
 window.otvoritJazyk = () => { document.getElementById('settingsModal').style.display = 'none'; document.getElementById('languageModal').style.display = 'flex'; };
 window.zavrietJazyk = () => { document.getElementById('languageModal').style.display = 'none'; document.getElementById('settingsModal').style.display = 'flex'; };
+
+window.otvoritTerms = () => document.getElementById('termsModal').style.display = 'flex';
+window.zavrietTerms = () => document.getElementById('termsModal').style.display = 'none';
 
 window.showAlert = (msg) => {
   const dialog = document.getElementById('customDialog');
