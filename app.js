@@ -1,16 +1,3 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getAuth, signOut, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, query, where, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDlzYqLEcy1OzZMcGOlidQRr8tNdZNXsSk",
-  authDomain: "zdravie-plus-5193f.firebaseapp.com",
-  projectId: "zdravie-plus-5193f",
-  storageBucket: "zdravie-plus-5193f.appspot.com",
-  messagingSenderId: "21608089094",
-  appId: "1:21608089094:web:53b5f9fc60d51ae96ba587"
-};
-
 window.exportMedCardPDF = () => {
   const tInfo = translations[window.currentLang];
   const pMeno = localStorage.getItem('userProfile_meno') || '-';
@@ -23,6 +10,21 @@ window.exportMedCardPDF = () => {
   pdfWrapper.style.backgroundColor = '#ffffff';
   pdfWrapper.style.color = '#000000';
   pdfWrapper.style.fontFamily = 'Arial, sans-serif';
+  pdfWrapper.style.position = 'relative';
+  pdfWrapper.style.minHeight = '277mm';
+
+  const watermark = document.createElement('img');
+  watermark.src = window.isBpOnly ? 'bp karta liekov archiv vahy.png' : 'bp inr.png';
+  watermark.style.position = 'absolute';
+  watermark.style.top = '138.5mm';
+  watermark.style.left = '50%';
+  watermark.style.transform = 'translate(-50%, -50%)';
+  watermark.style.opacity = '0.1';
+  watermark.style.width = '75%';
+  watermark.style.maxWidth = '400px';
+  watermark.style.zIndex = '999';
+  watermark.style.pointerEvents = 'none';
+  pdfWrapper.appendChild(watermark);
 
   const header = document.createElement('h2');
   header.innerText = tInfo.medicationCardPh || 'Karta liekov';
@@ -76,21 +78,90 @@ window.exportMedCardPDF = () => {
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
-  html2pdf().set(opt).from(pdfWrapper).save();
-};
+  const generatePdf = () => html2pdf().set(opt).from(pdfWrapper).save();
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+  if (watermark.complete) {
+    generatePdf();
+  } else {
+    watermark.onload = generatePdf;
+    watermark.onerror = generatePdf;
+  }
+};
 
 // Cache pre záznamy, aby sme ich neťahali z Firebase pri každom prepnutí okna
 window.zaznamy = [];
 window.loadRecords = async function() {
   if (!window.user) return;
-  const q = query(collection(db, 'zaznamy'), where('userId', '==', window.user.uid));
-  const snap = await getDocs(q);
-  window.zaznamy = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  const localKey = 'zaznamy_historia_' + window.user.uid;
+  let stored = localStorage.getItem(localKey);
+  window.zaznamy = stored ? JSON.parse(stored) : [];
+  
   if (document.getElementById('archiv').style.display === 'block') window.zobrazArchiv();
+};
+
+window.checkMigration = () => {
+  if (!window.user) return;
+  const localKey = 'zaznamy_historia_' + window.user.uid;
+  if (!localStorage.getItem(localKey + '_migrated')) {
+    document.getElementById('migrationModal').style.display = 'flex';
+  }
+};
+
+window.startMigration = async () => {
+  const btn = document.getElementById('mig_btn');
+  const progressEl = document.getElementById('mig_progress');
+  const t = translations[window.currentLang];
+  
+  btn.style.display = 'none';
+  progressEl.style.display = 'block';
+  progressEl.innerText = "Sťahujem zo servera...";
+
+  try {
+    const q = query(collection(db, 'zaznamy'), where('userId', '==', window.user.uid));
+    const snap = await getDocs(q);
+    const fbRecords = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    
+    const localKey = 'zaznamy_historia_' + window.user.uid;
+    const total = fbRecords.length;
+    
+    if (total === 0) {
+      progressEl.innerText = t.migNoData;
+      setTimeout(() => finishMigration(localKey), 1500);
+      return;
+    }
+
+    let current = 0;
+    progressEl.innerText = `${t.migProcess}: 0 / ${total}`;
+
+    const processChunk = () => {
+      const chunkSize = Math.max(1, Math.ceil(total / 20)); // Plynulý vizuál v 20 krokoch
+      const chunk = fbRecords.slice(current, current + chunkSize);
+      chunk.forEach(fr => {
+        if (!window.zaznamy.find(h => h.id === fr.id)) window.zaznamy.push(fr);
+      });
+      current += chunk.length;
+      progressEl.innerText = `${t.migProcess}: ${current} / ${total}`;
+      
+      if (current < total) {
+        setTimeout(processChunk, 40);
+      } else {
+        localStorage.setItem(localKey, JSON.stringify(window.zaznamy));
+        progressEl.innerText = t.migDone;
+        setTimeout(() => finishMigration(localKey), 1500);
+      }
+    };
+    processChunk();
+  } catch (e) {
+    progressEl.innerText = t.migError + e.message;
+    btn.style.display = 'block';
+    btn.innerText = "Znova / Retry";
+  }
+};
+
+const finishMigration = (localKey) => {
+  localStorage.setItem(localKey + '_migrated', 'true');
+  document.getElementById('migrationModal').style.display = 'none';
+  window.loadRecords();
 };
 
 window.skrytVsetko = () => {
@@ -150,8 +221,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.64) je pripravená:",
-    updateChanges: "• Váha sa ukladá len lokálne a v PDF sa zobrazí podľa konkrétneho mesiaca",
+    updateReady: "Nová verzia (v1.68) je pripravená:",
+    updateChanges: "• Príprava na plne offline režim: Vaše dáta sa sťahujú a ukladajú bezpečne priamo do tohto zariadenia.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -160,7 +231,14 @@ const translations = {
     btnWeightArchive: "Archív váhy",
     titleWeightArchive: "Archív váhy",
     newWeightPh: "Nová váha (kg)",
-    addBtnShort: "Pridať"
+    addBtnShort: "Pridať",
+    migTitle: "Prechod na Offline režim",
+    migDesc: "Aplikácia sa prepína na bleskový lokálny režim. Vaše údaje budú stiahnuté a bezpečne uložené vo vašom zariadení.",
+    migBtn: "Stiahnuť dáta",
+    migProcess: "Spracovávam",
+    migDone: "Hotovo! Dáta sú uložené.",
+    migNoData: "Žiadne dáta na stiahnutie.",
+    migError: "Chyba: "
   },
   de: {
     login: "Anmelden", register: "Registrierung", titleLogin: "Login", titleReg: "Neues Konto", namePh: "Dein Name", pinPh: "PIN (6 Stellen)",
@@ -193,8 +271,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.64) ist bereit:",
-    updateChanges: "• Gewicht wird nur lokal gespeichert und PDF-Export an den jeweiligen Monat angepasst\n• App-Design wurde aktualisiert",
+    updateReady: "Neue Version (v1.68) ist bereit:",
+    updateChanges: "• Vorbereitung auf den Offline-Modus: Ihre Daten werden sicher auf dieses Gerät heruntergeladen.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -203,7 +281,14 @@ const translations = {
     btnWeightArchive: "Gewichtsarchiv",
     titleWeightArchive: "Gewichtsarchiv",
     newWeightPh: "Neues Gewicht (kg)",
-    addBtnShort: "Hinzufügen"
+    addBtnShort: "Hinzufügen",
+    migTitle: "Übergang zum Offline-Modus",
+    migDesc: "Die App wechselt in einen schnellen lokalen Modus. Ihre Daten werden heruntergeladen und sicher auf Ihrem Gerät gespeichert.",
+    migBtn: "Daten herunterladen",
+    migProcess: "Verarbeite",
+    migDone: "Fertig! Daten sind gespeichert.",
+    migNoData: "Keine Daten zum Herunterladen.",
+    migError: "Fehler: "
   }
 };
 
@@ -302,6 +387,10 @@ window.updateUI = () => {
     const el = document.getElementById(id);
     if(el) el.placeholder = id.toUpperCase();
   });
+
+  if(document.getElementById('mig_title')) document.getElementById('mig_title').innerText = t.migTitle;
+  if(document.getElementById('mig_desc')) document.getElementById('mig_desc').innerText = t.migDesc;
+  if(document.getElementById('mig_btn')) document.getElementById('mig_btn').innerText = t.migBtn;
 };
 
 window.changeLanguage = (lang) => {
@@ -377,6 +466,12 @@ window.registerUser = async function() {
     await signOut(auth);
     window.isRegistering = false;
     
+    // Pripravíme lokálny účet pre budúci offline režim bez Firebase
+    const localAccounts = JSON.parse(localStorage.getItem('bp_inr_local_accounts') || '{}');
+    localAccounts[nameLower] = { uid: res.user.uid, name: name, pin: pin, role: 'user' };
+    localStorage.setItem('bp_inr_local_accounts', JSON.stringify(localAccounts));
+    localStorage.setItem('currentUserUid', res.user.uid);
+
     document.getElementById('regName').value = '';
     document.getElementById('regPin').value = '';
     document.getElementById('regPinConfirm').value = '';
@@ -402,6 +497,12 @@ window.loginUser = async function() {
       return window.showAlert(translations[window.currentLang].msgUserNotFound);
     }
     await signInWithEmailAndPassword(auth, userDoc.data().email, pin);
+    
+    // Uloženie účtu a PINu pri prihlásení pre budúci offline režim
+    const localAccounts = JSON.parse(localStorage.getItem('bp_inr_local_accounts') || '{}');
+    localAccounts[nameLower] = { uid: userDoc.data().uid, name: userDoc.data().name, pin: pin, role: userDoc.data().role || 'user' };
+    localStorage.setItem('bp_inr_local_accounts', JSON.stringify(localAccounts));
+    localStorage.setItem('currentUserUid', userDoc.data().uid);
   } catch (e) { 
     errorEl.innerText = translations[window.currentLang].msgWrongPin;
     window.showAlert(translations[window.currentLang].msgWrongPin); 
@@ -420,6 +521,14 @@ onAuthStateChanged(auth, (user) => {
         const userData = snap.docs[0].data();
         window.userName = userData.name;
         window.userRole = userData.role || userData.isadmin || 'user';
+
+        // Ak sa používateľ prihlásil automaticky, uložíme si ho tiež pre neskorší prechod
+        localStorage.setItem('currentUserUid', user.uid);
+        const localAccounts = JSON.parse(localStorage.getItem('bp_inr_local_accounts') || '{}');
+        if (!localAccounts[userData.name.toLowerCase()]) {
+          localAccounts[userData.name.toLowerCase()] = { uid: user.uid, name: userData.name, pin: null, role: window.userRole };
+          localStorage.setItem('bp_inr_local_accounts', JSON.stringify(localAccounts));
+        }
 
         const storedUid = localStorage.getItem('userProfile_uid');
         if (storedUid && storedUid !== user.uid) {
@@ -450,6 +559,7 @@ onAuthStateChanged(auth, (user) => {
     document.querySelector('header').style.display = 'grid';
     document.getElementById('formular').style.display = 'block';
     window.loadRecords();
+    window.checkMigration();
     window.updateUI();
   } else {
     window.user = null; 
@@ -482,10 +592,13 @@ window.pridatZaznam = async function() {
     mode: window.isBpOnly ? 'bp' : 'full'
   };
   if (![data.inr, data.tab, data.sys, data.dia, data.pulse].some(v => v.trim() !== '')) return;
-  await addDoc(collection(db, 'zaznamy'), data);
+  data.id = Date.now().toString();
+  window.zaznamy.push(data);
+  localStorage.setItem('zaznamy_historia_' + window.user.uid, JSON.stringify(window.zaznamy));
+  
   ['inr','tab','sys','dia','pulse'].forEach(id => document.getElementById(id).value = '');
   window.showToast(translations[window.currentLang].saved || 'Uložené');
-  window.loadRecords();
+  if (document.getElementById('archiv').style.display === 'block') window.zobrazArchiv();
 };
 
 window.pridatVahu = async function() {
@@ -513,8 +626,6 @@ window.pridatVahu = async function() {
 window.vymazatVahu = async function(id) {
   window.showConfirm(translations[window.currentLang].confirmDel, async () => {
     try {
-      if (id.length > 15) { try { await deleteDoc(doc(db, 'zaznamy', id)); } catch(e) {} } 
-      
       let history = window.getVahaHistory();
       history = history.filter(h => h.id !== id);
       localStorage.setItem('vaha_historia_' + window.user.uid, JSON.stringify(history));
@@ -599,12 +710,12 @@ window.spustitImport = async function() {
   let targetUserId = window.user.uid;
 
   if (window.userRole === 'admin') {
-    const targetName = prompt("Zadajte MENO používateľa, ktorému chcete importovať dáta (nechajte prázdne pre seba):");
+    const targetName = prompt("Zadajte lokálne MENO používateľa v tomto zariadení (nechajte prázdne pre seba):");
     if (targetName && targetName.trim() !== "") {
-      const q = query(collection(db, 'users'), where('name', '==', targetName.trim()));
-      const snap = await getDocs(q);
-      if (snap.empty) return window.showAlert("Používateľ s týmto menom nebol nájdený!");
-      targetUserId = snap.docs[0].data().uid;
+      const localAccounts = JSON.parse(localStorage.getItem('bp_inr_local_accounts') || '{}');
+      const targetUser = localAccounts[targetName.trim().toLowerCase()];
+      if (!targetUser) return window.showAlert("Používateľ v tomto zariadení neexistuje!");
+      targetUserId = targetUser.uid;
     }
   }
 
@@ -649,11 +760,14 @@ window.spustitImport = async function() {
         else if (k === 'pulz' || k === 'pulse') record.pulse = val;
       });
 
-      await addDoc(collection(db, 'zaznamy'), record);
+      record.id = Date.now().toString() + count; // Lokálne ID
+      window.zaznamy.push(record);
       count++;
     }
+    
+    localStorage.setItem('zaznamy_historia_' + targetUserId, JSON.stringify(window.zaznamy));
     window.showAlert(`Import úspešne dokončený! Pridaných ${count} záznamov.`);
-    window.loadRecords();
+    if (document.getElementById('archiv').style.display === 'block') window.zobrazArchiv();
   } catch (e) {
     window.showAlert("Chyba pri importe: " + e.message);
   }
@@ -936,8 +1050,9 @@ window.exportToPDF = (isCurrent = false) => {
 
 window.vymazatZaznam = (id) => {
   window.showConfirm(translations[window.currentLang].confirmDel, async () => {
-    await deleteDoc(doc(db, 'zaznamy', id));
-    window.loadRecords();
+    window.zaznamy = window.zaznamy.filter(r => r.id !== id);
+    localStorage.setItem('zaznamy_historia_' + window.user.uid, JSON.stringify(window.zaznamy));
+    
     window.zobrazArchiv();
   });
 };
@@ -951,7 +1066,10 @@ window.formatDatum = () => {
 window.skrytArchiv = () => { window.skrytVsetko(); document.getElementById('formular').style.display = 'block'; };
 
 window.logout = () => {
-  window.showConfirm(translations[window.currentLang].confirmLogout, () => signOut(auth));
+  window.showConfirm(translations[window.currentLang].confirmLogout, () => {
+    localStorage.removeItem('currentUserUid');
+    window.checkLocalAuth();
+  });
 };
 
 window.toggleDropdown = () => { const d = document.getElementById('dropdown'); d.style.display = (d.style.display === 'flex') ? 'none' : 'flex'; };
@@ -996,9 +1114,13 @@ window.ulozitManual = async () => {
   const data = { userId: window.user.uid, datum: `${match[1]}.${match[2]}.${year} ${match[4]}:${match[5]}`, inr: document.getElementById('manualInr').value, tab: document.getElementById('manualTab').value, sys: document.getElementById('manualSys').value, dia: document.getElementById('manualDia').value, pulse: document.getElementById('manualPulse').value, mode: window.isBpOnly ? 'bp' : 'full' };
   if (![data.inr, data.tab, data.sys, data.dia, data.pulse].some(v => v.trim() !== '')) return;
 
-  await addDoc(collection(db, 'zaznamy'), data);
+  data.id = Date.now().toString();
+  window.zaznamy.push(data);
+  localStorage.setItem('zaznamy_historia_' + window.user.uid, JSON.stringify(window.zaznamy));
+  
   ['manualDatum','manualInr','manualTab','manualSys','manualDia','manualPulse'].forEach(id => document.getElementById(id).value = '');
-  window.zavrietModal(); window.loadRecords(); window.showToast(translations[window.currentLang].saved);
+  window.zavrietModal(); window.showToast(translations[window.currentLang].saved);
+  if (document.getElementById('archiv').style.display === 'block') window.zobrazArchiv();
 };
 
 window.otvoritProfil = () => {
@@ -1148,7 +1270,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.64').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=1.68').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 
