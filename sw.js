@@ -1,11 +1,11 @@
-// BP & INR Service Worker - Build: v1.69
-const CACHE_NAME = 'bp-inr-v1.69';
+// BP & INR Service Worker - Build: v1.70
+const CACHE_NAME = 'bp-inr-v1.70';
 const FILES_TO_CACHE = [
   './',
   'index.html',
   'style.css',
   'app.js',
-  'favicon.png',
+  'favicon-v2.png',
   'manifest.json',
   'bp.png',
   'bp inr.png',

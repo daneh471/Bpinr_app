@@ -148,8 +148,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.69) je pripravená:",
-    updateChanges: "• Aplikácia je teraz plne OFFLINE! Vaše dáta zostávajú výlučne vo vašom zariadení.",
+    updateReady: "Nová verzia (v1.70) je pripravená:",
+    updateChanges: "• Aktualizovaná ikona aplikácie a drobné vylepšenia.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -198,8 +198,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.69) ist bereit:",
-    updateChanges: "• Die App ist jetzt vollständig OFFLINE! Ihre Daten bleiben ausschließlich auf Ihrem Gerät.",
+    updateReady: "Neue Version (v1.70) ist bereit:",
+    updateChanges: "• App-Icon aktualisiert und kleinere Verbesserungen.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -1209,7 +1209,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.69').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=1.70').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 

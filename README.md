@@ -1,6 +1,6 @@
 # BP & INR
 
-`BP & INR` is a lightweight PWA for tracking health metrics such as INR, medication tablets, blood pressure, and pulse, with data synced via Firebase.
+`BP & INR` is a lightweight PWA for tracking health metrics such as INR, medication tablets, blood pressure, and pulse, fully offline with data stored securely in the device's local storage.
 
 ## Files
 
@@ -11,8 +11,8 @@
 
 ## Features
 
-- User registration and login via PIN (Firebase Auth)
-- Save daily measurements to Cloud Firestore (Real-time syncing)
+- Local user registration and login via PIN (Offline Auth)
+- Save daily measurements locally (100% Offline)
 - Archive view with delete support
 - Manual record entry
 - Basic PWA installability and offline cache
@@ -28,5 +28,4 @@
 
 ## Notes
 
-- Records are stored in **Firebase Cloud Firestore** and are linked to your account.
-- Authentication is handled by **Firebase Auth** using an internal email generated from the username and PIN.
+- Records are stored exclusively in **localStorage** and are linked to your local account. No data is sent to external servers.

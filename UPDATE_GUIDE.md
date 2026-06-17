@@ -1,9 +1,9 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v1.69):
-- ✅ OFFLINE: Aplikácia je teraz plne offline a nepotrebuje prístup na internet.
-- ✅ SÚKROMIE: Databáza Firebase bola odstránená. Všetky záznamy sa ukladajú výlučne vo vašom zariadení.
-- ✅ VÝKON: Prechodom na výhradné využívanie `localStorage` je aplikácia výrazne rýchlejšia.
+## Zmeny v tejto verzii (v1.70):
+- ✅ IKONA: Aktualizácia ikony aplikácie, ktorá sa prejaví aj na ploche.
+- ✅ MANIFEST: Vytvorenie a prepojenie nového `manifest.json` pre lepšiu PWA integráciu.
+- ✅ STABILITA: Drobné úpravy pre zabezpečenie správneho priebehu aktualizácií.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -11,13 +11,13 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.69: Fully offline mode without Firebase"
+git commit -m "Update v1.70: Force PWA icon update"
 git push -u origin main --force
 ```
 
 ## ⏳ Čo sa stane potom:
 1. GitHub aktualizuje stránku (1-2 minúty)
-2. Service Worker detekuje zmenu (v1.69)
+2. Service Worker detekuje zmenu (v1.70)
 3. Stlačením **OK** v aplikácii sa vykoná aktualizácia
 4. **POZOR:** Ak sa názov na ploche nezmenil, vymaž starú ikonu a pridaj aplikáciu na plochu znova cez prehliadač.
 5. Nová verzia BP & INR je pripravená! 🎉

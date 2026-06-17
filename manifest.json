@@ -1,32 +1,23 @@
 {
   "name": "BP & INR",
   "short_name": "BP & INR",
-  "start_url": "index.html",
+  "description": "Aplikácia na sledovanie hodnôt INR a krvného tlaku.",
+  "start_url": ".",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "background_color": "#0d0d0d",
-  "theme_color": "#0d0d0d",
-  "scope": "./",
+  "background_color": "#1a1a1a",
+  "theme_color": "#1a1a1a",
   "icons": [
     {
-      "src": "favicon.png",
+      "src": "favicon-v2.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "favicon.png",
+      "src": "favicon-v2.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
-  ],
-  "screenshots": [
-    {
-      "src": "favicon.png",
-      "sizes": "540x720",
-      "type": "image/png"
-    }
-  ],
-  "categories": ["health", "productivity"]
+  ]
 }
