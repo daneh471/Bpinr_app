@@ -1,19 +1,3 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getAuth, signOut, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, query, where, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDlzYqLEcy1OzZMcGOlidQRr8tNdZNXsSk",
-  authDomain: "zdravie-plus-5193f.firebaseapp.com",
-  projectId: "zdravie-plus-5193f",
-  storageBucket: "zdravie-plus-5193f.appspot.com",
-  messagingSenderId: "21608089094",
-  appId: "1:21608089094:web:53b5f9fc60d51ae96ba587"
-};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
 window.exportMedCardPDF = () => {
   const tInfo = translations[window.currentLang];
   const pMeno = localStorage.getItem('userProfile_meno') || '-';
@@ -112,22 +96,6 @@ window.loadRecords = async function() {
   let stored = localStorage.getItem(localKey);
   window.zaznamy = stored ? JSON.parse(stored) : [];
 
-  // Jednorazová migrácia záznamov z Firebase do lokálnej pamäte
-  if (!localStorage.getItem(localKey + '_migrated')) {
-    window.showToast("Sťahujem históriu do zariadenia...");
-    const q = query(collection(db, 'zaznamy'), where('userId', '==', window.user.uid));
-    const snap = await getDocs(q);
-    const fbRecords = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    
-    if (fbRecords.length > 0) {
-      fbRecords.forEach(fr => {
-        if (!window.zaznamy.find(h => h.id === fr.id)) window.zaznamy.push(fr);
-      });
-      localStorage.setItem(localKey, JSON.stringify(window.zaznamy));
-    }
-    localStorage.setItem(localKey + '_migrated', 'true');
-    setTimeout(() => window.showToast("Údaje sú stiahnuté a bezpečne uložené."), 1000);
-  }
   
   if (document.getElementById('archiv').style.display === 'block') window.zobrazArchiv();
 };
@@ -145,15 +113,6 @@ window.getVahaHistory = () => {
   let stored = localStorage.getItem(localKey);
   let history = stored ? JSON.parse(stored) : [];
   
-  // Jednorazová migrácia starších váh z Firebase do lokálnej pamäte (aby sa nič nestratilo)
-  if (!localStorage.getItem(localKey + '_migrated') && window.zaznamy) {
-    const fbWeights = window.zaznamy.filter(r => r.vaha && r.vaha.trim() !== '' && r.mode === 'vaha');
-    if (fbWeights.length > 0) {
-      fbWeights.forEach(fw => { if (!history.find(h => h.id === fw.id)) history.push({ id: fw.id, datum: fw.datum, vaha: fw.vaha }); });
-      localStorage.setItem(localKey, JSON.stringify(history));
-    }
-    localStorage.setItem(localKey + '_migrated', 'true');
-  }
   return history;
 };
 
@@ -189,8 +148,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.68) je pripravená:",
-    updateChanges: "• Príprava na plne offline režim: Vaše dáta sa sťahujú a ukladajú bezpečne priamo do tohto zariadenia.",
+    updateReady: "Nová verzia (v1.69) je pripravená:",
+    updateChanges: "• Aplikácia je teraz plne OFFLINE! Vaše dáta zostávajú výlučne vo vašom zariadení.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -239,8 +198,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.68) ist bereit:",
-    updateChanges: "• Vorbereitung auf den Offline-Modus: Ihre Daten werden sicher auf dieses Gerät heruntergeladen.",
+    updateReady: "Neue Version (v1.69) ist bereit:",
+    updateChanges: "• Die App ist jetzt vollständig OFFLINE! Ihre Daten bleiben ausschließlich auf Ihrem Gerät.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -431,32 +390,27 @@ window.registerUser = async function() {
   if (!name || pin.length !== 6) return window.showAlert('Meno a PIN (presne 6 číslic)!');
   if (pin !== confirmPin) return window.showAlert('PIN sa nezhodujú!');
   try {
-    const snap = await getDocs(collection(db, 'users'));
     const nameLower = name.toLowerCase();
-    const userExists = snap.docs.some(doc => doc.data().name && doc.data().name.toLowerCase() === nameLower);
-    if (userExists) {
+    const localAccounts = JSON.parse(localStorage.getItem('bp_inr_local_accounts') || '{}');
+    
+    if (localAccounts[nameLower]) {
       errorEl.innerText = translations[window.currentLang].msgOccupied;
       return window.showAlert(translations[window.currentLang].msgOccupied);
     }
-    const safeEmailPrefix = name.replace(/\s+/g, '').toLowerCase();
-    const email = `${safeEmailPrefix}${Date.now()}@bpinr.local`;
-    window.isRegistering = true;
-    const res = await createUserWithEmailAndPassword(auth, email, pin);
-    await addDoc(collection(db, 'users'), { uid: res.user.uid, name: name, nameLower: nameLower, email: email });
-    await signOut(auth);
-    window.isRegistering = false;
     
-    // Pripravíme lokálny účet pre budúci offline režim bez Firebase
-    const localAccounts = JSON.parse(localStorage.getItem('bp_inr_local_accounts') || '{}');
-    localAccounts[nameLower] = { uid: res.user.uid, name: name, pin: pin, role: 'user' };
+    window.isRegistering = true;
+    const uid = 'local_' + Date.now().toString();
+    
+    localAccounts[nameLower] = { uid: uid, name: name, pin: pin, role: 'user' };
     localStorage.setItem('bp_inr_local_accounts', JSON.stringify(localAccounts));
-    localStorage.setItem('currentUserUid', res.user.uid);
+    localStorage.setItem('currentUserUid', uid);
 
     document.getElementById('regName').value = '';
     document.getElementById('regPin').value = '';
     document.getElementById('regPinConfirm').value = '';
     document.getElementById('loginName').value = name; 
     
+    window.isRegistering = false;
     window.showLogin();
     window.showAlert('Účet úspešne vytvorený! Teraz sa môžete prihlásiť.');
   } catch (e) { window.isRegistering = false; errorEl.innerText = 'Chyba pri registrácii.'; window.showAlert(e.message); }
@@ -469,72 +423,67 @@ window.loginUser = async function() {
   errorEl.innerText = '';
 
   try {
-    const snap = await getDocs(collection(db, 'users'));
     const nameLower = name.toLowerCase();
-    const userDoc = snap.docs.find(doc => doc.data().name && doc.data().name.toLowerCase() === nameLower);
+    const localAccounts = JSON.parse(localStorage.getItem('bp_inr_local_accounts') || '{}');
+    const userDoc = localAccounts[nameLower];
+    
     if (!userDoc) {
       errorEl.innerText = translations[window.currentLang].msgUserNotFound;
       return window.showAlert(translations[window.currentLang].msgUserNotFound);
     }
-    await signInWithEmailAndPassword(auth, userDoc.data().email, pin);
     
-    // Uloženie účtu a PINu pri prihlásení pre budúci offline režim
-    const localAccounts = JSON.parse(localStorage.getItem('bp_inr_local_accounts') || '{}');
-    localAccounts[nameLower] = { uid: userDoc.data().uid, name: userDoc.data().name, pin: pin, role: userDoc.data().role || 'user' };
-    localStorage.setItem('bp_inr_local_accounts', JSON.stringify(localAccounts));
-    localStorage.setItem('currentUserUid', userDoc.data().uid);
+    if (userDoc.pin !== null && userDoc.pin !== pin) {
+      errorEl.innerText = translations[window.currentLang].msgWrongPin;
+      return window.showAlert(translations[window.currentLang].msgWrongPin);
+    }
+
+    if (userDoc.pin === null) {
+      userDoc.pin = pin;
+      localAccounts[nameLower] = userDoc;
+      localStorage.setItem('bp_inr_local_accounts', JSON.stringify(localAccounts));
+    }
+    
+    localStorage.setItem('currentUserUid', userDoc.uid);
+    window.onLocalAuthStateChanged(userDoc);
   } catch (e) { 
-    errorEl.innerText = translations[window.currentLang].msgWrongPin;
-    window.showAlert(translations[window.currentLang].msgWrongPin); 
+    errorEl.innerText = 'Chyba pri prihlasovaní.';
+    window.showAlert(e.message); 
   }
 };
 
-onAuthStateChanged(auth, (user) => {
+window.onLocalAuthStateChanged = (user) => {
   if (window.isRegistering) return;
 
   document.getElementById('splashScreen').style.opacity = '0';
   setTimeout(() => document.getElementById('splashScreen').style.display = 'none', 500);
   if (user) {
     window.user = user;
-    getDocs(query(collection(db, 'users'), where('uid', '==', user.uid))).then(snap => {
-      if (!snap.empty) {
-        const userData = snap.docs[0].data();
-        window.userName = userData.name;
-        window.userRole = userData.role || userData.isadmin || 'user';
+    window.userName = user.name;
+    window.userRole = user.role || 'user';
 
-        // Ak sa používateľ prihlásil automaticky, uložíme si ho tiež pre neskorší prechod
-        localStorage.setItem('currentUserUid', user.uid);
-        const localAccounts = JSON.parse(localStorage.getItem('bp_inr_local_accounts') || '{}');
-        if (!localAccounts[userData.name.toLowerCase()]) {
-          localAccounts[userData.name.toLowerCase()] = { uid: user.uid, name: userData.name, pin: null, role: window.userRole };
-          localStorage.setItem('bp_inr_local_accounts', JSON.stringify(localAccounts));
-        }
+    const storedUid = localStorage.getItem('userProfile_uid');
+    if (storedUid && storedUid !== user.uid) {
+      localStorage.removeItem('userProfile_meno');
+      localStorage.removeItem('userProfile_priezvisko');
+      localStorage.removeItem('userProfile_vaha');
+      localStorage.removeItem('userProfile_vyska');
+      localStorage.removeItem('userProfile_karta');
+    }
+    localStorage.setItem('userProfile_uid', user.uid);
 
-        const storedUid = localStorage.getItem('userProfile_uid');
-        if (storedUid && storedUid !== user.uid) {
-          localStorage.removeItem('userProfile_meno');
-          localStorage.removeItem('userProfile_priezvisko');
-          localStorage.removeItem('userProfile_vaha');
-          localStorage.removeItem('userProfile_vyska');
-          localStorage.removeItem('userProfile_karta');
-        }
-        localStorage.setItem('userProfile_uid', user.uid);
+    const storedMeno = localStorage.getItem('userProfile_meno');
+    const storedPriezvisko = localStorage.getItem('userProfile_priezvisko');
 
-        const storedMeno = localStorage.getItem('userProfile_meno');
-        const storedPriezvisko = localStorage.getItem('userProfile_priezvisko');
-
-        if (!storedMeno && !storedPriezvisko && window.userName) {
-          const nameParts = window.userName.split(' ');
-          const firstName = nameParts[0] || '';
-          const lastName = nameParts.slice(1).join(' ') || '';
-          localStorage.setItem('userProfile_meno', firstName);
-          localStorage.setItem('userProfile_priezvisko', lastName);
-        }
-        
-        document.getElementById('btn_import').style.display = (window.userRole === 'admin') ? 'block' : 'none';
-        window.updateUI();
-      }
-    });
+    if (!storedMeno && !storedPriezvisko && window.userName) {
+      const nameParts = window.userName.split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+      localStorage.setItem('userProfile_meno', firstName);
+      localStorage.setItem('userProfile_priezvisko', lastName);
+    }
+    
+    document.getElementById('btn_import').style.display = (window.userRole === 'admin') ? 'block' : 'none';
+    
     document.getElementById('authScreen').style.display = 'none';
     document.querySelector('header').style.display = 'grid';
     document.getElementById('formular').style.display = 'block';
@@ -555,7 +504,18 @@ onAuthStateChanged(auth, (user) => {
     window.skrytVsetko();
     window.updateUI();
   }
-});
+};
+
+setTimeout(() => {
+  const currentUid = localStorage.getItem('currentUserUid');
+  if (currentUid) {
+    const localAccounts = JSON.parse(localStorage.getItem('bp_inr_local_accounts') || '{}');
+    const foundUser = Object.values(localAccounts).find(acc => acc.uid === currentUid);
+    window.onLocalAuthStateChanged(foundUser || null);
+  } else {
+    window.onLocalAuthStateChanged(null);
+  }
+}, 100);
 
 window.updateUI(); 
 
@@ -1047,7 +1007,7 @@ window.skrytArchiv = () => { window.skrytVsetko(); document.getElementById('form
 window.logout = () => {
   window.showConfirm(translations[window.currentLang].confirmLogout, () => {
     localStorage.removeItem('currentUserUid');
-    signOut(auth);
+      window.onLocalAuthStateChanged(null);
   });
 };
 
@@ -1249,7 +1209,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.68').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=1.69').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 

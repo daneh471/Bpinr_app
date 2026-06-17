@@ -1,5 +1,5 @@
-// BP & INR Service Worker - Build: v1.68
-const CACHE_NAME = 'bp-inr-v1.68';
+// BP & INR Service Worker - Build: v1.69
+const CACHE_NAME = 'bp-inr-v1.69';
 const FILES_TO_CACHE = [
   './',
   'index.html',
@@ -49,7 +49,6 @@ self.addEventListener('message', function (e) {
 self.addEventListener('fetch', function(e) {
   if (e.request.method !== 'GET' ||
       !e.request.url.startsWith('http') ||
-      e.request.url.includes('firestore.googleapis.com') ||
       e.request.url.includes('google.com') ||
       e.request.url.includes('sw.js')) return;
 
