@@ -3,7 +3,7 @@
   "short_name": "BP & INR",
   "description": "Aplikácia na sledovanie hodnôt INR a krvného tlaku.",
   "id": "bpinr-app-v2",
-  "start_url": "./index.html",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#000000",
