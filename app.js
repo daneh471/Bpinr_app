@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.93) je pripravená:",
-    updateChanges: "• Pridaná automatická diagnostika prostredia (detekcia maskovanej domény blokujúcej inštaláciu).",
+    updateReady: "Nová verzia (v1.94) je pripravená:",
+    updateChanges: "• Opravené zobrazenie inštalačného tlačidla PWA.\n• Tlačidlo na inštaláciu (⬇️) sa teraz automaticky ukáže v hlavičke.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -217,8 +217,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.93) ist bereit:",
-    updateChanges: "• Automatische Umgebungsdiagnose hinzugefügt (Erkennung von Iframe-Blockaden).",
+    updateReady: "Neue Version (v1.94) ist bereit:",
+    updateChanges: "• Anzeige des Installationsbuttons (PWA) korrigiert.\n• Der Button (⬇️) wird nun korrekt im Header angezeigt.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -530,7 +530,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '1.93';
+      const currentAppVersion = '1.94';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1375,7 +1375,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.93').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=1.94').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 
@@ -1495,6 +1495,10 @@ window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   // Uložíme event pre neskoršie použitie
   window.deferredPrompt = e;
+  
+  // Keď je PWA pripravená, zobrazíme inštalačné tlačidlo v hlavičke
+  const installBtn = document.getElementById('headerInstallBtn');
+  if (installBtn) installBtn.style.display = 'block';
 });
 
 window.installPWA = async () => {
@@ -1516,6 +1520,10 @@ window.installPWA = async () => {
     }
     // Po použití sa musí prompt vymazať (dá sa použiť iba raz)
     window.deferredPrompt = null;
+    
+    // Skryjeme inštalačné tlačidlo
+    const installBtn = document.getElementById('headerInstallBtn');
+    if (installBtn) installBtn.style.display = 'none';
   } else {
     window.showAlert(translations[window.currentLang].msgNoInstall);
   }
@@ -1523,5 +1531,9 @@ window.installPWA = async () => {
 
 window.addEventListener('appinstalled', () => {
   window.deferredPrompt = null;
+  // Skryjeme inštalačné tlačidlo aj po úspešnej inštalácii
+  const installBtn = document.getElementById('headerInstallBtn');
+  if (installBtn) installBtn.style.display = 'none';
+  
   window.showToast(translations[window.currentLang].msgAlreadyInstalled || "Aplikácia bola nainštalovaná");
 });

@@ -1,15 +1,16 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v1.93):
-- ✅ SYSTÉM: Pridaná automatická diagnostika Iframe prostredia, ktorá upozorní používateľa, ak mu maskovaná doména blokuje inštaláciu.
+## Zmeny v tejto verzii (v1.94):
+- ✅ PWA: Opravené zobrazenie tlačidla pre inštaláciu aplikácie v hlavičke.
+- ✅ PWA: Tlačidlo sa teraz správne zjaví, keď je inštalácia pripravená a skryje sa po úspešnom pridaní na plochu.
 
 ## POSTUP - Skopíruj do Git Bash:
 
 ```bash
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
-git remote set-url origin https://app.bpinr.sk/
+git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.93: Add iframe detection for PWA install block"
+git commit -m "Update v1.94: Fix PWA install button visibility"
 git push -u origin main --force
 ```
 
