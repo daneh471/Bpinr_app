@@ -170,7 +170,7 @@ body.bp-only #info_tab_row, body.bp-only #info_inr_row { display: none; }
 /* Mesačný archív */
 .month-header { display: flex; justify-content: space-between; align-items: center; background: var(--header); padding: 0.5rem; border-radius: 0.5rem; margin: 1.2rem 0 0.5rem 0; }
 .month-header h3 { margin: 0; font-size: 1rem; border: none; padding: 0; background: transparent; }
-button.main.pdf-export-btn { margin: 0; min-height: 0; padding: 0.4rem 0.6rem; width: auto; font-size: 0.8rem; background-color: #4CAF50; }
+button.main.pdf-export-btn { margin: 0; min-height: 0; padding: 0.4rem 0.6rem; width: auto; font-size: 0.8rem; background-color: #2196F3; }
 .btn-monthly-archive { margin-top: 1.5rem; background-color: #444; }
 .month-btn { background-color: #2196F3 !important; margin-bottom: 0.3rem;}
 #monthlyArchiveListModal button[onclick*="zavrietMesacnyArchivList"], #btn_close_month { background-color: #4CAF50 !important; }

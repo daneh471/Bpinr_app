@@ -148,8 +148,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.74) je pripravená:",
-    updateChanges: "• Gesto Krok späť (potiahnutie zľava doprava) teraz funguje na celom displeji.\n• Oprava zobrazenia archívu v PDF a zjednotené farby UI.",
+    updateReady: "Nová verzia (v1.75) je pripravená:",
+    updateChanges: "• Vylepšený Archív váhy (ukladá a aktualizuje 1 hodnotu pre každý mesiac).\n• Vylepšený export do PDF a zjednotené modré tlačidlá.\n• Gesto potiahnutia späť pre celú obrazovku.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -198,8 +198,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.74) ist bereit:",
-    updateChanges: "• Zurück-Geste durch Wischen jetzt auf dem gesamten Bildschirm aktiv.\n• UI und PDF Verbesserungen.",
+    updateReady: "Neue Version (v1.75) ist bereit:",
+    updateChanges: "• Verbessertes Gewichtsarchiv (1 Eintrag pro Monat).\n• Blaue Export-Buttons & optimiertes Design.\n• Zurück-Geste auf dem gesamten Bildschirm aktiv.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -545,9 +545,30 @@ window.pridatVahu = async function() {
     const val = document.getElementById('novaVaha').value.trim();
     if (!val) return;
     
-    const history = window.getVahaHistory();
-    const data = { id: Date.now().toString(), datum: window.formatDatum(), vaha: val };
-    history.push(data);
+    let history = window.getVahaHistory();
+    const novyDatum = window.formatDatum();
+    const dParts = novyDatum.split(' ')[0].split('.');
+    const aktualnyMesiacRok = `${dParts[1]}.${dParts[2]}`;
+    
+    let existujeVmesiaci = false;
+    for (let i = 0; i < history.length; i++) {
+      const p = history[i].datum.split(' ')[0].split('.');
+      if (p.length >= 3) {
+        let m = p[1].padStart(2, '0');
+        let y = p[2].length === 2 ? '20' + p[2] : p[2];
+        if (`${m}.${y}` === aktualnyMesiacRok) {
+          history[i].vaha = val;
+          history[i].datum = novyDatum;
+          existujeVmesiaci = true;
+          break;
+        }
+      }
+    }
+    
+    if (!existujeVmesiaci) {
+      const data = { id: Date.now().toString(), datum: novyDatum, vaha: val };
+      history.push(data);
+    }
     localStorage.setItem('vaha_historia_' + window.user.uid, JSON.stringify(history));
     
     document.getElementById('novaVaha').value = '';
@@ -904,6 +925,21 @@ window.exportToPDF = (isCurrent = false) => {
     if (monthWeights.length > 0) {
       monthWeights.sort((a,b) => parseInt(b.id) - parseInt(a.id));
       pVaha = monthWeights[0].vaha + ' kg';
+      } else {
+        const [em, ey] = window.currentExportMonthKey.split('.').map(Number);
+        const exportMonthNum = ey * 12 + em;
+        const prevWeights = history.filter(h => {
+          const parts = h.datum.split(' ')[0].split('.');
+          if (parts.length === 3) {
+            const y = parts[2].length === 2 ? '20' + parts[2] : parts[2];
+            return (Number(y) * 12 + Number(parts[1])) < exportMonthNum;
+          }
+          return false;
+        });
+        if (prevWeights.length > 0) {
+          prevWeights.sort((a,b) => parseInt(b.id) - parseInt(a.id));
+          pVaha = prevWeights[0].vaha + ' kg';
+        }
     }
   } else {
     pVaha = localStorage.getItem('userProfile_vaha') ? localStorage.getItem('userProfile_vaha') + ' kg' : '-';
@@ -1171,10 +1207,43 @@ window.zavrietEditProfil = () => {
 window.ulozitProfil = () => {
   const t = translations[window.currentLang];
   if (window.user) localStorage.setItem('userProfile_uid', window.user.uid);
+  
+  const staraVaha = localStorage.getItem('userProfile_vaha') || '';
+  const novaVaha = document.getElementById('profileVaha').value.trim();
+  
   localStorage.setItem('userProfile_meno', document.getElementById('profileMeno').value.trim());
   localStorage.setItem('userProfile_priezvisko', document.getElementById('profilePriezvisko').value.trim());
-  localStorage.setItem('userProfile_vaha', document.getElementById('profileVaha').value.trim());
+  localStorage.setItem('userProfile_vaha', novaVaha);
   localStorage.setItem('userProfile_vyska', document.getElementById('profileVyska').value.trim());
+  
+  if (novaVaha && novaVaha !== staraVaha && window.user) {
+    let history = window.getVahaHistory();
+    const novyDatum = window.formatDatum();
+    const dParts = novyDatum.split(' ')[0].split('.');
+    const aktualnyMesiacRok = `${dParts[1]}.${dParts[2]}`;
+    
+    let existujeVmesiaci = false;
+    for (let i = 0; i < history.length; i++) {
+      const p = history[i].datum.split(' ')[0].split('.');
+      if (p.length >= 3) {
+        let m = p[1].padStart(2, '0');
+        let y = p[2].length === 2 ? '20' + p[2] : p[2];
+        if (`${m}.${y}` === aktualnyMesiacRok) {
+          history[i].vaha = novaVaha;
+          history[i].datum = novyDatum;
+          existujeVmesiaci = true;
+          break;
+        }
+      }
+    }
+    
+    if (!existujeVmesiaci) {
+      const data = { id: Date.now().toString(), datum: novyDatum, vaha: novaVaha };
+      history.push(data);
+    }
+    localStorage.setItem('vaha_historia_' + window.user.uid, JSON.stringify(history));
+  }
+  
   window.showToast(t.saved || 'Uložené');
   window.zavrietEditProfil(); 
 };
@@ -1209,7 +1278,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.74').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=1.75').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 
