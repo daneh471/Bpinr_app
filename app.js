@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.86) je pripravená:",
-    updateChanges: "• Inštalačné tlačidlá odstránené, inštalácia je teraz plne automatická cez URL lištu prehliadača.",
+    updateReady: "Nová verzia (v1.87) je pripravená:",
+    updateChanges: "• Finálna oprava pravidiel pre správne zobrazenie inštalačnej ikony PWA v URL lište.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -217,8 +217,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.86) ist bereit:",
-    updateChanges: "• Installations-Buttons entfernt, die Installation erfolgt nun vollautomatisch über die URL-Leiste.",
+    updateReady: "Neue Version (v1.87) ist bereit:",
+    updateChanges: "• Finale Fehlerbehebung für die Anzeige des PWA-Installationssymbols in der URL-Leiste.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -530,7 +530,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '1.86';
+      const currentAppVersion = '1.87';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1364,7 +1364,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.86').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=1.87').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 
