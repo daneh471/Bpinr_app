@@ -1,8 +1,7 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v1.82):
-- ✅ FUNKCIA: Zoskupenie Mesačného archívu do "priečinkov" podľa rokov pre lepšiu prehľadnosť.
-- ✅ SYSTÉM: Vynútenie aktualizácie a vyčistenie cache pre stabilnejší beh.
+## Zmeny v tejto verzii (v1.83):
+- ✅ FUNKCIA: Pridané plávajúce tlačidlo pre inštaláciu PWA aplikácie (zobrazí sa v prehliadači).
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -10,7 +9,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.82: Group Monthly Archive by Years and stability update"
+git commit -m "Update v1.83: Add PWA install button"
 git push -u origin main --force
 ```
 

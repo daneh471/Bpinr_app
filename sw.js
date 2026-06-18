@@ -1,5 +1,5 @@
-// BP & INR Service Worker - Build: v1.82
-const CACHE_NAME = 'bp-inr-v1.82';
+// BP & INR Service Worker - Build: v1.83
+const CACHE_NAME = 'bp-inr-v1.83';
 const FILES_TO_CACHE = [
   './',
   'index.html',

@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.82) je pripravená:",
-    updateChanges: "• Mesačný archív je teraz prehľadne rozdelený a zoskupený podľa rokov.\n• Optimalizácia zobrazenia pre dlhodobú históriu.",
+    updateReady: "Nová verzia (v1.83) je pripravená:",
+    updateChanges: "• Pridané plávajúce tlačidlo pre jednoduchú inštaláciu aplikácie z prehliadača.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -180,7 +180,8 @@ const translations = {
     t2T: "2. Riziko straty dát:", t2D: "Ak vymažete vyrovnávaciu pamäť prehliadača (cache), odinštalujete aplikáciu alebo stratíte zariadenie, vaše údaje budú natrvalo stratené.",
     t3T: "3. Zálohovanie:", t3D: "Za zálohovanie svojich údajov (napríklad pomocou pravidelného exportu do PDF) ste plne zodpovedný vy.",
     t4T: "4. Zdravotné upozornenie:", t4D: "Aplikácia slúži výlučne na informatívne účely a evidenciu hodnôt. Nenahrádza odbornú lekársku starostlivosť.",
-    btnUnderstand: "Rozumiem / Zatvoriť"
+    btnUnderstand: "Rozumiem / Zatvoriť",
+    installApp: "⬇️ Nainštalovať aplikáciu"
   },
   de: {
     login: "Anmelden", register: "Registrierung", titleLogin: "Login", titleReg: "Neues Konto", namePh: "Dein Name", pinPh: "PIN (6 Stellen)",
@@ -213,8 +214,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.82) ist bereit:",
-    updateChanges: "• Das Monatsarchiv ist nun übersichtlich nach Jahren gegliedert.\n• Optimierung der Langzeithistorie.",
+    updateReady: "Neue Version (v1.83) ist bereit:",
+    updateChanges: "• Schwebende Schaltfläche zur einfachen Installation der App im Browser hinzugefügt.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -230,7 +231,8 @@ const translations = {
     t2T: "2. Risiko von Datenverlust:", t2D: "Wenn Sie den Browser-Cache löschen, die App deinstallieren oder das Gerät verlieren, gehen Ihre Daten dauerhaft verloren.",
     t3T: "3. Datensicherung:", t3D: "Sie sind für die Sicherung Ihrer Daten (z. B. durch regelmäßigen PDF-Export) selbst verantwortlich.",
     t4T: "4. Medizinischer Hinweis:", t4D: "Die App dient ausschließlich zu Informationszwecken und ersetzt keine professionelle medizinische Betreuung.",
-    btnUnderstand: "Verstanden / Schließen"
+    btnUnderstand: "Verstanden / Schließen",
+    installApp: "⬇️ App installieren"
   }
 };
 
@@ -333,6 +335,7 @@ window.updateUI = () => {
   document.getElementById('btn_pdf').innerText = t.btnExportPdf;
   document.getElementById('btn_close_month').innerText = t.closeBtn;
   if (document.getElementById('btn_force_update')) document.getElementById('btn_force_update').innerText = t.menuForceUpdate;
+  if (document.getElementById('installPwaBtn')) document.getElementById('installPwaBtn').innerText = t.installApp;
 
   document.querySelectorAll('.t-low').forEach(el => el.innerText = t.infoLow);
   document.querySelectorAll('.t-norm').forEach(el => el.innerText = t.infoNorm);
@@ -522,7 +525,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '1.82';
+      const currentAppVersion = '1.83';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1356,7 +1359,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.82').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=1.83').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 
@@ -1467,3 +1470,27 @@ window.goBackOneStep = () => {
     return;
   }
 };
+
+// --- Inštalácia PWA (Pridať na plochu) ---
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const installBtn = document.getElementById('installPwaBtn');
+  if (installBtn) installBtn.style.display = 'block';
+});
+
+window.installPWA = async () => {
+  const installBtn = document.getElementById('installPwaBtn');
+  if (installBtn) installBtn.style.display = 'none';
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt = null;
+  }
+};
+
+window.addEventListener('appinstalled', () => {
+  const installBtn = document.getElementById('installPwaBtn');
+  if (installBtn) installBtn.style.display = 'none';
+  deferredPrompt = null;
+});
