@@ -52,7 +52,7 @@ header {
   padding: 0 10px; 
   height: 45px;
   display: grid;
-  grid-template-columns: 80px 1fr 80px;
+  grid-template-columns: 80px 1fr auto;
   align-items: center; 
   box-shadow: 0 0.125rem 0.3125rem rgba(0,0,0,0.1); 
   box-sizing: border-box;

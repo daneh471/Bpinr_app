@@ -59,7 +59,10 @@
     <header style="display:none;">
       <div class="header-logo-container"><img src="img/favicon.png" class="header-logo" alt="Logo"></div>
       <span class="header-title"><span style="color: #4CAF50;">BP</span> <span style="background: linear-gradient(to right, #4CAF50 50%, #2196F3 50%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">&amp;</span> <span style="color: #2196F3;">INR</span></span>
-      <button onclick="window.toggleDropdown()"><span><span style="color: #4CAF50;">☰</span> <span style="color: #2196F3;">Menu</span></span></button>
+      <div style="justify-self: flex-end; display: flex; align-items: center;">
+        <button id="headerInstallBtn" onclick="window.installPWA()" style="display:none; color: #f39c12; font-size: 1.3rem; padding: 0 0.5rem; background: transparent; border: none;" title="Nainštalovať aplikáciu">⬇️</button>
+        <button onclick="window.toggleDropdown()"><span><span style="color: #4CAF50;">☰</span> <span style="color: #2196F3;">Menu</span></span></button>
+      </div>
       <div id="dropdown" class="dropdown-content">
         <button onclick="window.otvoritProfil(); window.toggleDropdown();">👤 Profil</button>
         <button onclick="window.zobrazArchiv(); window.toggleDropdown();">📄 Archív</button>
@@ -258,7 +261,7 @@
     </div>
 
     <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; z-index: 1000;"></div>
-    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.88</div>
+    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v1.91</div>
   </div>
 
   <script type="module" src="app.js"></script>

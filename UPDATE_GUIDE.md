@@ -1,7 +1,7 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v1.88):
-- ✅ OPRAVA: Pridané povinné ID a explicitná start_url do manifestu pre moderné prehliadače, aby spoľahlivo zobrazili ikonu inštalácie.
+## Zmeny v tejto verzii (v1.91):
+- ✅ OPRAVA: Definovaný striktný "scope" a pridané relatívne cesty v cache (./) pre garantovanú detekciu inštalovateľnosti.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -9,7 +9,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.88: Strict PWA manifest ID and start_url"
+git commit -m "Update v1.91: Fix relative paths and scope for PWA installability"
 git push -u origin main --force
 ```
 
