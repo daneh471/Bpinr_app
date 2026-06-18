@@ -1,8 +1,8 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.00):
-- ✅ PWA: Obnovené automatické natívne okno na inštaláciu (pre Chrome, Edge, Samsung Internet).
-- ✅ PWA: Odstránené blokovanie `preventDefault()`.
+## Zmeny v tejto verzii (v2.01):
+- ✅ PWA: Vynútené nové ID (`bpinr-app-v3`) pre prebitie anti-spamovej ochrany prehliadača.
+- ✅ PWA: Fix cesty na `index.html` v manifest.json pre absolútnu zhodu v cache.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -10,7 +10,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v2.00: Restore native auto-install prompt for supported browsers"
+git commit -m "Update v2.01: Reset Chrome install prompt cooldown"
 git push -u origin main --force
 ```
 

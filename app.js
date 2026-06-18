@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.00) je pripravená:",
-    updateChanges: "• Obnovená natívna automatická inštalácia pre Chrome, Edge a Samsung Internet.",
+    updateReady: "Nová verzia (v2.01) je pripravená:",
+    updateChanges: "• Vynútený reštart inštalačného okna (obídenie ochrany prehliadača proti spamu).",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -217,8 +217,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v2.00) ist bereit:",
-    updateChanges: "• Native automatische Installation für Chrome, Edge und Samsung Internet wiederhergestellt.",
+    updateReady: "Neue Version (v2.01) ist bereit:",
+    updateChanges: "• Neustart des Installationsfensters erzwungen (Umgehung des Browser-Spamschutzes).",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -530,7 +530,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '2.00';
+      const currentAppVersion = '2.01';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
