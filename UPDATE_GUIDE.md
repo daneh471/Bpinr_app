@@ -1,8 +1,9 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v1.72):
-- ✅ DIZAJN: Úplne čierne pozadie aplikácie, ktoré perfektne splýva so spodným okrajom obrazovky a status barom.
-- ✅ STABILITA: Drobné úpravy pre zabezpečenie správneho priebehu aktualizácií.
+## Zmeny v tejto verzii (v1.73):
+- ✅ FUNKCIA: Pridané gesto "Krok späť" (potiahnutie prstom zľava doprava).
+- ✅ OPRAVA: Odstránený vizuálny pásik hlavičky pri exporte aktuálneho mesiaca do PDF.
+- ✅ DIZAJN: Zjednotené farby tlačidiel (modrá a zelená) v modálnych oknách a v archíve.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -10,7 +11,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.72: True black background for app and safe area"
+git commit -m "Update v1.73: Swipe back gesture, PDF fixes, UI colors"
 git push -u origin main --force
 ```
 

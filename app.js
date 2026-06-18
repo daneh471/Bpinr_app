@@ -926,7 +926,7 @@ window.exportToPDF = (isCurrent = false) => {
   tableClone.style.border = '1px solid #eee';
   
   if (isCurrent === true) {
-     tableClone.querySelectorAll('h3, button, .main').forEach(el => el.remove());
+     tableClone.querySelectorAll('.month-header, button, .main').forEach(el => el.remove());
   }
   
   tableClone.querySelectorAll('.record-row, .archive-header').forEach(row => {
@@ -1250,4 +1250,74 @@ window.showUpdateUI = (reg) => {
     else window.location.href = window.location.pathname + '?updated=true';
   };
   dialog.style.display = 'flex';
+};
+
+// --- Gesto: Krok späť (potiahnutie zľava doprava) ---
+let touchStartX = 0;
+let touchStartY = 0;
+
+document.addEventListener('touchstart', (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+  touchStartY = e.changedTouches[0].screenY;
+}, { passive: true });
+
+document.addEventListener('touchend', (e) => {
+  const touchEndX = e.changedTouches[0].screenX;
+  const touchEndY = e.changedTouches[0].screenY;
+  
+  const distanceX = touchEndX - touchStartX;
+  const distanceY = Math.abs(touchEndY - touchStartY);
+
+  // Podmienky pre krok späť:
+  // 1. Gesto začalo pri ľavom okraji obrazovky (menej ako 100px od kraja)
+  // 2. Vzdialenosť potiahnutia doprava je viac ako 60px
+  // 3. Nešlo o výrazný posun hore/dole (menej ako 50px vertikálne - ignoruje scrollovanie)
+  if (touchStartX < 100 && distanceX > 60 && distanceY < 50) {
+    window.goBackOneStep();
+  }
+}, { passive: true });
+
+window.goBackOneStep = () => {
+  const dialog = document.getElementById('customDialog');
+  if (dialog && dialog.style.display === 'flex') return; // Zablokuje krok späť, kým používateľ nepotvrdí/nezruší alert okno
+
+  const dropdown = document.getElementById('dropdown');
+  if (dropdown && dropdown.style.display === 'flex') {
+    window.toggleDropdown();
+    return;
+  }
+
+  const uiLayers = [
+    { id: 'languageModal', closeFunc: window.zavrietJazyk },
+    { id: 'settingsModal', closeFunc: window.zavrietNastavenia },
+    { id: 'termsModal', closeFunc: window.zavrietTerms },
+    { id: 'monthDetailModal', closeFunc: window.zavrietMesacnyDetail },
+    { id: 'monthlyArchiveListModal', closeFunc: window.zavrietMesacnyArchivList },
+    { id: 'editMedicationModal', closeFunc: window.zavrietEditKartu },
+    { id: 'editProfileModal', closeFunc: window.zavrietEditProfil },
+    { id: 'archivVahyModal', closeFunc: window.zavrietArchivVahy },
+    { id: 'viewProfileModal', closeFunc: window.zavrietViewProfil },
+    { id: 'infoModal', closeFunc: window.zavrietInfo },
+    { id: 'manualModal', closeFunc: window.zavrietModal }
+  ];
+
+  for (const layer of uiLayers) {
+    const el = document.getElementById(layer.id);
+    if (el && (el.style.display === 'block' || el.style.display === 'flex')) {
+      layer.closeFunc();
+      return;
+    }
+  }
+
+  const archiv = document.getElementById('archiv');
+  if (archiv && archiv.style.display === 'block') {
+    window.skrytArchiv();
+    return;
+  }
+
+  const registerForm = document.getElementById('registerForm');
+  if (registerForm && registerForm.style.display === 'block') {
+    window.showLogin();
+    return;
+  }
 };
