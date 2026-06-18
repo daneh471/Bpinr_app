@@ -148,7 +148,7 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.75) je pripravená:",
+    updateReady: "Nová verzia (v1.76) je pripravená:",
     updateChanges: "• Vylepšený Archív váhy (ukladá a aktualizuje 1 hodnotu pre každý mesiac).\n• Vylepšený export do PDF a zjednotené modré tlačidlá.\n• Gesto potiahnutia späť pre celú obrazovku.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
@@ -198,7 +198,7 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.75) ist bereit:",
+    updateReady: "Neue Version (v1.76) ist bereit:",
     updateChanges: "• Verbessertes Gewichtsarchiv (1 Eintrag pro Monat).\n• Blaue Export-Buttons & optimiertes Design.\n• Zurück-Geste auf dem gesamten Bildschirm aktiv.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
@@ -1278,7 +1278,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.75').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=1.76').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 

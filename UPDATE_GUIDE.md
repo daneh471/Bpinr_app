@@ -1,6 +1,6 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v1.75):
+## Zmeny v tejto verzii (v1.76):
 - ✅ FUNKCIA: Vylepšená logika archívu váhy (prepíše záznam v rámci rovnakého mesiaca).
 - ✅ DIZAJN: Modré tlačidlo pre PDF export vo všetkých oknách aplikácie pre lepšiu konzistenciu.
 - ✅ SYSTÉM: Vynútená globálna aktualizácia (všetky doterajšie funkcie vrátane gest a PDF fixov).
@@ -11,7 +11,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.75: Weight archive logic, blue PDF buttons, full update"
+git commit -m "Update v1.76: Final trigger for update modal"
 git push -u origin main --force
 ```
 
