@@ -1,8 +1,8 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.10):
-- ✅ PWA: Pridaný samo-opravný mechanizmus (Auto-Heal) pre zaseknuté Service Workery.
-- ✅ PWA: Aplikácia sa odteraz sama reštartuje a vyčistí, ak prehliadač zablokuje inštaláciu.
+## Zmeny v tejto verzii (v2.12):
+- ✅ PWA: Pridané "agresívne" vymazanie cache na zabitie starých, zaseknutých PWA inštalácií (ako v1.99).
+- ✅ PWA: Opravený syntaxový preklep v hlavičke manifestu.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -10,7 +10,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v2.10: Add Service Worker auto-heal mechanism"
+git commit -m "Update v2.12: Hard reset caches to kill stuck v1.99 service worker"
 git push -u origin main --force
 ```
 

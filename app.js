@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.10) je pripravená:",
-    updateChanges: "• Pridaný samo-opravný mechanizmus pre zaseknuté inštalácie (Auto-heal Service Worker).",
+    updateReady: "Nová verzia (v2.12) je pripravená:",
+    updateChanges: "• Tvrdý reštart a vyčistenie starých zaseknutých inštalácií prehliadača.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -213,8 +213,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v2.10) ist bereit:",
-    updateChanges: "• Selbstheilungsmechanismus für blockierte Service Worker hinzugefügt.",
+    updateReady: "Neue Version (v2.12) ist bereit:",
+    updateChanges: "• Harter Neustart und Bereinigung alter festgefahrener Browserinstallationen.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -522,7 +522,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '2.10';
+      const currentAppVersion = '2.12';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1355,6 +1355,23 @@ window.forceUpdateCheck = () => {
 };
 
 if ('serviceWorker' in navigator) {
+  // Agresívne vyčistenie starých PWA chýb z prehliadača (Zabitie ducha verzie 1.99)
+  const FORCE_CLEAR_KEY = 'bp_inr_force_clear_v2.12';
+  if (!localStorage.getItem(FORCE_CLEAR_KEY)) {
+    localStorage.setItem(FORCE_CLEAR_KEY, 'done');
+    navigator.serviceWorker.getRegistrations().then(regs => {
+      for (let r of regs) r.unregister();
+    });
+    if (window.caches) {
+      caches.keys().then(keys => {
+        keys.forEach(k => caches.delete(k));
+      });
+    }
+    setTimeout(() => window.location.reload(true), 500);
+    // Zastavíme ďalšie vykonávanie skriptu, kým sa stránka nereštartuje nacisto
+    throw new Error('Prebieha tvrdý reštart a vymazanie starej PWA cache...');
+  }
+
   if (sessionStorage.getItem(UPDATE_ACKNOWLEDGED_KEY) === 'true') {
     setTimeout(() => sessionStorage.removeItem(UPDATE_ACKNOWLEDGED_KEY), 1000);
   }
@@ -1367,7 +1384,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.10').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.12').then(reg => {
     setInterval(() => { reg.update().catch(()=>{}); }, 1000 * 60 * 60);
     reg.update().catch(()=>{});
 
