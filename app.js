@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.96) je pripravená:",
-    updateChanges: "• Vylepšená detekcia PWA inštalácie.\n• Pridané presnejšie upozornenia pri blokovaní inštalácie prehliadačom.",
+    updateReady: "Nová verzia (v1.97) je pripravená:",
+    updateChanges: "• Vnútenie novej PWA identity na prebitie systémovej cache prehliadača.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -217,8 +217,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.96) ist bereit:",
-    updateChanges: "• Verbesserte PWA-Installationserkennung.\n• Genauere Warnungen bei Blockierung durch den Browser hinzugefügt.",
+    updateReady: "Neue Version (v1.97) ist bereit:",
+    updateChanges: "• PWA-Identität wurde aktualisiert, um den System-Cache zu umgehen.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -530,7 +530,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '1.96';
+      const currentAppVersion = '1.97';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1375,7 +1375,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.96').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=1.97').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 
