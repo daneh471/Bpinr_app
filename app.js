@@ -148,8 +148,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.77) je pripravená:",
-    updateChanges: "• Vylepšený Archív váhy (ukladá a aktualizuje 1 hodnotu pre každý mesiac).\n• Vylepšený export do PDF a zjednotené modré tlačidlá.\n• Garantované zobrazenie noviniek po aktualizácii.\n• Pridané gesto: krok späť potiahnutím zľava doprava.",
+    updateReady: "Nová verzia (v1.78) je pripravená:",
+    updateChanges: "• Ovládanie gestom: krok späť potiahnutím prstom zľava doprava na displeji.\n• Vylepšený Archív váhy (ukladá 1 najnovšiu hodnotu pre každý mesiac).\n• Vylepšený export do PDF a zjednotené modré tlačidlá.\n• Garantované zobrazenie noviniek po aktualizácii.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -198,8 +198,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.77) ist bereit:",
-    updateChanges: "• Verbessertes Gewichtsarchiv (1 Eintrag pro Monat).\n• Blaue Export-Buttons & optimiertes Design.\n• Garantierte Anzeige der Neuigkeiten nach dem Update.\n• Wischgeste hinzugefügt: Zurück durch Wischen von links nach rechts.",
+    updateReady: "Neue Version (v1.78) ist bereit:",
+    updateChanges: "• Wischgeste: Zurück durch Wischen mit dem Finger von links nach rechts.\n• Verbessertes Gewichtsarchiv (1 Eintrag pro Monat).\n• Blaue Export-Buttons & optimiertes Design.\n• Garantierte Anzeige der Neuigkeiten.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -494,7 +494,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '1.77';
+      const currentAppVersion = '1.78';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1300,7 +1300,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.77').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=1.78').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 

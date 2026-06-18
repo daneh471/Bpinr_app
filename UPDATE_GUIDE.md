@@ -1,6 +1,6 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v1.77):
+## Zmeny v tejto verzii (v1.78):
 - ✅ FUNKCIA: Pridané gesto krok späť potiahnutím zľava doprava.
 - ✅ FUNKCIA: Vylepšená logika archívu váhy (prepíše záznam v rámci rovnakého mesiaca).
 - ✅ DIZAJN: Modré tlačidlo pre PDF export vo všetkých oknách aplikácie pre lepšiu konzistenciu.
@@ -12,7 +12,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.77: Guaranteed update notes popup & Swipe back gesture"
+git commit -m "Update v1.78: Complete update with swipe gesture prominently featured"
 git push -u origin main --force
 ```
 
