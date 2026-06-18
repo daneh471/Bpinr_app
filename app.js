@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.85) je pripravená:",
-    updateChanges: "• Inštalačné tlačidlo pridané priamo do hlavného Menu.\n• Automatický návod pre inštaláciu aplikácie na iPhone/iPad.",
+    updateReady: "Nová verzia (v1.86) je pripravená:",
+    updateChanges: "• Inštalačné tlačidlá odstránené, inštalácia je teraz plne automatická cez URL lištu prehliadača.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -217,8 +217,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.85) ist bereit:",
-    updateChanges: "• Installations-Button direkt im Hauptmenü hinzugefügt.\n• Automatische Anleitung für iPhone/iPad.",
+    updateReady: "Neue Version (v1.86) ist bereit:",
+    updateChanges: "• Installations-Buttons entfernt, die Installation erfolgt nun vollautomatisch über die URL-Leiste.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -341,8 +341,6 @@ window.updateUI = () => {
   document.getElementById('btn_pdf').innerText = t.btnExportPdf;
   document.getElementById('btn_close_month').innerText = t.closeBtn;
   if (document.getElementById('btn_force_update')) document.getElementById('btn_force_update').innerText = t.menuForceUpdate;
-  if (document.getElementById('installPwaBtn')) document.getElementById('installPwaBtn').innerText = t.installApp;
-  if (document.getElementById('menu_install')) document.getElementById('menu_install').innerText = t.installApp;
 
   document.querySelectorAll('.t-low').forEach(el => el.innerText = t.infoLow);
   document.querySelectorAll('.t-norm').forEach(el => el.innerText = t.infoNorm);
@@ -532,7 +530,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '1.85';
+      const currentAppVersion = '1.86';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1366,7 +1364,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.85').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=1.86').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 
@@ -1477,62 +1475,3 @@ window.goBackOneStep = () => {
     return;
   }
 };
-
-// --- Inštalácia PWA (Pridať na plochu) ---
-let deferredPrompt;
-
-const isStandalone = () => {
-  return ('standalone' in window.navigator) && window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
-};
-const isIos = () => {
-  const userAgent = window.navigator.userAgent.toLowerCase();
-  return /iphone|ipad|ipod/.test(userAgent);
-};
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  const installBtn = document.getElementById('installPwaBtn');
-  if (installBtn) installBtn.style.display = 'block';
-});
-
-window.installPWA = async () => {
-  const t = translations[window.currentLang] || translations['sk'];
-  if (isStandalone()) {
-    return window.showAlert(t.msgAlreadyInstalled);
-  }
-  if (isIos()) {
-    return window.showAlert(t.msgIosInstall);
-  }
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-        const installBtn = document.getElementById('installPwaBtn');
-        if (installBtn) installBtn.style.display = 'none';
-        const menuInstall = document.getElementById('menu_install');
-        if (menuInstall) menuInstall.style.display = 'none';
-    }
-    deferredPrompt = null;
-  } else {
-    window.showAlert(t.msgNoInstall);
-  }
-};
-
-window.addEventListener('appinstalled', () => {
-  const installBtn = document.getElementById('installPwaBtn');
-  if (installBtn) installBtn.style.display = 'none';
-  const menuInstall = document.getElementById('menu_install');
-  if (menuInstall) menuInstall.style.display = 'none';
-  deferredPrompt = null;
-});
-
-setTimeout(() => {
-  if (isStandalone()) {
-      const menuInstall = document.getElementById('menu_install');
-      if (menuInstall) menuInstall.style.display = 'none';
-  } else if (isIos()) {
-      const installBtn = document.getElementById('installPwaBtn');
-      if (installBtn) installBtn.style.display = 'block';
-  }
-}, 500);

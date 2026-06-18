@@ -1,7 +1,7 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v1.85):
-- ✅ FUNKCIA: Tlačidlo na inštaláciu PWA je natrvalo umiestnené v hlavnom Menu aplikácie s podporou a návodom pre iPhone.
+## Zmeny v tejto verzii (v1.86):
+- ✅ FUNKCIA: Odstránené manuálne inštalačné tlačidlá, inštalácia bude prebiehať výhradne systémovo cez URL lištu.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -9,7 +9,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.85: Add PWA install button to main menu and iOS guide"
+git commit -m "Update v1.86: Remove custom install buttons, rely on native omnibox"
 git push -u origin main --force
 ```
 
