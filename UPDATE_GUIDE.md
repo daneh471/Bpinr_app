@@ -1,7 +1,7 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v1.83):
-- ✅ FUNKCIA: Pridané plávajúce tlačidlo pre inštaláciu PWA aplikácie (zobrazí sa v prehliadači).
+## Zmeny v tejto verzii (v1.84):
+- ✅ OPRAVA: Úprava manifest.json pre korektné zobrazenie inštalačnej ikony priamo v URL lište (pre Google Chrome).
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -9,7 +9,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.83: Add PWA install button"
+git commit -m "Update v1.84: Fix manifest for omnibox install icon"
 git push -u origin main --force
 ```
 
