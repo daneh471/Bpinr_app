@@ -148,8 +148,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.76) je pripravená:",
-    updateChanges: "• Vylepšený Archív váhy (ukladá a aktualizuje 1 hodnotu pre každý mesiac).\n• Vylepšený export do PDF a zjednotené modré tlačidlá.\n• Gesto potiahnutia späť pre celú obrazovku.",
+    updateReady: "Nová verzia (v1.77) je pripravená:",
+    updateChanges: "• Vylepšený Archív váhy (ukladá a aktualizuje 1 hodnotu pre každý mesiac).\n• Vylepšený export do PDF a zjednotené modré tlačidlá.\n• Garantované zobrazenie noviniek po aktualizácii.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -198,8 +198,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.76) ist bereit:",
-    updateChanges: "• Verbessertes Gewichtsarchiv (1 Eintrag pro Monat).\n• Blaue Export-Buttons & optimiertes Design.\n• Zurück-Geste auf dem gesamten Bildschirm aktiv.",
+    updateReady: "Neue Version (v1.77) ist bereit:",
+    updateChanges: "• Verbessertes Gewichtsarchiv (1 Eintrag pro Monat).\n• Blaue Export-Buttons & optimiertes Design.\n• Garantierte Anzeige der Neuigkeiten nach dem Update.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -489,6 +489,28 @@ window.onLocalAuthStateChanged = (user) => {
     document.getElementById('formular').style.display = 'block';
     window.loadRecords();
     window.updateUI();
+
+    setTimeout(() => {
+      const dialog = document.getElementById('customDialog');
+      if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
+
+      const currentAppVersion = '1.77';
+      if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
+        const t = translations[window.currentLang];
+        document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
+        
+        let msg = t.updateReady.replace(' je pripravená:', ' bola úspešne nainštalovaná.') + '\n\n' + t.updateChanges;
+        if (window.currentLang === 'de') msg = t.updateReady.replace(' ist bereit:', ' wurde erfolgreich installiert.') + '\n\n' + t.updateChanges;
+        
+        document.getElementById('dialogMessage').innerText = msg;
+        document.getElementById('dialogCancelBtn').style.display = 'none';
+        document.getElementById('dialogOkBtn').onclick = () => {
+          localStorage.setItem('bp_inr_last_seen_version', currentAppVersion);
+          dialog.style.display = 'none';
+        };
+        dialog.style.display = 'flex';
+      }
+    }, 800);
   } else {
     window.user = null; 
     window.userName = null;
@@ -1278,7 +1300,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.76').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=1.77').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 

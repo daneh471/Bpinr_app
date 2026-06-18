@@ -1,9 +1,9 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v1.76):
+## Zmeny v tejto verzii (v1.77):
 - ✅ FUNKCIA: Vylepšená logika archívu váhy (prepíše záznam v rámci rovnakého mesiaca).
 - ✅ DIZAJN: Modré tlačidlo pre PDF export vo všetkých oknách aplikácie pre lepšiu konzistenciu.
-- ✅ SYSTÉM: Vynútená globálna aktualizácia (všetky doterajšie funkcie vrátane gest a PDF fixov).
+- ✅ SYSTÉM: Garantované zobrazenie informačného okna po úspešnej aktualizácii na novú verziu.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -11,7 +11,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.76: Final trigger for update modal"
+git commit -m "Update v1.77: Guaranteed update notes popup"
 git push -u origin main --force
 ```
 
