@@ -1,8 +1,8 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.13):
-- ✅ PWA: Kompletne prepísaný inštalačný proces v `sw.js`, ktorý ignoruje chyby súborov (tzv. fault-tolerant inštalácia).
-- ✅ PWA: Definitívne odstránenie problému "Failed to execute addAll", ktorý bránil updatom.
+## Zmeny v tejto verzii (v2.15):
+- ✅ SYSTÉM: Synchronizácia produkčného nasadenia s Vercel serverom.
+- ✅ PWA: Posledný tvrdý reštart pre potvrdenie aktuálnej živej verzie.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -10,7 +10,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v2.13: Bulletproof Service Worker installation"
+git commit -m "Update v2.15: Vercel deployment sync fix"
 git push -u origin main --force
 ```
 
@@ -24,4 +24,4 @@ git push -u origin main --force
 
 Hlavná doména: https://app.bpinr.sk/
 Záloha (GitHub Pages): https://daneh471.github.io/Zdravie_plus/
-Záloha (Vercel): https://zdravie-plus-ma1j.vercel.app/
+Záloha (Vercel): https://zdravieplus123.vercel.app/

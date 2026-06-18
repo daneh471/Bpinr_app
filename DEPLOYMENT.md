@@ -24,7 +24,7 @@ App na GitHub Pages: https://daneh471.github.io/Zdravie_plus/
 1. Prihlás sa na [Vercel.com](https://vercel.com)
 2. Importuj repozitár `Zdravie_plus`
 3. Deployment je automatický po každom pushi.
-App na Vercel: https://zdravie-plus-ma1j.vercel.app/
+App na Vercel: https://zdravieplus123.vercel.app/
 
 ## Updates na mobile
 - Keď pushneš novú verziu na GitHub (Pages/Vercel)
