@@ -12,7 +12,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.77: Guaranteed update notes popup"
+git commit -m "Update v1.77: Guaranteed update notes popup & Swipe back gesture"
 git push -u origin main --force
 ```
 
