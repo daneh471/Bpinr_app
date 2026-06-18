@@ -1,8 +1,8 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v1.95):
-- ✅ PWA: Pridaná inteligentná detekcia, či už je aplikácia nainštalovaná na ploche.
-- ✅ PWA: Vylepšené chybové hlášky, ak prehliadač inštaláciu zablokuje.
+## Zmeny v tejto verzii (v1.96):
+- ✅ PWA: Odstránené meta tagy pre cachovanie, ktoré blokovali inštaláciu aplikácie.
+- ✅ PWA: Odchytávač inštalácie bol presunutý do hlavičky pre okamžitú odozvu.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -10,7 +10,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.95: Enhance PWA install diagnostics and messaging"
+git commit -m "Update v1.96: Fix PWA install prompt in index.html"
 git push -u origin main --force
 ```
 

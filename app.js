@@ -163,7 +163,7 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.95) je pripravená:",
+    updateReady: "Nová verzia (v1.96) je pripravená:",
     updateChanges: "• Vylepšená detekcia PWA inštalácie.\n• Pridané presnejšie upozornenia pri blokovaní inštalácie prehliadačom.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
@@ -217,7 +217,7 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.95) ist bereit:",
+    updateReady: "Neue Version (v1.96) ist bereit:",
     updateChanges: "• Verbesserte PWA-Installationserkennung.\n• Genauere Warnungen bei Blockierung durch den Browser hinzugefügt.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
@@ -530,7 +530,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '1.95';
+      const currentAppVersion = '1.96';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1375,7 +1375,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.95').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=1.96').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 
@@ -1486,20 +1486,6 @@ window.goBackOneStep = () => {
     return;
   }
 };
-
-// --- PWA Inštalačná Logika ---
-window.deferredPrompt = null;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  // Zabránime prehliadaču zobraziť predvolenú malú lištu (voliteľné)
-  e.preventDefault();
-  // Uložíme event pre neskoršie použitie
-  window.deferredPrompt = e;
-  
-  // Keď je PWA pripravená, zobrazíme inštalačné tlačidlo v hlavičke
-  const installBtn = document.getElementById('headerInstallBtn');
-  if (installBtn) installBtn.style.display = 'block';
-});
 
 window.installPWA = async () => {
   // Kontrola pre iOS (Apple vôbec nepodporuje programovú inštaláciu PWA, musíme ukázať inštrukcie)
