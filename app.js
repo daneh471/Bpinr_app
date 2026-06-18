@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.08) je pripravená:",
-    updateChanges: "• Oprava zlyhania inštalácie - nahradená chýbajúca ikona a pridané meta tagy pre mobilné prehliadače.",
+    updateReady: "Nová verzia (v2.09) je pripravená:",
+    updateChanges: "• Oprava padania Service Workera na produkčnom serveri (odstránené rizikové cesty k súborom).",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -213,8 +213,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v2.08) ist bereit:",
-    updateChanges: "• PWA Crash Fix - Fehlendes Icon ersetzt und Meta-Tags für mobile Browser hinzugefügt.",
+    updateReady: "Neue Version (v2.09) ist bereit:",
+    updateChanges: "• Fix für Service Worker Absturz auf dem Produktionsserver.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -522,7 +522,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '2.08';
+      const currentAppVersion = '2.09';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1367,7 +1367,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.08').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.09').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 
