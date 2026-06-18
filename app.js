@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.94) je pripravená:",
-    updateChanges: "• Opravené zobrazenie inštalačného tlačidla PWA.\n• Tlačidlo na inštaláciu (⬇️) sa teraz automaticky ukáže v hlavičke.",
+    updateReady: "Nová verzia (v1.95) je pripravená:",
+    updateChanges: "• Vylepšená detekcia PWA inštalácie.\n• Pridané presnejšie upozornenia pri blokovaní inštalácie prehliadačom.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -183,8 +183,8 @@ const translations = {
     btnUnderstand: "Rozumiem / Zatvoriť",
     installApp: "⬇️ Nainštalovať aplikáciu",
     msgIosInstall: "Na iPhone/iPad sa aplikácia inštaluje takto:\n\n1. Kliknite na ikonu Zdieľať (štvorec so šípkou dole na lište).\n2. Vyberte možnosť 'Pridať na plochu' (Add to Home Screen).",
-    msgNoInstall: "Váš prehliadač momentálne neponúka automatickú inštaláciu. Skúste to manuálne cez menu prehliadača -> Pridať na plochu.",
-    msgAlreadyInstalled: "Aplikácia je už nainštalovaná vo vašom zariadení."
+    msgNoInstall: "Prehliadač momentálne blokuje automatickú inštaláciu.\n\nNajčastejšie dôvody:\n1. Aplikáciu už máte na ploche (skúste ju najprv vymazať).\n2. Ste v Inkognito režime.\n3. Odkaz ste otvorili cez iný prehliadač (napr. Messenger).\n\nSkúste to manuálne cez menu prehliadača -> Pridať na plochu.",
+    msgAlreadyInstalled: "Aplikácia je už pravdepodobne nainštalovaná vo vašom zariadení."
   },
   de: {
     login: "Anmelden", register: "Registrierung", titleLogin: "Login", titleReg: "Neues Konto", namePh: "Dein Name", pinPh: "PIN (6 Stellen)",
@@ -217,8 +217,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.94) ist bereit:",
-    updateChanges: "• Anzeige des Installationsbuttons (PWA) korrigiert.\n• Der Button (⬇️) wird nun korrekt im Header angezeigt.",
+    updateReady: "Neue Version (v1.95) ist bereit:",
+    updateChanges: "• Verbesserte PWA-Installationserkennung.\n• Genauere Warnungen bei Blockierung durch den Browser hinzugefügt.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -237,8 +237,8 @@ const translations = {
     btnUnderstand: "Verstanden / Schließen",
     installApp: "⬇️ App installieren",
     msgIosInstall: "Auf dem iPhone/iPad wird die App so installiert:\n\n1. Tippen Sie auf das Teilen-Symbol (Quadrat mit Pfeil).\n2. Wählen Sie 'Zum Home-Bildschirm' (Add to Home Screen).",
-    msgNoInstall: "Ihr Browser unterstützt keine automatische Installation. Versuchen Sie es über das Browser-Menü -> Zum Home-Bildschirm.",
-    msgAlreadyInstalled: "Die App ist bereits auf Ihrem Gerät installiert."
+    msgNoInstall: "Der Browser blockiert die automatische Installation.\n\nGründe:\n1. Die App ist bereits installiert (bitte zuerst löschen).\n2. Inkognito-Modus.\n3. Link über einen anderen Browser (z.B. Messenger) geöffnet.\n\nVersuchen Sie es manuell über das Browser-Menü -> Zum Home-Bildschirm.",
+    msgAlreadyInstalled: "Die App ist wahrscheinlich bereits auf Ihrem Gerät installiert."
   }
 };
 
@@ -530,7 +530,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '1.94';
+      const currentAppVersion = '1.95';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1375,7 +1375,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.94').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=1.95').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 
@@ -1506,6 +1506,11 @@ window.installPWA = async () => {
   const isIos = /ipad|iphone|ipod/.test(navigator.userAgent.toLowerCase());
   if (isIos && !window.MSStream) {
     return window.showAlert(translations[window.currentLang].msgIosInstall);
+  }
+
+  // Kontrola, či aplikácia momentálne už nebeží v nainštalovanom režime (Standalone)
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    return window.showAlert(translations[window.currentLang].msgAlreadyInstalled || "Aplikácia je už nainštalovaná vo vašom zariadení.");
   }
 
   // Ak je event pripravený a sme na Androide/Windows/Mac
