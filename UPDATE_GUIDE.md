@@ -1,7 +1,7 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v1.91):
-- ✅ OPRAVA: Definovaný striktný "scope" a pridané relatívne cesty v cache (./) pre garantovanú detekciu inštalovateľnosti.
+## Zmeny v tejto verzii (v1.92):
+- ✅ OPRAVA: Presné rozdelenie ikon v manifeste, aby Chrome s istotou povolil inštaláciu.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -9,7 +9,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.91: Fix relative paths and scope for PWA installability"
+git commit -m "Update v1.92: Explicitly separate icon sizes in manifest"
 git push -u origin main --force
 ```
 
