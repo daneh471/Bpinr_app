@@ -148,8 +148,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.72) je pripravená:",
-    updateChanges: "• Úplne čierne pozadie aplikácie pre perfektné splynutie s okrajmi obrazovky.",
+    updateReady: "Nová verzia (v1.74) je pripravená:",
+    updateChanges: "• Gesto Krok späť (potiahnutie zľava doprava) teraz funguje na celom displeji.\n• Oprava zobrazenia archívu v PDF a zjednotené farby UI.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -198,8 +198,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.72) ist bereit:",
-    updateChanges: "• Vollständig schwarzer Hintergrund der App.",
+    updateReady: "Neue Version (v1.74) ist bereit:",
+    updateChanges: "• Zurück-Geste durch Wischen jetzt auf dem gesamten Bildschirm aktiv.\n• UI und PDF Verbesserungen.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -1209,7 +1209,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.72').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=1.74').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 
@@ -1269,10 +1269,9 @@ document.addEventListener('touchend', (e) => {
   const distanceY = Math.abs(touchEndY - touchStartY);
 
   // Podmienky pre krok späť:
-  // 1. Gesto začalo pri ľavom okraji obrazovky (menej ako 100px od kraja)
-  // 2. Vzdialenosť potiahnutia doprava je viac ako 60px
-  // 3. Nešlo o výrazný posun hore/dole (menej ako 50px vertikálne - ignoruje scrollovanie)
-  if (touchStartX < 100 && distanceX > 60 && distanceY < 50) {
+  // 1. Vzdialenosť potiahnutia doprava je viac ako 60px nezávisle od toho, kde začalo
+  // 2. Nešlo o výrazný posun hore/dole (menej ako 50px vertikálne - ignoruje scrollovanie)
+  if (distanceX > 60 && distanceY < 50) {
     window.goBackOneStep();
   }
 }, { passive: true });

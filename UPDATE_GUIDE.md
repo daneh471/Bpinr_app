@@ -1,7 +1,7 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v1.73):
-- ✅ FUNKCIA: Pridané gesto "Krok späť" (potiahnutie prstom zľava doprava).
+## Zmeny v tejto verzii (v1.74):
+- ✅ FUNKCIA: Gesto "Krok späť" (potiahnutie zľava doprava) teraz funguje kdekoľvek na displeji.
 - ✅ OPRAVA: Odstránený vizuálny pásik hlavičky pri exporte aktuálneho mesiaca do PDF.
 - ✅ DIZAJN: Zjednotené farby tlačidiel (modrá a zelená) v modálnych oknách a v archíve.
 
@@ -11,7 +11,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.73: Swipe back gesture, PDF fixes, UI colors"
+git commit -m "Update v1.74: Global swipe back gesture, PDF fixes, UI colors"
 git push -u origin main --force
 ```
 
