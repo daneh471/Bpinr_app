@@ -7,7 +7,7 @@
 
 ```bash
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
-git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
+git remote set-url origin https://app.bpinr.sk/
 git add .
 git commit -m "Update v1.93: Add iframe detection for PWA install block"
 git push -u origin main --force

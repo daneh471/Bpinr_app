@@ -1486,3 +1486,42 @@ window.goBackOneStep = () => {
     return;
   }
 };
+
+// --- PWA Inštalačná Logika ---
+window.deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Zabránime prehliadaču zobraziť predvolenú malú lištu (voliteľné)
+  e.preventDefault();
+  // Uložíme event pre neskoršie použitie
+  window.deferredPrompt = e;
+});
+
+window.installPWA = async () => {
+  // Kontrola pre iOS (Apple vôbec nepodporuje programovú inštaláciu PWA, musíme ukázať inštrukcie)
+  const isIos = /ipad|iphone|ipod/.test(navigator.userAgent.toLowerCase());
+  if (isIos && !window.MSStream) {
+    return window.showAlert(translations[window.currentLang].msgIosInstall);
+  }
+
+  // Ak je event pripravený a sme na Androide/Windows/Mac
+  if (window.deferredPrompt) {
+    // Zobrazíme natívny inštalačný dialóg prehliadača
+    window.deferredPrompt.prompt();
+    
+    // Počkáme, ako sa používateľ rozhodol (Inštalovať / Zrušiť)
+    const { outcome } = await window.deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      console.log('Užívateľ prijal inštaláciu');
+    }
+    // Po použití sa musí prompt vymazať (dá sa použiť iba raz)
+    window.deferredPrompt = null;
+  } else {
+    window.showAlert(translations[window.currentLang].msgNoInstall);
+  }
+};
+
+window.addEventListener('appinstalled', () => {
+  window.deferredPrompt = null;
+  window.showToast(translations[window.currentLang].msgAlreadyInstalled || "Aplikácia bola nainštalovaná");
+});
