@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.80) je pripravená:",
-    updateChanges: "• Optimalizácia súborov (zvyšné obrázky presunuté do zložky img).\n• Rozšírená offline podpora pre vodoznaky.",
+    updateReady: "Nová verzia (v1.82) je pripravená:",
+    updateChanges: "• Mesačný archív je teraz prehľadne rozdelený a zoskupený podľa rokov.\n• Optimalizácia zobrazenia pre dlhodobú históriu.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -213,8 +213,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.80) ist bereit:",
-    updateChanges: "• Datei- und Ordneroptimierung (restliche Bilder in den img-Ordner verschoben).\n• Erweiterte Offline-Unterstützung für Wasserzeichen.",
+    updateReady: "Neue Version (v1.82) ist bereit:",
+    updateChanges: "• Das Monatsarchiv ist nun übersichtlich nach Jahren gegliedert.\n• Optimierung der Langzeithistorie.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -522,7 +522,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '1.80';
+      const currentAppVersion = '1.82';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -895,10 +895,38 @@ window.otvoritMesacnyArchivList = () => {
     const [mb, yb] = b.split('.').map(Number);
     return (yb*12+mb) - (ya*12+ma);
   });
+
+  const byYear = {};
   olderKeys.forEach(key => {
-    container.innerHTML += `<button class="main month-btn" onclick="window.otvoritMesacnyDetail('${key}')">${window.groupedOlder[key].title}</button>`;
+    const year = key.split('.')[1];
+    if (!byYear[year]) byYear[year] = [];
+    byYear[year].push(key);
   });
+
+  const sortedYears = Object.keys(byYear).sort((a,b) => b - a);
+  
+  sortedYears.forEach(year => {
+    container.innerHTML += `<button class="main" style="background-color: #555; margin-bottom: 0.3rem; margin-top: 0.5rem; text-align: left; padding-left: 1rem;" onclick="window.toggleYear('${year}')">📁 ${year}</button>`;
+    let monthsHtml = `<div id="year_${year}" style="display: none; flex-direction: column; gap: 0.3rem; padding-left: 1rem; border-left: 2px solid #555; margin-bottom: 0.5rem;">`;
+    byYear[year].forEach(key => {
+      const title = window.groupedOlder[key].title.replace(' ' + year, '');
+      monthsHtml += `<button class="main month-btn" onclick="window.otvoritMesacnyDetail('${key}')">${title}</button>`;
+    });
+    monthsHtml += `</div>`;
+    container.innerHTML += monthsHtml;
+  });
+
+  if (sortedYears.length > 0) {
+    setTimeout(() => window.toggleYear(sortedYears[0]), 50);
+  }
   document.getElementById('monthlyArchiveListModal').style.display = 'flex';
+};
+
+window.toggleYear = (year) => {
+  const el = document.getElementById('year_' + year);
+  if (el) {
+    el.style.display = (el.style.display === 'none') ? 'flex' : 'none';
+  }
 };
 
 window.zavrietMesacnyArchivList = () => document.getElementById('monthlyArchiveListModal').style.display = 'none';
@@ -1328,7 +1356,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.80').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=1.82').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 

@@ -1,19 +1,16 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v1.80):
-- ✅ SYSTÉM: Presunutie zvyšných 3 obrázkov do zložky `img/`.
-- ✅ SYSTÉM: Pridanie chýbajúcich obrázkov do Service Worker vyrovnávacej pamäte pre plnú offline dostupnosť.
+## Zmeny v tejto verzii (v1.82):
+- ✅ FUNKCIA: Zoskupenie Mesačného archívu do "priečinkov" podľa rokov pre lepšiu prehľadnosť.
+- ✅ SYSTÉM: Vynútenie aktualizácie a vyčistenie cache pre stabilnejší beh.
 
 ## POSTUP - Skopíruj do Git Bash:
 
 ```bash
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
-mv "bp inr karta liekov.png" img/
-mv "bp inr registracia.png" img/
-mv "bp karta liekov.png" img/
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.80: Move remaining images to img/ and update SW cache"
+git commit -m "Update v1.82: Group Monthly Archive by Years and stability update"
 git push -u origin main --force
 ```
 
