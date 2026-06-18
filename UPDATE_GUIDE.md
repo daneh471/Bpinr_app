@@ -1,8 +1,8 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.09):
-- ✅ PWA: Odstránené súbory s medzerami v názvoch z povinnej inštalácie Service Workera.
-- ✅ PWA: Týmto sa zabránilo padaniu `cache.addAll` na Linux serveroch (Vercel/GitHub).
+## Zmeny v tejto verzii (v2.10):
+- ✅ PWA: Pridaný samo-opravný mechanizmus (Auto-Heal) pre zaseknuté Service Workery.
+- ✅ PWA: Aplikácia sa odteraz sama reštartuje a vyčistí, ak prehliadač zablokuje inštaláciu.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -10,7 +10,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v2.09: Fix Service Worker crash by removing unencoded image paths"
+git commit -m "Update v2.10: Add Service Worker auto-heal mechanism"
 git push -u origin main --force
 ```
 

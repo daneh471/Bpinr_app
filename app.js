@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.09) je pripravená:",
-    updateChanges: "• Oprava padania Service Workera na produkčnom serveri (odstránené rizikové cesty k súborom).",
+    updateReady: "Nová verzia (v2.10) je pripravená:",
+    updateChanges: "• Pridaný samo-opravný mechanizmus pre zaseknuté inštalácie (Auto-heal Service Worker).",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -213,8 +213,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v2.09) ist bereit:",
-    updateChanges: "• Fix für Service Worker Absturz auf dem Produktionsserver.",
+    updateReady: "Neue Version (v2.10) ist bereit:",
+    updateChanges: "• Selbstheilungsmechanismus für blockierte Service Worker hinzugefügt.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -522,7 +522,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '2.09';
+      const currentAppVersion = '2.10';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1367,13 +1367,13 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.09').then(reg => {
-    setInterval(() => { reg.update(); }, 1000 * 60 * 60);
-    reg.update();
+  navigator.serviceWorker.register('./sw.js?v=2.10').then(reg => {
+    setInterval(() => { reg.update().catch(()=>{}); }, 1000 * 60 * 60);
+    reg.update().catch(()=>{});
 
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') {
-        reg.update();
+        reg.update().catch(()=>{});
       }
     });
 
@@ -1389,6 +1389,12 @@ if ('serviceWorker' in navigator) {
         }
       };
     };
+  }).catch(err => {
+    console.warn('Zaseknutý Service Worker detegovaný, prebieha auto-oprava...', err);
+    navigator.serviceWorker.getRegistrations().then(regs => {
+      for (let r of regs) r.unregister();
+      setTimeout(() => window.location.reload(), 500);
+    });
   });
 }
 
