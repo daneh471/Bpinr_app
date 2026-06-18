@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.05) je pripravená:",
-    updateChanges: "• Pridané natívne inštalačné tlačidlo PWA (vzor PWABuilder).",
+    updateReady: "Nová verzia (v2.08) je pripravená:",
+    updateChanges: "• Oprava zlyhania inštalácie - nahradená chýbajúca ikona a pridané meta tagy pre mobilné prehliadače.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -180,9 +180,7 @@ const translations = {
     t2T: "2. Riziko straty dát:", t2D: "Ak vymažete vyrovnávaciu pamäť prehliadača (cache), odinštalujete aplikáciu alebo stratíte zariadenie, vaše údaje budú natrvalo stratené.",
     t3T: "3. Zálohovanie:", t3D: "Za zálohovanie svojich údajov (napríklad pomocou pravidelného exportu do PDF) ste plne zodpovedný vy.",
     t4T: "4. Zdravotné upozornenie:", t4D: "Aplikácia slúži výlučne na informatívne účely a evidenciu hodnôt. Nenahrádza odbornú lekársku starostlivosť.",
-    btnUnderstand: "Rozumiem / Zatvoriť",
-    installBtnHeader: "Nainštalovať",
-    installBtnFull: "⬇️ Nainštalovať aplikáciu"
+    btnUnderstand: "Rozumiem / Zatvoriť"
   },
   de: {
     login: "Anmelden", register: "Registrierung", titleLogin: "Login", titleReg: "Neues Konto", namePh: "Dein Name", pinPh: "PIN (6 Stellen)",
@@ -215,8 +213,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v2.05) ist bereit:",
-    updateChanges: "• Nativer PWA-Installationsbutton hinzugefügt (wie PWABuilder).",
+    updateReady: "Neue Version (v2.08) ist bereit:",
+    updateChanges: "• PWA Crash Fix - Fehlendes Icon ersetzt und Meta-Tags für mobile Browser hinzugefügt.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -232,9 +230,7 @@ const translations = {
     t2T: "2. Risiko von Datenverlust:", t2D: "Wenn Sie den Browser-Cache löschen, die App deinstallieren oder das Gerät verlieren, gehen Ihre Daten dauerhaft verloren.",
     t3T: "3. Datensicherung:", t3D: "Sie sind für die Sicherung Ihrer Daten (z. B. durch regelmäßigen PDF-Export) selbst verantwortlich.",
     t4T: "4. Medizinischer Hinweis:", t4D: "Die App dient ausschließlich zu Informationszwecken und ersetzt keine professionelle medizinische Betreuung.",
-    btnUnderstand: "Verstanden / Schließen",
-    installBtnHeader: "Installieren",
-    installBtnFull: "⬇️ App installieren"
+    btnUnderstand: "Verstanden / Schließen"
   }
 };
 
@@ -526,7 +522,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '2.05';
+      const currentAppVersion = '2.08';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1371,7 +1367,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=2.05').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.08').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 
@@ -1482,27 +1478,3 @@ window.goBackOneStep = () => {
     return;
   }
 };
-
-// --- PWA INŠTALÁCIA (ŠTANDARD PWABUILDER) ---
-window.installPWA = async () => {
-  if (!window.deferredPrompt) return;
-  // Ukáže natívne inštalačné okno prehliadača
-  window.deferredPrompt.prompt();
-  const { outcome } = await window.deferredPrompt.userChoice;
-  if (outcome === 'accepted') {
-    console.log('Používateľ nainštaloval aplikáciu');
-  }
-  window.deferredPrompt = null;
-  // Skryje tlačidlá
-  const btn1 = document.getElementById('installPwaBtn');
-  if (btn1) btn1.style.display = 'none';
-  const btn2 = document.getElementById('authInstallBtn');
-  if (btn2) btn2.style.display = 'none';
-};
-
-window.addEventListener('appinstalled', () => {
-  window.deferredPrompt = null;
-  if (document.getElementById('installPwaBtn')) document.getElementById('installPwaBtn').style.display = 'none';
-  if (document.getElementById('authInstallBtn')) document.getElementById('authInstallBtn').style.display = 'none';
-  window.showToast("Nainštalované");
-});
