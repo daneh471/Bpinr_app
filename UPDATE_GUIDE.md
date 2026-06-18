@@ -1,8 +1,8 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.01):
-- ✅ PWA: Vynútené nové ID (`bpinr-app-v3`) pre prebitie anti-spamovej ochrany prehliadača.
-- ✅ PWA: Fix cesty na `index.html` v manifest.json pre absolútnu zhodu v cache.
+## Zmeny v tejto verzii (v2.02):
+- ✅ PWA: Opravený skrytý pád aplikácie pri Chrome PWA offline teste.
+- ✅ PWA: Úprava manifestu a odinštalovanie konfliktného scope/id parametra.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -10,7 +10,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v2.01: Reset Chrome install prompt cooldown"
+git commit -m "Update v2.02: Bulletproof PWA offline catch for Lighthouse validation"
 git push -u origin main --force
 ```
 

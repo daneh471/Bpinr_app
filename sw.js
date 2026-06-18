@@ -1,5 +1,5 @@
-// BP & INR Service Worker - Build: v2.01
-const CACHE_NAME = 'bp-inr-v2.01';
+// BP & INR Service Worker - Build: v2.02
+const CACHE_NAME = 'bp-inr-v2.02';
 const FILES_TO_CACHE = [
   './',
   './index.html',
@@ -69,6 +69,10 @@ self.addEventListener('fetch', function(e) {
         });
         return response;
       })
-      .catch(() => caches.match(e.request))
+      .catch(function() {
+        return caches.match(e.request).then(function(response) {
+          return response || caches.match('./index.html');
+        });
+      })
   );
 });
