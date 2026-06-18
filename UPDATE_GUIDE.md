@@ -1,6 +1,7 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
 ## Zmeny v tejto verzii (v1.77):
+- ✅ FUNKCIA: Pridané gesto krok späť potiahnutím zľava doprava.
 - ✅ FUNKCIA: Vylepšená logika archívu váhy (prepíše záznam v rámci rovnakého mesiaca).
 - ✅ DIZAJN: Modré tlačidlo pre PDF export vo všetkých oknách aplikácie pre lepšiu konzistenciu.
 - ✅ SYSTÉM: Garantované zobrazenie informačného okna po úspešnej aktualizácii na novú verziu.
@@ -17,7 +18,7 @@ git push -u origin main --force
 
 ## ⏳ Čo sa stane potom:
 1. GitHub aktualizuje stránku (1-2 minúty)
-2. Service Worker detekuje zmenu (v1.75)
+2. Service Worker detekuje zmenu (v1.77)
 3. Stlačením **OK** v aplikácii sa vykoná aktualizácia
 4. Nová verzia BP & INR je pripravená! 🎉
 
