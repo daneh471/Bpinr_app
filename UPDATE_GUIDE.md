@@ -2,7 +2,7 @@
 
 ## Zmeny v tejto verzii (v1.94):
 - ✅ PWA: Opravené zobrazenie tlačidla pre inštaláciu aplikácie v hlavičke.
-- ✅ PWA: Tlačidlo sa teraz správne zjaví, keď je inštalácia pripravená a skryje sa po úspešnom pridaní na plochu.
+- ✅ PWA: Inštalačné tlačidlo (⬇️) je teraz vynútene viditeľné natrvalo, aby sa predišlo blokovaniu prehliadačom.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -10,7 +10,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.94: Fix PWA install button visibility"
+git commit -m "Update: Force show PWA install button"
 git push -u origin main --force
 ```
 
