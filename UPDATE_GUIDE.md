@@ -1,7 +1,7 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v1.92):
-- ✅ OPRAVA: Presné rozdelenie ikon v manifeste, aby Chrome s istotou povolil inštaláciu.
+## Zmeny v tejto verzii (v1.93):
+- ✅ SYSTÉM: Pridaná automatická diagnostika Iframe prostredia, ktorá upozorní používateľa, ak mu maskovaná doména blokuje inštaláciu.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -9,7 +9,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.92: Explicitly separate icon sizes in manifest"
+git commit -m "Update v1.93: Add iframe detection for PWA install block"
 git push -u origin main --force
 ```
 

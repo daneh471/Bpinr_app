@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.92) je pripravená:",
-    updateChanges: "• Explicitné rozdelenie ikon v manifeste pre maximálnu kompatibilitu inštalácie.",
+    updateReady: "Nová verzia (v1.93) je pripravená:",
+    updateChanges: "• Pridaná automatická diagnostika prostredia (detekcia maskovanej domény blokujúcej inštaláciu).",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -217,8 +217,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.92) ist bereit:",
-    updateChanges: "• Explizite Aufteilung der Icons im Manifest.",
+    updateReady: "Neue Version (v1.93) ist bereit:",
+    updateChanges: "• Automatische Umgebungsdiagnose hinzugefügt (Erkennung von Iframe-Blockaden).",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -530,7 +530,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '1.92';
+      const currentAppVersion = '1.93';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -547,6 +547,17 @@ window.onLocalAuthStateChanged = (user) => {
         dialog.style.display = 'flex';
       }
     }, 800);
+
+setTimeout(() => {
+  const inIframe = () => {
+    try { return window.self !== window.top; } catch (e) { return true; }
+  };
+  if (inIframe()) {
+    const t = translations[window.currentLang] || translations['sk'];
+    const msg = window.currentLang === 'de' ? "⚠️ Die App läuft in einer maskierten Domain (Iframe). Browser BLOCKIEREN die Installation in diesem Modus. Bitte öffnen Sie die Originaladresse." : "⚠️ Aplikácia beží v maskovanej doméne (Iframe). Prehliadače v tomto režime z bezpečnostných dôvodov BLOKUJÚ inštaláciu aplikácie. Otvorte priamo originálnu adresu (GitHub Pages).";
+    window.showAlert(msg);
+  }
+}, 2500);
   } else {
     window.user = null; 
     window.userName = null;
@@ -1364,7 +1375,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.92').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=1.93').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 
