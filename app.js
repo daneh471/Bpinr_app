@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.99) je pripravená:",
-    updateChanges: "• Plná podpora inštalácie pre VŠETKY prehliadače (Safari, Firefox, Chrome) cez zjednotené tlačidlo ⬇️.",
+    updateReady: "Nová verzia (v2.00) je pripravená:",
+    updateChanges: "• Obnovená natívna automatická inštalácia pre Chrome, Edge a Samsung Internet.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -183,7 +183,7 @@ const translations = {
     btnUnderstand: "Rozumiem / Zatvoriť",
     installApp: "⬇️ Nainštalovať aplikáciu",
     msgIosInstall: "Na iPhone/iPad sa aplikácia inštaluje takto:\n\n1. Kliknite na ikonu Zdieľať (štvorec so šípkou dole na lište).\n2. Vyberte možnosť 'Pridať na plochu' (Add to Home Screen).",
-    msgNoInstall: "Váš prehliadač nepodporuje automatickú inštaláciu (napr. Firefox/Safari) alebo je inštalácia zablokovaná.\n\nSkúste si aplikáciu pridať na plochu manuálne cez menu prehliadača -> Pridať na plochu (Add to Home Screen).",
+    msgNoInstall: "Prehliadač momentálne blokuje inštaláciu (alebo ju nepodporuje).\n\nSkúste to manuálne cez menu prehliadača -> Pridať na plochu (Add to Home Screen).",
     msgAlreadyInstalled: "Aplikácia je už pravdepodobne nainštalovaná vo vašom zariadení."
   },
   de: {
@@ -217,8 +217,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.99) ist bereit:",
-    updateChanges: "• Volle Unterstützung für die Installation in ALLEN Browsern (Safari, Firefox, Chrome) über den ⬇️ Button.",
+    updateReady: "Neue Version (v2.00) ist bereit:",
+    updateChanges: "• Native automatische Installation für Chrome, Edge und Samsung Internet wiederhergestellt.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -237,7 +237,7 @@ const translations = {
     btnUnderstand: "Verstanden / Schließen",
     installApp: "⬇️ App installieren",
     msgIosInstall: "Auf dem iPhone/iPad wird die App so installiert:\n\n1. Tippen Sie auf das Teilen-Symbol (Quadrat mit Pfeil).\n2. Wählen Sie 'Zum Home-Bildschirm' (Add to Home Screen).",
-    msgNoInstall: "Ihr Browser unterstützt keine automatische Installation oder sie wird blockiert.\n\nBitte fügen Sie die App manuell über das Browser-Menü -> Zum Home-Bildschirm (Add to Home Screen) hinzu.",
+    msgNoInstall: "Der Browser blockiert die Installation (oder unterstützt sie nicht).\n\nVersuchen Sie es manuell über das Browser-Menü -> Zum Home-Bildschirm (Add to Home Screen).",
     msgAlreadyInstalled: "Die App ist wahrscheinlich bereits auf Ihrem Gerät installiert."
   }
 };
@@ -530,7 +530,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '1.99';
+      const currentAppVersion = '2.00';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1375,7 +1375,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.99').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=2.00').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 

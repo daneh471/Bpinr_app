@@ -1,8 +1,8 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v1.99):
-- ✅ PWA: Pridaná plná podpora inštalácie (a chybových hlášok) pre všetky prehliadače (Safari, Firefox, atď.).
-- ✅ PWA: Zjednotené inštalačné rozhranie cez tlačidlo ⬇️.
+## Zmeny v tejto verzii (v2.00):
+- ✅ PWA: Obnovené automatické natívne okno na inštaláciu (pre Chrome, Edge, Samsung Internet).
+- ✅ PWA: Odstránené blokovanie `preventDefault()`.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -10,7 +10,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v1.99: Cross-browser PWA install compatibility"
+git commit -m "Update v2.00: Restore native auto-install prompt for supported browsers"
 git push -u origin main --force
 ```
 
