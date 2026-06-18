@@ -1,9 +1,24 @@
+window.escapeHTML = (str) => {
+  if (str === null || str === undefined) return '';
+  return String(str).replace(/[&<>'"]/g, match => {
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' };
+    return map[match];
+  });
+};
+
+window.hashString = async (str) => {
+  if (!str) return null;
+  const msgBuffer = new TextEncoder().encode(str);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+};
+
 window.exportMedCardPDF = () => {
   const tInfo = translations[window.currentLang];
-  const pMeno = localStorage.getItem('userProfile_meno') || '-';
-  const pPriezvisko = localStorage.getItem('userProfile_priezvisko') || '-';
-  const pVaha = localStorage.getItem('userProfile_vaha') ? localStorage.getItem('userProfile_vaha') + ' kg' : '-';
-  const pVyska = localStorage.getItem('userProfile_vyska') ? localStorage.getItem('userProfile_vyska') + ' cm' : '-';
+  const pMeno = window.escapeHTML(localStorage.getItem('userProfile_meno') || '-');
+  const pPriezvisko = window.escapeHTML(localStorage.getItem('userProfile_priezvisko') || '-');
+  const pVaha = window.escapeHTML(localStorage.getItem('userProfile_vaha') ? localStorage.getItem('userProfile_vaha') + ' kg' : '-');
+  const pVyska = window.escapeHTML(localStorage.getItem('userProfile_vyska') ? localStorage.getItem('userProfile_vyska') + ' cm' : '-');
 
   const pdfWrapper = document.createElement('div');
   pdfWrapper.style.padding = '30px';
@@ -14,7 +29,7 @@ window.exportMedCardPDF = () => {
   pdfWrapper.style.minHeight = '277mm';
 
   const watermark = document.createElement('img');
-  watermark.src = window.isBpOnly ? 'bp karta liekov archiv vahy.png' : 'bp inr.png';
+  watermark.src = window.isBpOnly ? 'img/bp karta liekov archiv vahy.png' : 'img/bp inr.png';
   watermark.style.position = 'absolute';
   watermark.style.top = '138.5mm';
   watermark.style.left = '50%';
@@ -148,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v1.78) je pripravená:",
-    updateChanges: "• Ovládanie gestom: krok späť potiahnutím prstom zľava doprava na displeji.\n• Vylepšený Archív váhy (ukladá 1 najnovšiu hodnotu pre každý mesiac).\n• Vylepšený export do PDF a zjednotené modré tlačidlá.\n• Garantované zobrazenie noviniek po aktualizácii.",
+    updateReady: "Nová verzia (v1.80) je pripravená:",
+    updateChanges: "• Optimalizácia súborov (zvyšné obrázky presunuté do zložky img).\n• Rozšírená offline podpora pre vodoznaky.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -198,8 +213,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v1.78) ist bereit:",
-    updateChanges: "• Wischgeste: Zurück durch Wischen mit dem Finger von links nach rechts.\n• Verbessertes Gewichtsarchiv (1 Eintrag pro Monat).\n• Blaue Export-Buttons & optimiertes Design.\n• Garantierte Anzeige der Neuigkeiten.",
+    updateReady: "Neue Version (v1.80) ist bereit:",
+    updateChanges: "• Datei- und Ordneroptimierung (restliche Bilder in den img-Ordner verschoben).\n• Erweiterte Offline-Unterstützung für Wasserzeichen.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -400,8 +415,9 @@ window.registerUser = async function() {
     
     window.isRegistering = true;
     const uid = 'local_' + Date.now().toString();
+    const hashedPin = await window.hashString(pin);
     
-    localAccounts[nameLower] = { uid: uid, name: name, pin: pin, role: 'user' };
+    localAccounts[nameLower] = { uid: uid, name: name, pin: hashedPin, role: 'user' };
     localStorage.setItem('bp_inr_local_accounts', JSON.stringify(localAccounts));
     localStorage.setItem('currentUserUid', uid);
 
@@ -432,15 +448,27 @@ window.loginUser = async function() {
       return window.showAlert(translations[window.currentLang].msgUserNotFound);
     }
     
-    if (userDoc.pin !== null && userDoc.pin !== pin) {
-      errorEl.innerText = translations[window.currentLang].msgWrongPin;
-      return window.showAlert(translations[window.currentLang].msgWrongPin);
-    }
+    const hashedPin = await window.hashString(pin);
+    let isPinCorrect = false;
 
     if (userDoc.pin === null) {
-      userDoc.pin = pin;
+      userDoc.pin = hashedPin;
       localAccounts[nameLower] = userDoc;
       localStorage.setItem('bp_inr_local_accounts', JSON.stringify(localAccounts));
+      isPinCorrect = true;
+    } else if (userDoc.pin === pin) {
+      // Backward compatibility pre starých používateľov - ak sa prihlásia starým PINom, uložíme ho už ako hash
+      userDoc.pin = hashedPin;
+      localAccounts[nameLower] = userDoc;
+      localStorage.setItem('bp_inr_local_accounts', JSON.stringify(localAccounts));
+      isPinCorrect = true;
+    } else if (userDoc.pin === hashedPin) {
+      isPinCorrect = true;
+    }
+
+    if (!isPinCorrect) {
+      errorEl.innerText = translations[window.currentLang].msgWrongPin;
+      return window.showAlert(translations[window.currentLang].msgWrongPin);
     }
     
     localStorage.setItem('currentUserUid', userDoc.uid);
@@ -494,7 +522,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '1.78';
+      const currentAppVersion = '1.80';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -680,8 +708,8 @@ window.vykreslitArchivVahy = function() {
     }
 
     html += `<div class="record-row weight-row">
-      <div>${r.datum}</div>
-      <div class="weight-val">${r.vaha}${trend}</div>
+      <div>${window.escapeHTML(r.datum)}</div>
+      <div class="weight-val">${window.escapeHTML(r.vaha)}${trend}</div>
       <div class="weight-del" onclick="window.vymazatVahu('${r.id}')">🗑️</div>
     </div>`;
   }
@@ -833,12 +861,12 @@ window.zobrazArchiv = function() {
     }
 
     const rowHtml = `<div class="record-row">
-      <div>${r.datum}</div>
-      <div class="col-inr ${window.getColorClass(r.inr,'inr')}">${r.inr||'-'}</div>
-      <div class="col-tab ${window.getColorClass(r.tab,'tab')}">${r.tab||'-'}</div>
-      <div class="col-sys ${window.getColorClass(r.sys,'sys')}">${r.sys||'-'}</div>
-      <div class="col-dia ${window.getColorClass(r.dia,'dia')}">${r.dia||'-'}</div>
-      <div class="${window.getColorClass(r.pulse,'pulse')}">${r.pulse||'-'}</div>
+      <div>${window.escapeHTML(r.datum)}</div>
+      <div class="col-inr ${window.getColorClass(r.inr,'inr')}">${window.escapeHTML(r.inr)||'-'}</div>
+      <div class="col-tab ${window.getColorClass(r.tab,'tab')}">${window.escapeHTML(r.tab)||'-'}</div>
+      <div class="col-sys ${window.getColorClass(r.sys,'sys')}">${window.escapeHTML(r.sys)||'-'}</div>
+      <div class="col-dia ${window.getColorClass(r.dia,'dia')}">${window.escapeHTML(r.dia)||'-'}</div>
+      <div class="${window.getColorClass(r.pulse,'pulse')}">${window.escapeHTML(r.pulse)||'-'}</div>
       <div class="delete-icon" onclick="window.vymazatZaznam('${r.id}')">🗑️</div>
     </div>`;
 
@@ -911,7 +939,7 @@ window.exportToPDF = (isCurrent = false) => {
   pdfWrapper.style.minHeight = '277mm'; 
 
   const watermark = document.createElement('img');
-  watermark.src = window.isBpOnly ? 'bp.png' : 'bp inr.png';
+  watermark.src = window.isBpOnly ? 'img/bp.png' : 'img/bp inr.png';
   watermark.style.position = 'absolute';
   watermark.style.top = '138.5mm'; 
   watermark.style.left = '50%';
@@ -1300,7 +1328,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=1.78').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=1.80').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 

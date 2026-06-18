@@ -1,15 +1,19 @@
-// BP & INR Service Worker - Build: v1.78
-const CACHE_NAME = 'bp-inr-v1.78';
+// BP & INR Service Worker - Build: v1.80
+const CACHE_NAME = 'bp-inr-v1.80';
 const FILES_TO_CACHE = [
   './',
   'index.html',
   'style.css',
   'app.js',
-  'favicon-v2.png',
+  'img/favicon.png',
+  'img/favicon-v2.png',
   'manifest.json',
-  'bp.png',
-  'bp inr.png',
-  'bp karta liekov archiv vahy.png'
+  'img/bp.png',
+  'img/bp inr.png',
+  'img/bp karta liekov archiv vahy.png',
+  'img/bp inr karta liekov.png',
+  'img/bp inr registracia.png',
+  'img/bp karta liekov.png'
 ];
 
 // Inštalácia service workera – ukladáme potrebné súbory
