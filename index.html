@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="BP & INR" />
   <title>BP & INR</title>
-  <link rel="manifest" href="manifest.json?v=2.02" />
+  <link rel="manifest" href="manifest.json?v=2.05" />
   <link rel="icon" href="img/favicon-v2.png" />
   <link rel="apple-touch-icon" href="img/favicon-v2.png" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -16,7 +16,12 @@
   <script>
     window.deferredPrompt = null;
     window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
       window.deferredPrompt = e;
+      const btn1 = document.getElementById('installPwaBtn');
+      if (btn1) btn1.style.display = 'block';
+      const btn2 = document.getElementById('authInstallBtn');
+      if (btn2) btn2.style.display = 'block';
     });
   </script>
 </head>
@@ -56,6 +61,8 @@
         <div style="margin-top: 1.5rem; text-align: center;">
           <a href="#" onclick="window.otvoritTerms(); return false;" id="auth_terms_link" style="font-size: 0.8rem; color: #888; text-decoration: underline;">Podmienky používania a súkromie</a>
         </div>
+        
+        <button id="authInstallBtn" class="main" onclick="window.installPWA()" style="display: none; background-color: #2196F3; margin-top: 1.5rem; font-size: 1rem;">⬇️ Nainštalovať aplikáciu</button>
       </div>
     </div>
 
@@ -63,7 +70,7 @@
       <div class="header-logo-container"><img src="img/favicon.png" class="header-logo" alt="Logo"></div>
       <span class="header-title"><span style="color: #4CAF50;">BP</span> <span style="background: linear-gradient(to right, #4CAF50 50%, #2196F3 50%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">&amp;</span> <span style="color: #2196F3;">INR</span></span>
       <div style="justify-self: flex-end; display: flex; align-items: center;">
-        <button id="headerInstallBtn" onclick="window.installPWA()" style="color: #f39c12; font-size: 1.3rem; padding: 0 0.5rem; background: transparent; border: none;" title="Nainštalovať aplikáciu">⬇️</button>
+        <button id="installPwaBtn" onclick="window.installPWA()" style="display: none; background-color: #2196F3; color: white; border-radius: 0.5rem; padding: 0.35rem 0.6rem; font-size: 0.85rem; font-weight: bold; margin-right: 0.5rem; box-shadow: 0 0.15rem 0.3rem rgba(0,0,0,0.1);">Nainštalovať</button>
         <button onclick="window.toggleDropdown()"><span><span style="color: #4CAF50;">☰</span> <span style="color: #2196F3;">Menu</span></span></button>
       </div>
       <div id="dropdown" class="dropdown-content">
@@ -264,7 +271,7 @@
     </div>
 
     <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; z-index: 1000;"></div>
-    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v2.02</div>
+    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v2.05</div>
   </div>
 
   <script type="module" src="app.js"></script>

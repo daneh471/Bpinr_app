@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.02) je pripravená:",
-    updateChanges: "• Oprava offline režimu pre schválenie inštalácie prehliadačom (Lighthouse PWA fix).",
+    updateReady: "Nová verzia (v2.05) je pripravená:",
+    updateChanges: "• Pridané natívne inštalačné tlačidlo PWA (vzor PWABuilder).",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -181,10 +181,8 @@ const translations = {
     t3T: "3. Zálohovanie:", t3D: "Za zálohovanie svojich údajov (napríklad pomocou pravidelného exportu do PDF) ste plne zodpovedný vy.",
     t4T: "4. Zdravotné upozornenie:", t4D: "Aplikácia slúži výlučne na informatívne účely a evidenciu hodnôt. Nenahrádza odbornú lekársku starostlivosť.",
     btnUnderstand: "Rozumiem / Zatvoriť",
-    installApp: "⬇️ Nainštalovať aplikáciu",
-    msgIosInstall: "Na iPhone/iPad sa aplikácia inštaluje takto:\n\n1. Kliknite na ikonu Zdieľať (štvorec so šípkou dole na lište).\n2. Vyberte možnosť 'Pridať na plochu' (Add to Home Screen).",
-    msgNoInstall: "Prehliadač momentálne blokuje inštaláciu (alebo ju nepodporuje).\n\nSkúste to manuálne cez menu prehliadača -> Pridať na plochu (Add to Home Screen).",
-    msgAlreadyInstalled: "Aplikácia je už pravdepodobne nainštalovaná vo vašom zariadení."
+    installBtnHeader: "Nainštalovať",
+    installBtnFull: "⬇️ Nainštalovať aplikáciu"
   },
   de: {
     login: "Anmelden", register: "Registrierung", titleLogin: "Login", titleReg: "Neues Konto", namePh: "Dein Name", pinPh: "PIN (6 Stellen)",
@@ -217,8 +215,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v2.02) ist bereit:",
-    updateChanges: "• Offline-Modus für die Installationsfreigabe repariert (Lighthouse PWA Fix).",
+    updateReady: "Neue Version (v2.05) ist bereit:",
+    updateChanges: "• Nativer PWA-Installationsbutton hinzugefügt (wie PWABuilder).",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -235,10 +233,8 @@ const translations = {
     t3T: "3. Datensicherung:", t3D: "Sie sind für die Sicherung Ihrer Daten (z. B. durch regelmäßigen PDF-Export) selbst verantwortlich.",
     t4T: "4. Medizinischer Hinweis:", t4D: "Die App dient ausschließlich zu Informationszwecken und ersetzt keine professionelle medizinische Betreuung.",
     btnUnderstand: "Verstanden / Schließen",
-    installApp: "⬇️ App installieren",
-    msgIosInstall: "Auf dem iPhone/iPad wird die App so installiert:\n\n1. Tippen Sie auf das Teilen-Symbol (Quadrat mit Pfeil).\n2. Wählen Sie 'Zum Home-Bildschirm' (Add to Home Screen).",
-    msgNoInstall: "Der Browser blockiert die Installation (oder unterstützt sie nicht).\n\nVersuchen Sie es manuell über das Browser-Menü -> Zum Home-Bildschirm (Add to Home Screen).",
-    msgAlreadyInstalled: "Die App ist wahrscheinlich bereits auf Ihrem Gerät installiert."
+    installBtnHeader: "Installieren",
+    installBtnFull: "⬇️ App installieren"
   }
 };
 
@@ -530,7 +526,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '2.02';
+      const currentAppVersion = '2.05';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1375,7 +1371,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('sw.js?v=2.02').then(reg => {
+  navigator.serviceWorker.register('sw.js?v=2.05').then(reg => {
     setInterval(() => { reg.update(); }, 1000 * 60 * 60);
     reg.update();
 
@@ -1487,44 +1483,26 @@ window.goBackOneStep = () => {
   }
 };
 
+// --- PWA INŠTALÁCIA (ŠTANDARD PWABUILDER) ---
 window.installPWA = async () => {
-  // Kontrola pre iOS (Apple vôbec nepodporuje programovú inštaláciu PWA, musíme ukázať inštrukcie)
-  const isIos = /ipad|iphone|ipod/.test(navigator.userAgent.toLowerCase());
-  if (isIos && !window.MSStream) {
-    return window.showAlert(translations[window.currentLang].msgIosInstall);
+  if (!window.deferredPrompt) return;
+  // Ukáže natívne inštalačné okno prehliadača
+  window.deferredPrompt.prompt();
+  const { outcome } = await window.deferredPrompt.userChoice;
+  if (outcome === 'accepted') {
+    console.log('Používateľ nainštaloval aplikáciu');
   }
-
-  // Kontrola, či aplikácia momentálne už nebeží v nainštalovanom režime (Standalone)
-  if (window.matchMedia('(display-mode: standalone)').matches) {
-    return window.showAlert(translations[window.currentLang].msgAlreadyInstalled || "Aplikácia je už nainštalovaná vo vašom zariadení.");
-  }
-
-  // Ak je event pripravený a sme na Androide/Windows/Mac
-  if (window.deferredPrompt) {
-    // Zobrazíme natívny inštalačný dialóg prehliadača
-    window.deferredPrompt.prompt();
-    
-    // Počkáme, ako sa používateľ rozhodol (Inštalovať / Zrušiť)
-    const { outcome } = await window.deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      console.log('Užívateľ prijal inštaláciu');
-    }
-    // Po použití sa musí prompt vymazať (dá sa použiť iba raz)
-    window.deferredPrompt = null;
-    
-    // Skryjeme inštalačné tlačidlo
-    const installBtn = document.getElementById('headerInstallBtn');
-    if (installBtn) installBtn.style.display = 'none';
-  } else {
-    window.showAlert(translations[window.currentLang].msgNoInstall);
-  }
+  window.deferredPrompt = null;
+  // Skryje tlačidlá
+  const btn1 = document.getElementById('installPwaBtn');
+  if (btn1) btn1.style.display = 'none';
+  const btn2 = document.getElementById('authInstallBtn');
+  if (btn2) btn2.style.display = 'none';
 };
 
 window.addEventListener('appinstalled', () => {
   window.deferredPrompt = null;
-  // Skryjeme inštalačné tlačidlo aj po úspešnej inštalácii
-  const installBtn = document.getElementById('headerInstallBtn');
-  if (installBtn) installBtn.style.display = 'none';
-  
-  window.showToast(translations[window.currentLang].msgAlreadyInstalled || "Aplikácia bola nainštalovaná");
+  if (document.getElementById('installPwaBtn')) document.getElementById('installPwaBtn').style.display = 'none';
+  if (document.getElementById('authInstallBtn')) document.getElementById('authInstallBtn').style.display = 'none';
+  window.showToast("Nainštalované");
 });

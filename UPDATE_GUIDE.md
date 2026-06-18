@@ -1,8 +1,8 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.02):
-- ✅ PWA: Opravený skrytý pád aplikácie pri Chrome PWA offline teste.
-- ✅ PWA: Úprava manifestu a odinštalovanie konfliktného scope/id parametra.
+## Zmeny v tejto verzii (v2.05):
+- ✅ PWA: Pridané oficiálne inštalačné tlačidlo "Nainštalovať" podľa vzoru PWABuilder.
+- ✅ PWA: Tlačidlo je inteligentné, zjaví sa len vtedy, keď prehliadač aplikáciu schváli.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -10,7 +10,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v2.02: Bulletproof PWA offline catch for Lighthouse validation"
+git commit -m "Update v2.05: Add smart PWA install button"
 git push -u origin main --force
 ```
 
