@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.12) je pripravená:",
-    updateChanges: "• Tvrdý reštart a vyčistenie starých zaseknutých inštalácií prehliadača.",
+    updateReady: "Nová verzia (v2.13) je pripravená:",
+    updateChanges: "• Bulletproof Service Worker: oprava chyby 'addAll', vďaka ktorej sa aplikácia vždy úspešne nainštaluje.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -213,8 +213,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmDelMed: "Dieses Medikament wirklich löschen?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v2.12) ist bereit:",
-    updateChanges: "• Harter Neustart und Bereinigung alter festgefahrener Browserinstallationen.",
+    updateReady: "Neue Version (v2.13) ist bereit:",
+    updateChanges: "• Bulletproof Service Worker: Behebung des 'addAll'-Fehlers für garantierte Installation.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -522,7 +522,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '2.12';
+      const currentAppVersion = '2.13';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1356,7 +1356,7 @@ window.forceUpdateCheck = () => {
 
 if ('serviceWorker' in navigator) {
   // Agresívne vyčistenie starých PWA chýb z prehliadača (Zabitie ducha verzie 1.99)
-  const FORCE_CLEAR_KEY = 'bp_inr_force_clear_v2.12';
+  const FORCE_CLEAR_KEY = 'bp_inr_force_clear_v2.13';
   if (!localStorage.getItem(FORCE_CLEAR_KEY)) {
     localStorage.setItem(FORCE_CLEAR_KEY, 'done');
     navigator.serviceWorker.getRegistrations().then(regs => {
@@ -1384,7 +1384,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.12').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.13').then(reg => {
     setInterval(() => { reg.update().catch(()=>{}); }, 1000 * 60 * 60);
     reg.update().catch(()=>{});
 

@@ -1,8 +1,8 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.12):
-- ✅ PWA: Pridané "agresívne" vymazanie cache na zabitie starých, zaseknutých PWA inštalácií (ako v1.99).
-- ✅ PWA: Opravený syntaxový preklep v hlavičke manifestu.
+## Zmeny v tejto verzii (v2.13):
+- ✅ PWA: Kompletne prepísaný inštalačný proces v `sw.js`, ktorý ignoruje chyby súborov (tzv. fault-tolerant inštalácia).
+- ✅ PWA: Definitívne odstránenie problému "Failed to execute addAll", ktorý bránil updatom.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -10,7 +10,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v2.12: Hard reset caches to kill stuck v1.99 service worker"
+git commit -m "Update v2.13: Bulletproof Service Worker installation"
 git push -u origin main --force
 ```
 

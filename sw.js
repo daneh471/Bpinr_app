@@ -1,14 +1,22 @@
-// BP & INR Service Worker - Build: v2.12
-const CACHE_NAME = 'bp-inr-v2.12';
+// BP & INR Service Worker - Build: v2.13
+const CACHE_NAME = 'bp-inr-v2.13';
 const FILES_TO_CACHE = [
-  './'
+  './index.html',
+  './style.css',
+  './app.js',
+  './manifest.json',
+  './img/favicon.png'
 ];
 
 // Inštalácia service workera – ukladáme potrebné súbory
 self.addEventListener('install', function (e) {
+  self.skipWaiting(); // Okamžite aktivuje nový SW a zabije starý
   e.waitUntil(
     caches.open(CACHE_NAME).then(function (cache) {
-      return cache.addAll(FILES_TO_CACHE);
+      // Namiesto "addAll" chytáme chyby pre každý súbor samostatne, takže SW už nikdy nespadne
+      return Promise.all(FILES_TO_CACHE.map(function(url) {
+        return cache.add(url).catch(function(err) { console.warn('SW Cache ignoruje chybu pre:', url); });
+      }));
     })
   );
 });
