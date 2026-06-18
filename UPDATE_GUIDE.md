@@ -17,7 +17,7 @@ git push -u origin main --force
 
 ## ⏳ Čo sa stane potom:
 1. GitHub aktualizuje stránku (1-2 minúty)
-2. Service Worker detekuje zmenu (v1.72)
+2. Service Worker detekuje zmenu (v1.75)
 3. Stlačením **OK** v aplikácii sa vykoná aktualizácia
 4. Nová verzia BP & INR je pripravená! 🎉
 
