@@ -134,11 +134,11 @@ window.getVahaHistory = () => {
 const translations = {
   sk: {
     login: "Prihlásiť sa", register: "Registrácia", titleLogin: "Prihlásenie", titleReg: "Nový účet", namePh: "Tvoje meno", pinPh: "PIN (6 číslic)", 
-    pinConfPh: "Zopakuj PIN", createBtn: "Vytvoriť účet", menuArchive: "📄 Archív", menuManual: "➕ Manuálny záznam", menuInfo: "ℹ️ Informácie", 
-    menuSettings: "⚙️ Nastavenia", menuLogout: "🚪 Odhlásiť sa", addBtn: "Pridať záznam", backBtn: "Späť na formulár", saveBtn: "Uložiť", 
+    pinConfPh: "Zopakuj PIN", createBtn: "Vytvoriť účet", menuArchive: "📄 Archív", menuManual: "➕ Manuálny záznam", menuInfo: "ℹ️ Informácie",
+    menuSettings: "📜 Podmienky", menuLogout: "🚪 Odhlásiť sa", addBtn: "Pridať záznam", backBtn: "Späť na formulár", saveBtn: "Uložiť", 
     closeBtn: "Zatvoriť", titleArchive: "Archív záznamov", titleManual: "Manuálny záznam", titleInfo: "Informácie o hodnotách", titleSettings: "Nastavenia",
     menuLang: "Jazyk", selectLang: "Vybrať jazyk", menuToggleBp: "Prepnúť na: Iba Tlak", menuToggleFull: "Prepnúť na: INR + Tlak", userPrefix: "Používateľ",
-    infoTab: "Tabletka (počet tabletiek)", infoLow: "Nízky", infoNorm: "Normálny", infoHigh: "Vysoký", btnExportPdf: "Exportovať PDF",
+    infoTab: "Tabletka (počet tabletiek)", infoLow: "Nízky", infoNorm: "Normálny", infoHigh: "Vysoký", btnExportPdf: "Exportovať PDF", menuToggleBp: "🩺 Režim: Iba Tlak", menuToggleFull: "❤️ Režim: INR + Tlak",
     saved: "Uložené", msgOccupied: "Meno už je obsadené.", msgUserNotFound: "Používateľ neexistuje.", msgWrongPin: "Nesprávny PIN kód.",
     confirmDel: "Naozaj chcete vymazať tento záznam?", confirmLogout: "Ste si istý, že sa chcete odhlásiť?",
     confirmDelMed: "Naozaj chcete vymazať tento liek?",
@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.15) je pripravená:",
-    updateChanges: "• Úspešné prepojenie s Vercel produkciou a synchronizácia aktualizácií.",
+    updateReady: "Nová verzia (v2.16) je pripravená:",
+    updateChanges: "• UI: Vylepšené menu (ikony, oddeľovače).\n• UI: Prepracovaná spodná lišta v archíve záznamov s ikonami.\n• UI: Zjednotenie dizajnu a názvov tlačidiel.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -184,11 +184,11 @@ const translations = {
   },
   de: {
     login: "Anmelden", register: "Registrierung", titleLogin: "Login", titleReg: "Neues Konto", namePh: "Dein Name", pinPh: "PIN (6 Stellen)",
-    pinConfPh: "PIN wiederholen", createBtn: "Konto erstellen", menuArchive: "📄 Archiv", menuManual: "➕ Manueller Eintrag", menuInfo: "ℹ️ Informationen", 
-    menuSettings: "⚙️ Einstellungen", menuLogout: "🚪 Abmelden", addBtn: "Eintrag hinzufügen", backBtn: "Zurück zum Formular", saveBtn: "Speichern", 
+    pinConfPh: "PIN wiederholen", createBtn: "Konto erstellen", menuArchive: "📄 Archiv", menuManual: "➕ Manueller Eintrag", menuInfo: "ℹ️ Informationen",
+    menuSettings: "📜 Bedingungen", menuLogout: "🚪 Abmelden", addBtn: "Eintrag hinzufügen", backBtn: "Zurück zum Formular", saveBtn: "Speichern", 
     closeBtn: "Schließen", titleArchive: "Eintragshistorie", titleManual: "Manueller Eintrag", titleInfo: "Informationen zu Werten", titleSettings: "Einstellungen",
     menuLang: "Sprache", selectLang: "Sprache wählen", menuToggleBp: "Nur Blutdruck", menuToggleFull: "INR + Blutdruck", userPrefix: "Benutzer",
-    infoTab: "Tablette (Anzahl der Tabletten)", infoLow: "Niedrig", infoNorm: "Normal", infoHigh: "Hoch", btnExportPdf: "PDF Exportieren",
+    infoTab: "Tablette (Anzahl der Tabletten)", infoLow: "Niedrig", infoNorm: "Normal", infoHigh: "Hoch", btnExportPdf: "PDF Exportieren", menuToggleBp: "🩺 Modus: Nur Blutdruck", menuToggleFull: "❤️ Modus: INR + Blutdruck",
     saved: "Gespeichert", msgOccupied: "Name bereits vergeben.", msgUserNotFound: "Benutzer existiert nicht.", msgWrongPin: "Falscher PIN-Code.",
     infoInrNote: "(Standardbereich. Individuelle Zielwerte werden vom behandelnden Arzt festgelegt.)",
     legendTitle: "Farberklärung:",
@@ -210,11 +210,11 @@ const translations = {
     legGreen: "Grün – Werte sind in Ordnung",
     legRed: "Rot – hohe Werte",
     legBlue: "Blau – niedrige Werte",
-    confirmDel: "Diesen Eintrag wirklich löschen?", confirmLogout: "Möchten Sie sich wirklich abmelden?",
-    confirmDelMed: "Dieses Medikament wirklich löschen?",
+    confirmDel: "Diesen Eintrag wirklich löschen?",
+    confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v2.15) ist bereit:",
-    updateChanges: "• Erfolgreiche Verknüpfung mit Vercel-Produktion und Update-Synchronisierung.",
+    updateReady: "Neue Version (v2.16) ist bereit:",
+    updateChanges: "• UI: Verbessertes Menü (Icons, Trennlinien).\n• UI: Überarbeitete Fußleiste im Archiv mit Icons.\n• UI: Vereinheitlichung von Design und Schaltflächen.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -260,9 +260,13 @@ window.updateUI = () => {
     if (menuBtns[0]) menuBtns[0].innerText = t.menuProfile;
     if (menuBtns[1]) menuBtns[1].innerText = t.menuArchive;
     if (menuBtns[2]) menuBtns[2].innerText = t.menuManual;
-    if (menuBtns[3]) menuBtns[3].innerText = t.menuInfo;
-    if (menuBtns[4]) menuBtns[4].innerText = t.menuSettings;
+    if (document.getElementById('menu_terms')) {
+      document.getElementById('menu_terms').style.borderTop = '1px solid rgba(0,0,0,0.1)';
+      document.getElementById('menu_terms').style.paddingTop = '0.8rem';
+      document.getElementById('menu_terms').style.marginTop = '0.3rem';
+    }
     if (document.getElementById('menu_terms')) document.getElementById('menu_terms').innerText = t.termsMenu;
+    if (menuBtns[4]) menuBtns[4].innerText = t.menuSettings; // Index upravený po odstránení tlačidla
     if (menuBtns[8]) menuBtns[8].innerText = t.menuLogout;
   }
   if (document.getElementById('toggleBtn')) document.getElementById('toggleBtn').innerText = window.isBpOnly ? t.menuToggleFull : t.menuToggleBp;
@@ -291,8 +295,6 @@ window.updateUI = () => {
 
   document.querySelector('#formular .main').innerText = t.addBtn;
   document.querySelector('#archiv h2').innerText = t.titleArchive;
-  if (document.getElementById('btn_back_form')) document.getElementById('btn_back_form').innerText = t.backBtn;
-  if (document.getElementById('btn_open_monthly_archive')) document.getElementById('btn_open_monthly_archive').innerText = t.btnMonthlyArchive;
   
   document.querySelector('#manualModal h2').innerText = t.titleManual;
   document.getElementById('manualDatum').placeholder = "Dátum a čas (dd.mm.rr hh:mm)";
@@ -522,7 +524,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '2.15';
+      const currentAppVersion = '2.16';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -890,12 +892,16 @@ window.zobrazArchiv = function() {
 
   list.innerHTML = currentMonthHtml;
 
-  if (Object.keys(window.groupedOlder).length > 0) {
-    document.getElementById('btn_open_monthly_archive').style.display = 'block';
-  } else {
-    document.getElementById('btn_open_monthly_archive').style.display = 'none';
-    list.innerHTML += `<button class="main btn-monthly-archive" onclick="window.otvoritMesacnyArchivList()">${translations[window.currentLang].btnMonthlyArchive}</button>`;
-  }
+  // Pridanie spodnej lišty s tlačidlami
+  const hasOlderRecords = Object.keys(window.groupedOlder).length > 0;
+  const monthlyArchiveBtn = `<button class="info-icon-btn" style="background-color: #2196F3;" onclick="window.otvoritMesacnyArchivList()" title="${translations[window.currentLang].btnMonthlyArchive}">📅</button>`;
+  const infoBtn = `<button class="info-icon-btn" onclick="window.otvoritInfo()" title="${translations[window.currentLang].titleInfo}">i</button>`;
+
+  const footerHtml = `<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 0.8rem; border-top: 1px solid rgba(128,128,128,0.15);">
+    ${monthlyArchiveBtn}
+    ${infoBtn}
+  </div>`;
+  list.innerHTML += footerHtml;
 };
 
 window.otvoritMesacnyArchivList = () => {
@@ -1356,7 +1362,7 @@ window.forceUpdateCheck = () => {
 
 if ('serviceWorker' in navigator) {
   // Agresívne vyčistenie starých PWA chýb z prehliadača (Zabitie ducha verzie 1.99)
-  const FORCE_CLEAR_KEY = 'bp_inr_force_clear_v2.15';
+  const FORCE_CLEAR_KEY = 'bp_inr_force_clear_v2.16';
   if (!localStorage.getItem(FORCE_CLEAR_KEY)) {
     localStorage.setItem(FORCE_CLEAR_KEY, 'done');
     navigator.serviceWorker.getRegistrations().then(regs => {
@@ -1384,7 +1390,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.15').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.16').then(reg => {
     setInterval(() => { reg.update().catch(()=>{}); }, 1000 * 60 * 60);
     reg.update().catch(()=>{});
 

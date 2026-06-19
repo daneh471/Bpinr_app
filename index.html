@@ -64,8 +64,7 @@
         <button onclick="window.otvoritProfil(); window.toggleDropdown();">👤 Profil</button>
         <button onclick="window.zobrazArchiv(); window.toggleDropdown();">📄 Archív</button>
         <button onclick="window.otvoritModal(); window.toggleDropdown();">➕ Manuálny záznam</button>
-        <button onclick="window.otvoritInfo(); window.toggleDropdown();">ℹ️ Informácie</button>
-        <button style="display: none;" onclick="window.otvoritNastavenia(); window.toggleDropdown();">⚙️ Nastavenia</button>
+        <button style="display: none;" onclick="window.otvoritNastavenia(); window.toggleDropdown();">📜 Podmienky</button>
         <button onclick="window.otvoritTerms(); window.toggleDropdown();" id="menu_terms">📜 Podmienky</button>
         <button id="toggleBtn" onclick="window.toggleViewMode(); window.toggleDropdown();"></button>
         <button onclick="window.logout(); window.toggleDropdown();">🚪 Odhlásiť sa</button>
@@ -151,10 +150,6 @@
     <div id="archiv" style="display:none; width: 100%;">
       <h2>Archív záznamov</h2>
       <div id="userDisplay" style="margin-bottom: 0.8rem; font-weight: bold; opacity: 0.8; font-size: 0.9rem;"></div>
-      <div style="display: flex; gap: 0.4rem; width: 100%; margin-bottom: 0.5rem;">
-        <button id="btn_back_form" class="main" style="margin: 0; flex: 1; background-color: #4CAF50; font-size: 0.95rem;" onclick="window.skrytArchiv()">Späť na formulár</button>
-        <button id="btn_open_monthly_archive" class="main" style="margin: 0; flex: 1; background-color: #2196F3; font-size: 0.95rem; display: none;" onclick="window.otvoritMesacnyArchivList()">Mesačný archív</button>
-      </div>
       <div id="archivList" class="record-list"></div>
     </div>
 
@@ -258,7 +253,7 @@
     </div>
 
     <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; z-index: 1000;"></div>
-    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v2.15</div>
+    <div style="position: fixed; bottom: 0.3rem; left: 0.5rem; font-size: 0.65rem; opacity: 0.4; pointer-events: none; z-index: 999;">v2.16</div>
   </div>
 
   <script type="module" src="app.js"></script>

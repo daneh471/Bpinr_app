@@ -1,8 +1,9 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.15):
-- ✅ SYSTÉM: Synchronizácia produkčného nasadenia s Vercel serverom.
-- ✅ PWA: Posledný tvrdý reštart pre potvrdenie aktuálnej živej verzie.
+## Zmeny v tejto verzii (v2.16):
+- ✅ UI: Vylepšené menu (ikony, oddeľovače).
+- ✅ UI: Prepracovaná spodná lišta v archíve záznamov s ikonami.
+- ✅ UI: Zjednotenie dizajnu a názvov tlačidiel.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -10,7 +11,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Update v2.15: Vercel deployment sync fix"
+git commit -m "Update v2.16: UI improvements for menu and archive"
 git push -u origin main --force
 ```
 
