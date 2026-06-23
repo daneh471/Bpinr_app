@@ -1152,12 +1152,14 @@ window.zavrietModal = () => {
   document.getElementById('formular').style.display = 'block';
 };
 window.otvoritInfo = () => {
-  window.skrytVsetko();
+  // window.skrytVsetko(); // Ponecháva na pozadí archiv, ak je otvorený
   document.getElementById('infoModal').style.display = 'block';
 };
 window.zavrietInfo = () => {
-  window.skrytVsetko();
-  document.getElementById('formular').style.display = 'block';
+  document.getElementById('infoModal').style.display = 'none';
+  if (document.getElementById('archiv').style.display !== 'block') {
+    document.getElementById('formular').style.display = 'block';
+  }
 };
 window.showToast = (m) => { const t = document.getElementById('toast'); t.innerText = m; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); };
 
