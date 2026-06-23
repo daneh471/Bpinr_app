@@ -1,9 +1,10 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.17):
-- ✅ UI: Prepracovaná hlavička aplikácie (logo a text).
-- ✅ UI: Odstránený text verzie zo spodnej časti obrazovky.
-- ✅ FIX: Opravené gesto pre krok späť v archíve.
+## Zmeny v tejto verzii (v2.18):
+- ✅ FEAT: Pridané testovacie funkcie a menu pre administrátora.
+- ✅ FEAT: Pridaná automatická pripomienka na zálohovanie dát na konci mesiaca.
+- ✅ FEAT: Pridaná možnosť registrácie "superadmin" účtu.
+- ✅ FIX: Opravený preklep v hashovacom algoritme (vyššia bezpečnosť).
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -11,7 +12,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Release v2.17: Header UI redesign and bugfixes"
+git commit -m "Release v2.18: Admin features and EOM reminder"
 git push -u origin main --force
 ```
 

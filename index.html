@@ -69,7 +69,8 @@
         <button style="display: none;" onclick="window.otvoritNastavenia(); window.toggleDropdown();">📜 Podmienky</button>
         <button onclick="window.otvoritTerms(); window.toggleDropdown();" id="menu_terms">📜 Podmienky</button>
         <button id="toggleBtn" onclick="window.toggleViewMode(); window.toggleDropdown();"></button>
-        <button onclick="window.logout(); window.toggleDropdown();">🚪 Odhlásiť sa</button>
+        <button id="btn_admin_menu" onclick="window.otvoritAdminTestModal(); window.toggleDropdown();" style="background-color: #8e44ad; color: white; display: none;">🧪 Testovacie funkcie</button>
+        <button onclick="window.logout(); window.toggleDropdown();" style="border-top: 1px solid rgba(0,0,0,0.1); padding-top: 0.8rem; margin-top: 0.3rem;">🚪 Odhlásiť sa</button>
       </div>
     </header>
 
@@ -189,7 +190,7 @@
     <div id="settingsModal" class="modal"><div class="modal-content">
       <h3 id="set_title">Nastavenia</h3>
       <button class="main" id="btn_lang_menu" onclick="window.otvoritJazyk()">Jazyk</button>
-      <button class="main" id="btn_force_update" style="background-color: #f39c12; margin-bottom: 0.3rem;" onclick="window.forceUpdateCheck()">🔄 Vynútiť aktualizáciu</button>
+      <button class="main" id="btn_force_update" style="background-color: #f39c12;" onclick="window.forceUpdateCheck()">🔄 Vynútiť aktualizáciu</button>
       <button id="btn_import" class="main" style="background-color: #607D8B; display: none;" onclick="window.spustitImport()">Importovať dáta</button>
       <button class="main" id="set_close" onclick="window.zavrietNastavenia()">Zatvoriť</button>
     </div></div>
@@ -201,6 +202,14 @@
         <button class="secondary" onclick="window.changeLanguage('de')">DE</button>
       </div>
       <button class="main" id="lang_close" onclick="window.zavrietJazyk()">Zatvoriť</button>
+    </div></div>
+
+    <div id="adminTestModal" class="modal"><div class="modal-content">
+      <h3 id="admin_test_title">Testovacie funkcie</h3>
+      <div style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%; margin: 0.5rem 0;">
+          <button class="main" id="btn_test_eom_reminder" onclick="window.testEomReminder()">Test Ulozenie Dat</button>
+      </div>
+      <button class="main" id="admin_test_close" onclick="window.zavrietAdminTestModal()">Zatvoriť</button>
     </div></div>
 
     <div id="termsModal" class="modal"><div class="modal-content" style="text-align: left; overflow-y: auto; max-height: 85vh;">

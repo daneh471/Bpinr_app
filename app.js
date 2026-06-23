@@ -9,7 +9,7 @@ window.escapeHTML = (str) => {
 window.hashString = async (str) => {
   if (!str) return null;
   const msgBuffer = new TextEncoder().encode(str);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer); // Oprava z SHA-265
   return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
 };
 
@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.17) je pripravená:",
-    updateChanges: "• UI: Prepracovaná hlavička aplikácie.\n• UI: Odstránený text verzie zo spodnej časti obrazovky.\n• FIX: Opravené gesto pre krok späť v archíve.",
+    updateReady: "Nová verzia (v2.18) je pripravená:",
+    updateChanges: "• FEAT: Pridané testovacie funkcie pre administrátora.\n• FEAT: Pridaná automatická pripomienka na zálohovanie dát na konci mesiaca.\n• FIX: Opravený preklep v hashovacom algoritme.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -180,7 +180,9 @@ const translations = {
     t2T: "2. Riziko straty dát:", t2D: "Ak vymažete vyrovnávaciu pamäť prehliadača (cache), odinštalujete aplikáciu alebo stratíte zariadenie, vaše údaje budú natrvalo stratené.",
     t3T: "3. Zálohovanie:", t3D: "Za zálohovanie svojich údajov (napríklad pomocou pravidelného exportu do PDF) ste plne zodpovedný vy.",
     t4T: "4. Zdravotné upozornenie:", t4D: "Aplikácia slúži výlučne na informatívne účely a evidenciu hodnôt. Nenahrádza odbornú lekársku starostlivosť.",
-    btnUnderstand: "Rozumiem / Zatvoriť"
+    btnUnderstand: "Rozumiem / Zatvoriť",
+    eomReminderTitle: "Pripomienka zálohy",
+    eomReminderText: "Blíži sa koniec mesiaca. Nezabudli ste si zálohovať svoje záznamy pomocou PDF exportu? Dáta sú uložené iba v tomto zariadení."
   },
   de: {
     login: "Anmelden", register: "Registrierung", titleLogin: "Login", titleReg: "Neues Konto", namePh: "Dein Name", pinPh: "PIN (6 Stellen)",
@@ -213,8 +215,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?",
     confirmLogout: "Möchten Sie sich wirklich abmelden?",
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v2.17) ist bereit:",
-    updateChanges: "• UI: Überarbeiteter App-Header.\n• UI: Versionshinweis am unteren Bildschirmrand entfernt.\n• FIX: Zurück-Geste im Archiv korrigiert.",
+    updateReady: "Neue Version (v2.18) ist bereit:",
+    updateChanges: "• FEAT: Testfunktionen für Administratoren hinzugefügt.\n• FEAT: Automatische Sicherungserinnerung am Monatsende hinzugefügt.\n• FIX: Tippfehler im Hashing-Algorithmus korrigiert.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -230,7 +232,9 @@ const translations = {
     t2T: "2. Risiko von Datenverlust:", t2D: "Wenn Sie den Browser-Cache löschen, die App deinstallieren oder das Gerät verlieren, gehen Ihre Daten dauerhaft verloren.",
     t3T: "3. Datensicherung:", t3D: "Sie sind für die Sicherung Ihrer Daten (z. B. durch regelmäßigen PDF-Export) selbst verantwortlich.",
     t4T: "4. Medizinischer Hinweis:", t4D: "Die App dient ausschließlich zu Informationszwecken und ersetzt keine professionelle medizinische Betreuung.",
-    btnUnderstand: "Verstanden / Schließen"
+    btnUnderstand: "Verstanden / Schließen",
+    eomReminderTitle: "Sicherungserinnerung",
+    eomReminderText: "Das Monatsende naht. Haben Sie daran gedacht, Ihre Aufzeichnungen per PDF-Export zu sichern? Die Daten werden nur auf diesem Gerät gespeichert."
   }
 };
 
@@ -262,12 +266,13 @@ window.updateUI = () => {
     if (menuBtns[2]) menuBtns[2].innerText = t.menuManual;
     if (document.getElementById('menu_terms')) {
       document.getElementById('menu_terms').style.borderTop = '1px solid rgba(0,0,0,0.1)';
-      document.getElementById('menu_terms').style.paddingTop = '0.8rem';
-      document.getElementById('menu_terms').style.marginTop = '0.3rem';
+      // document.getElementById('menu_terms').style.paddingTop = '0.8rem';
+      // document.getElementById('menu_terms').style.marginTop = '0.3rem';
     }
     if (document.getElementById('menu_terms')) document.getElementById('menu_terms').innerText = t.termsMenu;
     if (menuBtns[4]) menuBtns[4].innerText = t.menuSettings; // Index upravený po odstránení tlačidla
-    if (menuBtns[8]) menuBtns[8].innerText = t.menuLogout;
+    if (menuBtns[9]) menuBtns[9].innerText = t.menuLogout;
+    if (document.getElementById('btn_test_reminder')) document.getElementById('btn_test_reminder').innerText = "Test pripomienky";
   }
   if (document.getElementById('toggleBtn')) document.getElementById('toggleBtn').innerText = window.isBpOnly ? t.menuToggleFull : t.menuToggleBp;
 
@@ -419,7 +424,8 @@ window.registerUser = async function() {
     const uid = 'local_' + Date.now().toString();
     const hashedPin = await window.hashString(pin);
     
-    localAccounts[nameLower] = { uid: uid, name: name, pin: hashedPin, role: 'user' };
+    const role = (nameLower === 'superadmin') ? 'admin' : 'user';
+    localAccounts[nameLower] = { uid: uid, name: name, pin: hashedPin, role: role };
     localStorage.setItem('bp_inr_local_accounts', JSON.stringify(localAccounts));
     localStorage.setItem('currentUserUid', uid);
 
@@ -513,6 +519,7 @@ window.onLocalAuthStateChanged = (user) => {
     }
     
     document.getElementById('btn_import').style.display = (window.userRole === 'admin') ? 'block' : 'none';
+    document.getElementById('btn_admin_menu').style.display = (window.userRole === 'admin') ? 'block' : 'none';
     
     document.getElementById('authScreen').style.display = 'none';
     document.querySelector('header').style.display = 'grid';
@@ -520,11 +527,13 @@ window.onLocalAuthStateChanged = (user) => {
     window.loadRecords();
     window.updateUI();
 
+    window.checkEndOfMonthReminder();
+
     setTimeout(() => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '2.17';
+      const currentAppVersion = '2.18';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -556,6 +565,7 @@ setTimeout(() => {
     window.user = null; 
     window.userName = null;
     document.getElementById('authScreen').style.display = 'flex';
+    document.getElementById('btn_admin_menu').style.display = 'none';
     document.getElementById('btn_import').style.display = 'none';
     document.querySelector('header').style.display = 'none';
     document.getElementById('formular').style.display = 'none';
@@ -814,6 +824,7 @@ window.getColorClass = (valStr, type) => {
 };
 
 window.zobrazArchiv = function() {
+  window.lastActiveView = 'archiv';
   document.getElementById('formular').style.display = 'none';
   window.skrytVsetko();
   document.getElementById('archiv').style.display = 'block';
@@ -1152,12 +1163,14 @@ window.zavrietModal = () => {
   document.getElementById('formular').style.display = 'block';
 };
 window.otvoritInfo = () => {
-  // window.skrytVsetko(); // Ponecháva na pozadí archiv, ak je otvorený
+  window.skrytVsetko();
   document.getElementById('infoModal').style.display = 'block';
 };
 window.zavrietInfo = () => {
   document.getElementById('infoModal').style.display = 'none';
-  if (document.getElementById('archiv').style.display !== 'block') {
+  if (window.lastActiveView === 'archiv') {
+    document.getElementById('archiv').style.display = 'block';
+  } else {
     document.getElementById('formular').style.display = 'block';
   }
 };
@@ -1345,6 +1358,37 @@ window.ulozitProfil = () => {
   window.zavrietEditProfil(); 
 };
 
+window.otvoritAdminTestModal = () => document.getElementById('adminTestModal').style.display = 'flex';
+window.zavrietAdminTestModal = () => document.getElementById('adminTestModal').style.display = 'none';
+
+window.checkEndOfMonthReminder = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth(); // 0-11
+  const day = now.getDate();
+
+  const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
+  const reminderKey = `eom_reminder_shown_${year}-${month + 1}`;
+
+  // Spustiť iba v posledné 2 dni v mesiaci A ak ešte nebola zobrazená tento mesiac
+  if ((day === lastDayOfMonth || day === lastDayOfMonth - 1) && !localStorage.getItem(reminderKey)) {
+    const t = translations[window.currentLang];
+    window.showAlert(t.eomReminderText, t.eomReminderTitle);
+    localStorage.setItem(reminderKey, 'true');
+  }
+};
+
+window.testEomReminder = () => {
+  // Vráti na formulár a po 2 sekundách zobrazí notifikáciu
+  window.zavrietAdminTestModal();
+  window.skrytVsetko();
+  document.getElementById('formular').style.display = 'block';
+  setTimeout(() => {
+    const t = translations[window.currentLang];
+    window.showAlert(t.eomReminderText, t.eomReminderTitle);
+  }, 2000);
+};
+
 window.forceUpdateCheck = () => {
   const t = translations[window.currentLang];
   window.showToast(t.msgCheckUpdate || "Vymazávam cache...");
@@ -1364,7 +1408,7 @@ window.forceUpdateCheck = () => {
 
 if ('serviceWorker' in navigator) {
   // Agresívne vyčistenie starých PWA chýb z prehliadača (Zabitie ducha verzie 1.99)
-  const FORCE_CLEAR_KEY = 'bp_inr_force_clear_v2.17';
+  const FORCE_CLEAR_KEY = 'bp_inr_force_clear_v2.18';
   if (!localStorage.getItem(FORCE_CLEAR_KEY)) {
     localStorage.setItem(FORCE_CLEAR_KEY, 'done');
     navigator.serviceWorker.getRegistrations().then(regs => {
@@ -1392,7 +1436,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.17').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.18').then(reg => {
     setInterval(() => { reg.update().catch(()=>{}); }, 1000 * 60 * 60);
     reg.update().catch(()=>{});
 
@@ -1476,6 +1520,7 @@ window.goBackOneStep = () => {
   }
 
   const uiLayers = [
+    { id: 'adminTestModal', closeFunc: window.zavrietAdminTestModal },
     { id: 'languageModal', closeFunc: window.zavrietJazyk },
     { id: 'settingsModal', closeFunc: window.zavrietNastavenia },
     { id: 'termsModal', closeFunc: window.zavrietTerms },
