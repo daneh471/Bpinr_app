@@ -27,50 +27,49 @@
           <h2 style="position: relative; z-index: 1; margin: 0; font-size: 1.8rem;"><span style="color: #4CAF50;">BP</span> <span style="background: linear-gradient(to right, #4CAF50 50%, #2196F3 50%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">&amp;</span> <span style="color: #2196F3;">INR</span></h2>
         </div>
         <div class="tab-buttons">
-          <button class="secondary" onclick="window.showLogin()">Prihlásiť sa</button>
-          <button class="secondary" onclick="window.showRegister()">Registrácia</button>
+          <button class="secondary" onclick="window.showLogin()" data-translate="login">Prihlásiť sa</button>
+          <button class="secondary" onclick="window.showRegister()" data-translate="register">Registrácia</button>
         </div>
         
         <div id="loginForm">
-          <h3>Prihlásenie</h3>
-          <input type="text" id="loginName" placeholder="Tvoje meno">
-          <input type="password" id="loginPin" placeholder="PIN (6 číslic)" maxlength="6">
-          <button class="main" onclick="window.loginUser(); return false;">Prihlásiť sa</button>
+          <h3 data-translate="titleLogin">Prihlásenie</h3>
+          <input type="text" id="loginName" data-translate-placeholder="namePh" placeholder="Tvoje meno">
+          <input type="password" id="loginPin" data-translate-placeholder="pinPh" placeholder="PIN (6 číslic)" maxlength="6">
+          <button class="main" onclick="window.loginUser(); return false;" data-translate="login">Prihlásiť sa</button>
           <p id="loginError" style="color: red; font-size: 0.9rem;"></p>
         </div>
 
         <div id="registerForm" style="display: none;">
-          <h3>Nový účet</h3>
-          <input type="text" id="regName" placeholder="Tvoje meno">
-          <input type="password" id="regPin" placeholder="PIN (6 číslic)" maxlength="6">
-          <input type="password" id="regPinConfirm" placeholder="Zopakuj PIN" maxlength="6">
-          <button class="main" onclick="window.registerUser(); return false;">Vytvoriť účet</button>
+          <h3 data-translate="titleReg">Nový účet</h3>
+          <input type="text" id="regName" data-translate-placeholder="namePh" placeholder="Tvoje meno">
+          <input type="password" id="regPin" data-translate-placeholder="pinPh" placeholder="PIN (6 číslic)" maxlength="6">
+          <input type="password" id="regPinConfirm" data-translate-placeholder="pinConfPh" placeholder="Zopakuj PIN" maxlength="6">
+          <button class="main" onclick="window.registerUser(); return false;" data-translate="createBtn">Vytvoriť účet</button>
           <p id="regError" style="color: red; font-size: 0.9rem;"></p>
         </div>
         
         <div style="margin-top: 1.5rem; text-align: center;">
-          <a href="#" onclick="window.otvoritTerms(); return false;" id="auth_terms_link" style="font-size: 0.8rem; color: #888; text-decoration: underline;">Podmienky používania a súkromie</a>
+          <a href="#" onclick="window.otvoritTerms(); return false;" id="auth_terms_link" style="font-size: 0.8rem; color: #888; text-decoration: underline;" data-translate="termsTitle">Podmienky používania a súkromie</a>
         </div>
       </div>
     </div>
 
     <header style="display:none;">
       <div style="display: flex; align-items: center; gap: 0.5rem; justify-self: start; flex-wrap: nowrap; white-space: nowrap;">
-        <span class="header-title"><span style="color: #4CAF50;">BP</span> <span style="background: linear-gradient(to right, #4CAF50 50%, #2196F3 50%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">&amp;</span> <span style="color: #2196F3;">INR</span></span>
-        <span style="font-size: 0.7rem; font-weight: 600; opacity: 0.7; background: linear-gradient(to right, #4CAF50, #2196F3); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Digitálny Denník</span>
+        <span class="header-title" style="background: linear-gradient(to right, #4CAF50, #2196F3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: clamp(1.1rem, 5vw, 1.4rem);">Digitálny denník</span>
       </div>
       <div style="justify-self: flex-end; display: flex; align-items: center;">
         <button onclick="window.toggleDropdown()"><span><span style="color: #4CAF50;">☰</span> <span style="color: #2196F3;">Menu</span></span></button>
       </div>
       <div id="dropdown" class="dropdown-content">
-        <button onclick="window.otvoritProfil(); window.toggleDropdown();">👤 Profil</button>
-        <button onclick="window.zobrazArchiv(); window.toggleDropdown();">📄 Archív</button>
-        <button onclick="window.otvoritModal(); window.toggleDropdown();">➕ Manuálny záznam</button>
+        <button onclick="window.otvoritProfil(); window.toggleDropdown();" data-translate="menuProfile">👤 Profil</button>
+        <button onclick="window.zobrazArchiv(); window.toggleDropdown();" data-translate="menuArchive">📄 Archív</button>
+        <button onclick="window.otvoritModal(); window.toggleDropdown();" data-translate="menuManual">➕ Manuálny záznam</button>
         <button style="display: none;" onclick="window.otvoritNastavenia(); window.toggleDropdown();">📜 Podmienky</button>
-        <button onclick="window.otvoritTerms(); window.toggleDropdown();" id="menu_terms">📜 Podmienky</button>
+        <button onclick="window.otvoritTerms(); window.toggleDropdown();" id="menu_terms" data-translate="termsMenu">📜 Podmienky</button>
         <button id="toggleBtn" onclick="window.toggleViewMode(); window.toggleDropdown();"></button>
         <button id="btn_admin_menu" onclick="window.otvoritAdminTestModal(); window.toggleDropdown();" style="background-color: #8e44ad; color: white; display: none;">🧪 Testovacie funkcie</button>
-        <button onclick="window.logout(); window.toggleDropdown();" style="border-top: 1px solid rgba(0,0,0,0.1); padding-top: 0.8rem; margin-top: 0.3rem;">🚪 Odhlásiť sa</button>
+        <button onclick="window.logout(); window.toggleDropdown();" style="border-top: 1px solid rgba(0,0,0,0.1); padding-top: 0.8rem; margin-top: 0.3rem;" data-translate="menuLogout">🚪 Odhlásiť sa</button>
       </div>
     </header>
 
@@ -80,7 +79,7 @@
       <input type="tel" id="sys" placeholder="SYS" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" />
       <input type="tel" id="dia" placeholder="DIA" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" />
       <input type="tel" id="pulse" placeholder="PULZ" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" />
-      <button class="main" style="background-color: #2196F3;" onclick="window.pridatZaznam()">Pridať záznam</button>
+      <button class="main" style="background-color: #2196F3;" onclick="window.pridatZaznam()" data-translate="addBtn">Pridať záznam</button>
       <div style="grid-column: span 2; margin-top: 0.5rem; display: flex; justify-content: center; opacity: 0.2;">
         <img src="img/favicon.png" style="width: min(12rem, 50vw); height: auto; object-fit: contain;" alt="BP & INR Logo">
       </div>
@@ -89,38 +88,38 @@
     <div id="viewProfileModal" style="display:none; width: 100%;">
       <h2 id="view_profile_title" style="margin-top: 0;">Môj Profil</h2>
       <div style="background-color: var(--card); padding: 1rem; border-radius: 1rem; text-align: left; border: 1px solid rgba(128,128,128,0.1); box-shadow: 0 0.2rem 0.5rem rgba(0,0,0,0.05); margin-bottom: 1rem;">
-        <p style="margin: 0;"><strong><span id="viewProfileMenoLabel">Meno:</span></strong> <span id="viewProfileMeno"></span></p>
-        <p style="margin: 0.5rem 0 0 0;"><strong><span id="viewProfilePriezviskoLabel">Priezvisko:</span></strong> <span id="viewProfilePriezvisko"></span></p>
-        <p style="margin: 0.5rem 0 0 0;"><strong><span id="viewProfileVahaLabel">Váha:</span></strong> <span id="viewProfileVaha"></span></p>
-        <p style="margin: 0.5rem 0 0 0;"><strong><span id="viewProfileVyskaLabel">Výška:</span></strong> <span id="viewProfileVyska"></span></p>
-        <div style="margin: 1rem 0 0 0;"><strong><span id="viewProfileKartaLabel">Karta liekov:</span></strong> <span onclick="window.exportMedCardPDF()" title="Export PDF" style="cursor: pointer; font-size: 1.2rem; margin-left: 0.4rem; vertical-align: middle; opacity: 0.8;">📄</span><div id="viewProfileKarta" ondblclick="window.otvoritEditKartu()" title="Dvojklik pre úpravu" style="display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.95rem; margin-top: 0.6rem; transition: 0.2s;"></div></div>
+        <p style="margin: 0;"><strong><span id="viewProfileMenoLabel" data-translate="namePhProfile">Meno</span>:</strong> <span id="viewProfileMeno"></span></p>
+        <p style="margin: 0.5rem 0 0 0;"><strong><span id="viewProfilePriezviskoLabel" data-translate="surnamePhProfile">Priezvisko</span>:</strong> <span id="viewProfilePriezvisko"></span></p>
+        <p style="margin: 0.5rem 0 0 0;"><strong><span id="viewProfileVahaLabel" data-translate="weightPhProfile">Váha</span>:</strong> <span id="viewProfileVaha"></span></p>
+        <p style="margin: 0.5rem 0 0 0;"><strong><span id="viewProfileVyskaLabel" data-translate="heightPhProfile">Výška</span>:</strong> <span id="viewProfileVyska"></span></p>
+        <div style="margin: 1rem 0 0 0;"><strong><span id="viewProfileKartaLabel" data-translate="medicationCardPh">Karta liekov</span>:</strong> <span onclick="window.exportMedCardPDF()" title="Export PDF" style="cursor: pointer; font-size: 1.2rem; margin-left: 0.4rem; vertical-align: middle; opacity: 0.8;">📄</span><div id="viewProfileKarta" ondblclick="window.otvoritEditKartu()" title="Dvojklik pre úpravu" style="display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.95rem; margin-top: 0.6rem; transition: 0.2s;"></div></div>
       </div>
       <div style="display: flex; gap: 0.4rem; width: 100%; margin-top: 0.5rem;">
-        <button class="main" id="profile_edit_btn" onclick="window.otvoritEditProfil()" style="background-color: #4CAF50; margin: 0; flex: 1; font-size: 0.95rem;">Upraviť profil</button>
-        <button class="main" id="edit_med_btn" onclick="window.otvoritEditKartu()" style="background-color: #2196F3; margin: 0; flex: 1; font-size: 0.95rem;">Pridať lieky</button>
+        <button class="main" id="profile_edit_btn" onclick="window.otvoritEditProfil()" style="background-color: #4CAF50; margin: 0; flex: 1; font-size: 0.95rem;" data-translate="editBtnProfile">Upraviť profil</button>
+        <button class="main" id="edit_med_btn" onclick="window.otvoritEditKartu()" style="background-color: #2196F3; margin: 0; flex: 1; font-size: 0.95rem;" data-translate="editMedBtn">Pridať lieky</button>
       </div>
       <div style="display: flex; gap: 0.4rem; width: 100%; margin-top: 0.4rem;">
-        <button class="main" id="btn_weight_archive" onclick="window.otvoritArchivVahy()" style="background-color: #2196F3; margin: 0; flex: 1; font-size: 0.95rem;">Archív váhy</button>
-        <button class="main" id="view_profile_close" onclick="window.zavrietViewProfil()" style="background-color: #4CAF50; margin: 0; flex: 1; font-size: 0.95rem;">Späť</button>
+        <button class="main" id="btn_weight_archive" onclick="window.otvoritArchivVahy()" style="background-color: #2196F3; margin: 0; flex: 1; font-size: 0.95rem;" data-translate="btnWeightArchive">Archív váhy</button>
+        <button class="main" id="view_profile_close" onclick="window.zavrietViewProfil()" style="background-color: #4CAF50; margin: 0; flex: 1; font-size: 0.95rem;" data-translate="closeBtn">Späť</button>
       </div>
     </div>
 
     <div id="editProfileModal" style="display:none; width: 100%;">
-      <h2 id="edit_profile_title" style="margin-top: 0;">Upraviť Profil</h2>
+      <h2 id="edit_profile_title" style="margin-top: 0;" data-translate="titleEditProfile">Upraviť Profil</h2>
       <div class="form-container">
-        <input type="text" id="profileMeno" placeholder="Meno" style="grid-column: span 2;">
-        <input type="text" id="profilePriezvisko" placeholder="Priezvisko" style="grid-column: span 2;">
-        <input type="tel" id="profileVaha" placeholder="Váha (kg)" inputmode="decimal">
-        <input type="tel" id="profileVyska" placeholder="Výška (cm)" inputmode="decimal">
+        <input type="text" id="profileMeno" data-translate-placeholder="namePhProfile" placeholder="Meno" style="grid-column: span 2;">
+        <input type="text" id="profilePriezvisko" data-translate-placeholder="surnamePhProfile" placeholder="Priezvisko" style="grid-column: span 2;">
+        <input type="tel" id="profileVaha" data-translate-placeholder="weightPhProfile" placeholder="Váha (kg)" inputmode="decimal">
+        <input type="tel" id="profileVyska" data-translate-placeholder="heightPhProfile" placeholder="Výška (cm)" inputmode="decimal">
       </div>
       <div style="display: flex; gap: 0.4rem; width: 100%; margin-top: 0.8rem;">
-        <button class="main" id="edit_profile_save" onclick="window.ulozitProfil()" style="background-color: #2196F3; margin: 0; flex: 1;">Uložiť profil</button>
-        <button class="main" id="edit_profile_close" onclick="window.zavrietEditProfil()" style="background-color: #4CAF50; margin: 0; flex: 1;">Zrušiť</button>
+        <button class="main" id="edit_profile_save" onclick="window.ulozitProfil()" style="background-color: #2196F3; margin: 0; flex: 1;" data-translate="saveBtnProfile">Uložiť profil</button>
+        <button class="main" id="edit_profile_close" onclick="window.zavrietEditProfil()" style="background-color: #4CAF50; margin: 0; flex: 1;" data-translate="closeBtn">Zrušiť</button>
       </div>
     </div>
 
     <div id="editMedicationModal" style="display:none; width: 100%;">
-      <h2 id="edit_med_title" style="margin-top: 0;">Pridať liek</h2>
+      <h2 id="edit_med_title" style="margin-top: 0;" data-translate="titleEditMed">Pridať liek</h2>
       <div class="form-container">
         <input type="text" id="medName" placeholder="Názov lieku" autocomplete="off" style="grid-column: span 2;">
         <input type="tel" id="medQty" placeholder="Množ." autocomplete="off">
@@ -145,28 +144,28 @@
         </select>
       </div>
       <div style="display: flex; gap: 0.4rem; width: 100%; margin-top: 0.8rem;">
-        <button class="main" id="edit_med_save" onclick="window.ulozitKartu()" style="background-color: #2196F3; margin: 0; flex: 1;">Uložiť</button>
-        <button class="main" id="edit_med_close" onclick="window.zavrietEditKartu()" style="background-color: #4CAF50; margin: 0; flex: 1;">Zrušiť</button>
+        <button class="main" id="edit_med_save" onclick="window.ulozitKartu()" style="background-color: #2196F3; margin: 0; flex: 1;" data-translate="saveBtn">Uložiť</button>
+        <button class="main" id="edit_med_close" onclick="window.zavrietEditKartu()" style="background-color: #4CAF50; margin: 0; flex: 1;" data-translate="closeBtn">Zrušiť</button>
       </div>
     </div>
 
     <div id="archiv" style="display:none; width: 100%;">
-      <h2>Archív záznamov</h2>
+      <h2 data-translate="titleArchive">Archív záznamov</h2>
       <div id="userDisplay" style="margin-bottom: 0.8rem; font-weight: bold; opacity: 0.8; font-size: 0.9rem;"></div>
       <div id="archivList" class="record-list"></div>
     </div>
 
     <div id="monthlyArchiveListModal" class="modal"><div class="modal-content" style="max-height: 80dvh; overflow-y: auto;">
-      <h3 id="monthly_list_title">Mesačný archív</h3>
+      <h3 id="monthly_list_title" data-translate="btnMonthlyArchive">Mesačný archív</h3>
       <div id="monthlyArchiveButtons" style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%;"></div>
-      <button class="main" onclick="window.zavrietMesacnyArchivList()" style="margin-top: 1rem; background-color: #777;">Zatvoriť</button>
+      <button class="main" onclick="window.zavrietMesacnyArchivList()" style="margin-top: 1rem; background-color: #777;" data-translate="closeBtn">Zatvoriť</button>
     </div></div>
 
     <div id="monthDetailModal" class="modal" style="background: var(--bg);"><div class="modal-content" style="max-width: 100%; width: 100%; height: 100%; border-radius: 0; padding: 1rem; overflow-y: auto;">
       <h2 id="monthDetailTitle" style="margin-top: env(safe-area-inset-top);"></h2>
       <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-        <button class="main" id="btn_pdf" onclick="window.potvrditExportPDF(false)" style="background-color: #2196F3; flex: 1;">PDF Export</button>
-        <button class="main" id="btn_close_month" onclick="window.zavrietMesacnyDetail()" style="background-color: #777; flex: 1;">Zatvoriť</button>
+        <button class="main" id="btn_pdf" onclick="window.potvrditExportPDF(false)" style="background-color: #2196F3; flex: 1;" data-translate="btnExportPdf">PDF Export</button>
+        <button class="main" id="btn_close_month" onclick="window.zavrietMesacnyDetail()" style="background-color: #777; flex: 1;" data-translate="closeBtn">Zatvoriť</button>
       </div>
       <div id="monthDetailContent" class="record-list"></div>
     </div></div>
@@ -182,26 +181,26 @@
         <input type="tel" id="manualPulse" placeholder="PULZ" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false">
       </div>
       <div style="display: flex; gap: 0.4rem; width: 100%; margin-top: 0.8rem;">
-        <button class="main" onclick="window.ulozitManual()" style="background-color: #2196F3; margin: 0; flex: 1;">Uložiť</button>
-        <button class="main" onclick="window.zavrietModal()" style="background-color: #4CAF50; margin: 0; flex: 1;">Zrušiť</button>
+        <button class="main" onclick="window.ulozitManual()" style="background-color: #2196F3; margin: 0; flex: 1;" data-translate="saveBtn">Uložiť</button>
+        <button class="main" onclick="window.zavrietModal()" style="background-color: #4CAF50; margin: 0; flex: 1;" data-translate="closeBtn">Zrušiť</button>
       </div>
     </div>
 
     <div id="settingsModal" class="modal"><div class="modal-content">
-      <h3 id="set_title">Nastavenia</h3>
-      <button class="main" id="btn_lang_menu" onclick="window.otvoritJazyk()">Jazyk</button>
-      <button class="main" id="btn_force_update" style="background-color: #f39c12;" onclick="window.forceUpdateCheck()">🔄 Vynútiť aktualizáciu</button>
+      <h3 id="set_title" data-translate="titleSettings">Nastavenia</h3>
+      <button class="main" id="btn_lang_menu" onclick="window.otvoritJazyk()" data-translate="menuLang">Jazyk</button>
+      <button class="main" id="btn_force_update" style="background-color: #f39c12;" onclick="window.forceUpdateCheck()" data-translate="menuForceUpdate">🔄 Vynútiť aktualizáciu</button>
       <button id="btn_import" class="main" style="background-color: #607D8B; display: none;" onclick="window.spustitImport()">Importovať dáta</button>
-      <button class="main" id="set_close" onclick="window.zavrietNastavenia()">Zatvoriť</button>
+      <button class="main" id="set_close" onclick="window.zavrietNastavenia()" data-translate="closeBtn">Zatvoriť</button>
     </div></div>
 
     <div id="languageModal" class="modal"><div class="modal-content">
-      <h3 id="lang_title">Vybrať jazyk</h3>
+      <h3 id="lang_title" data-translate="selectLang">Vybrať jazyk</h3>
       <div class="tab-buttons">
         <button class="secondary" onclick="window.changeLanguage('sk')">SK</button>
         <button class="secondary" onclick="window.changeLanguage('de')">DE</button>
       </div>
-      <button class="main" id="lang_close" onclick="window.zavrietJazyk()">Zatvoriť</button>
+      <button class="main" id="lang_close" onclick="window.zavrietJazyk()" data-translate="closeBtn">Zatvoriť</button>
     </div></div>
 
     <div id="adminTestModal" class="modal"><div class="modal-content">
@@ -213,35 +212,36 @@
     </div></div>
 
     <div id="termsModal" class="modal"><div class="modal-content" style="text-align: left; overflow-y: auto; max-height: 85vh;">
-      <h3 id="terms_title" style="margin-top:0;">Podmienky používania a Ochrana súkromia</h3>
+      <h3 id="terms_title" style="margin-top:0;" data-translate="termsTitle">Podmienky používania a Ochrana súkromia</h3>
       <div style="font-size: 0.9rem; line-height: 1.5; color: var(--text); opacity: 0.9;">
-        <p><strong id="t1_title">1. Lokálne úložisko:</strong> <span id="t1_desc">Vaše zdravotné záznamy sú ukladané výhradne vo vašom zariadení (v prehliadači). Aplikácia neodosiela ani nezálohuje vaše dáta na žiadne externé servery.</span></p>
-        <p><strong id="t2_title">2. Riziko straty dát:</strong> <span id="t2_desc" style="color: #ff1744;">Ak vymažete vyrovnávaciu pamäť prehliadača (cache), odinštalujete aplikáciu alebo stratíte zariadenie, vaše údaje budú natrvalo stratené a nebude možné ich obnoviť.</span></p>
-        <p><strong id="t3_title">3. Zálohovanie:</strong> <span id="t3_desc">Za zálohovanie svojich údajov (napríklad pomocou pravidelného exportu do PDF) je plne zodpovedný používateľ.</span></p>
-        <p><strong id="t4_title">4. Zdravotné upozornenie:</strong> <span id="t4_desc">Aplikácia slúži výlučne na informatívne účely a evidenciu hodnôt. Nenahrádza odbornú lekársku starostlivosť.</span></p>
+        <p><strong id="t1_title" data-translate="t1T">1. Lokálne úložisko:</strong> <span id="t1_desc" data-translate="t1D">Vaše zdravotné záznamy sú ukladané výhradne vo vašom zariadení (v prehliadači). Aplikácia neodosiela ani nezálohuje vaše dáta na žiadne externé servery.</span></p>
+        <p><strong id="t2_title" data-translate="t2T">2. Riziko straty dát:</strong> <span id="t2_desc" data-translate="t2D" style="color: var(--val-red, #ff1744);">Ak vymažete vyrovnávaciu pamäť prehliadača (cache), odinštalujete aplikáciu alebo stratíte zariadenie, vaše údaje budú natrvalo stratené a nebude možné ich obnoviť.</span></p>
+        <p><strong id="t3_title" data-translate="t3T">3. Zálohovanie:</strong> <span id="t3_desc" data-translate="t3D">Za zálohovanie svojich údajov (napríklad pomocou pravidelného exportu do PDF) je plne zodpovedný používateľ.</span></p>
+        <p><strong id="t4_title" data-translate="t4T">4. Zdravotné upozornenie:</strong> <span id="t4_desc" data-translate="t4D">Aplikácia slúži výlučne na informatívne účely a evidenciu hodnôt. Nenahrádza odbornú lekársku starostlivosť.</span></p>
+        <p><strong>5. Kontakt a podpora:</strong> V prípade otázok alebo technických problémov nás môžete kontaktovať na emailovej adrese: <a href="mailto:hotline.bpinr@outlook.sk" style="color: var(--link-color);">hotline.bpinr@outlook.sk</a></p>
       </div>
-      <button class="main" id="terms_close" onclick="window.zavrietTerms()" style="background-color: #4CAF50; margin-top: 1rem;">Rozumiem</button>
+      <button class="main" id="terms_close" onclick="window.zavrietTerms()" style="background-color: #4CAF50; margin-top: 1rem;" data-translate="btnUnderstand">Rozumiem</button>
     </div></div>
 
     <div id="infoModal" style="display:none; width: 100%;">
-      <h2 id="info_title" style="margin-top: 0;">Informácie o hodnotách</h2>
+      <h2 id="info_title" style="margin-top: 0;" data-translate="titleInfo">Informácie o hodnotách</h2>
       <div class="info-card">
-        <p id="info_tab_row"><strong>TAB:</strong> <span id="info_tab_desc">Tabletka (počet tabletiek)</span></p>
-        <p id="info_inr_row"><strong>INR:</strong> &lt;2 <span class="t-low">Nízky</span> | 2–3 <span class="t-norm">Normálny</span> | &gt;3 <span class="t-high">Vysoký</span><br><small id="info_inr_note" style="opacity: 0.8; font-style: italic;">(Štandardné rozmedzie. Individuálne cieľové hodnoty stanovuje ošetrujúci lekár.)</small></p>
-        <p><strong>SYS:</strong> &lt;90 <span class="t-low">Nízky</span> | 90–140 <span class="t-norm">Normálny</span> | &gt;140 <span class="t-high">Vysoký</span></p>
-        <p><strong>DIA:</strong> &lt;60 <span class="t-low">Nízky</span> | 60–90 <span class="t-norm">Normálny</span> | &gt;90 <span class="t-high">Vysoký</span></p>
-        <p><strong>PULZ:</strong> &lt;60 <span class="t-low">Nízky</span> | 60–100 <span class="t-norm">Normálny</span> | &gt;100 <span class="t-high">Vysoký</span></p>
+        <p id="info_tab_row"><strong>TAB:</strong> <span id="info_tab_desc" data-translate="infoTab">Tabletka (počet tabletiek)</span></p>
+        <p id="info_inr_row"><strong>INR:</strong> &lt;2 <span class="t-low" data-translate="infoLow">Nízky</span> | 2–3 <span class="t-norm" data-translate="infoNorm">Normálny</span> | &gt;3 <span class="t-high" data-translate="infoHigh">Vysoký</span><br><small id="info_inr_note" style="opacity: 0.8; font-style: italic;" data-translate="infoInrNote">(Štandardné rozmedzie. Individuálne cieľové hodnoty stanovuje ošetrujúci lekár.)</small></p>
+        <p><strong>SYS:</strong> &lt;90 <span class="t-low" data-translate="infoLow">Nízky</span> | 90–140 <span class="t-norm" data-translate="infoNorm">Normálny</span> | &gt;140 <span class="t-high" data-translate="infoHigh">Vysoký</span></p>
+        <p><strong>DIA:</strong> &lt;60 <span class="t-low" data-translate="infoLow">Nízky</span> | 60–90 <span class="t-norm" data-translate="infoNorm">Normálny</span> | &gt;90 <span class="t-high" data-translate="infoHigh">Vysoký</span></p>
+        <p><strong>PULZ:</strong> &lt;60 <span class="t-low" data-translate="infoLow">Nízky</span> | 60–100 <span class="t-norm" data-translate="infoNorm">Normálny</span> | &gt;100 <span class="t-high" data-translate="infoHigh">Vysoký</span></p>
         <hr style="opacity: 0.1; margin: 0.5rem 0;">
-        <p><strong><span id="info_legend_title">Vysvetlenie farieb:</span></strong></p>
+        <p><strong><span id="info_legend_title" data-translate="legendTitle">Vysvetlenie farieb:</span></strong></p>
         <div style="font-size: 0.8rem; line-height: 1.4;">
-          <div id="leg_item_purple"><span style="color:#9c27b0;">■</span> <span id="leg_purple">Fialová – neutrálne (cieľové hodnoty stanovuje lekár)</span></div>
-          <div id="leg_item_yellow"><span style="color:#ffeb3b;">■</span> <span id="leg_yellow">Žltá – neutrálne (hodnoty stanovuje lekár)</span></div>
-          <div><span style="color:#00e676;">■</span> <span id="leg_green">Zelená – hodnoty sú v poriadku</span></div>
-          <div><span style="color:#ff1744;">■</span> <span id="leg_red">Červená – vysoké hodnoty</span></div>
-          <div><span style="color:#2196F3;">■</span> <span id="leg_blue">Modrá – nízke hodnoty</span></div>
+          <div id="leg_item_purple"><span style="color:#9c27b0;">■</span> <span id="leg_purple" data-translate="legPurple">Fialová – neutrálne (cieľové hodnoty stanovuje lekár)</span></div>
+          <div id="leg_item_yellow"><span style="color:#ffeb3b;">■</span> <span id="leg_yellow" data-translate="legYellow">Žltá – neutrálne (hodnoty stanovuje lekár)</span></div>
+          <div><span style="color:#00e676;">■</span> <span id="leg_green" data-translate="legGreen">Zelená – hodnoty sú v poriadku</span></div>
+          <div><span style="color:#ff1744;">■</span> <span id="leg_red" data-translate="legRed">Červená – vysoké hodnoty</span></div>
+          <div><span style="color:#2196F3;">■</span> <span id="leg_blue" data-translate="legBlue">Modrá – nízke hodnoty</span></div>
         </div>
       </div>
-      <button class="main" onclick="window.zavrietInfo()" style="background-color: #4CAF50;">Späť</button>
+      <button class="main" onclick="window.zavrietInfo()" style="background-color: #4CAF50;" data-translate="closeBtn">Späť</button>
     </div>
 
     <div id="customDialog" class="modal"><div class="modal-content">
@@ -254,13 +254,13 @@
     </div></div>
 
     <div id="archivVahyModal" style="display:none; width: 100%;">
-      <h2 id="vaha_title" style="margin-top:0;">Archív váhy</h2>
+      <h2 id="vaha_title" style="margin-top:0;" data-translate="titleWeightArchive">Archív váhy</h2>
       <div style="display: flex; gap: 0.4rem; margin-bottom: 0.8rem; width: 100%;">
-        <input type="tel" id="novaVaha" placeholder="Nová váha (kg)" inputmode="decimal" style="flex: 2;">
-        <button id="btn_add_weight" class="main" style="background-color: #2196F3; margin:0; flex: 1;" onclick="window.pridatVahu()">Pridať</button>
+        <input type="tel" id="novaVaha" data-translate-placeholder="newWeightPh" placeholder="Nová váha (kg)" inputmode="decimal" style="flex: 2;">
+        <button id="btn_add_weight" class="main" style="background-color: #2196F3; margin:0; flex: 1;" onclick="window.pridatVahu()" data-translate="addBtnShort">Pridať</button>
       </div>
       <div id="archivVahyList" class="record-list" style="max-height: 55dvh; overflow-y: auto; padding-bottom: 0;"></div>
-      <button id="btn_close_weight" class="main" onclick="window.zavrietArchivVahy()" style="background-color: #4CAF50; margin-top: 0.8rem;">Zatvoriť</button>
+      <button id="btn_close_weight" class="main" onclick="window.zavrietArchivVahy()" style="background-color: #4CAF50; margin-top: 0.8rem;" data-translate="closeBtn">Zatvoriť</button>
     </div>
 
     <div id="toast" style="display:none; position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 0.8rem 1.2rem; border-radius: 0.5rem; z-index: 1000;"></div>

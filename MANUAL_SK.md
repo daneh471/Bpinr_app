@@ -79,3 +79,9 @@ Aplikácia je prispôsobená pre moderné smartfóny.
 ## ⚠️ Dôležité upozornenie pre používateľov
 Keďže je aplikácia 100% offline, vaše dáta **nie sú zálohované na cloude**. Ak si v prehliadači kompletne **vymažete vyrovnávaciu pamäť (cache)**, alebo stratíte telefón, **dáta budú nenávratne stratené**. 
 Preto sa odporúča aspoň raz za čas urobiť si **PDF export svojich dát a uložiť si ho do súborov v telefóne.**
+
+---
+
+## 11. 📧 Kontakt a Podpora
+Ak máte akékoľvek otázky, návrhy na zlepšenie alebo ste narazili na technický problém, neváhajte nás kontaktovať na emailovej adrese:
+**hotline.bpinr@outlook.sk**

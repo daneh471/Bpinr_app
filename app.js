@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.18) je pripravená:",
-    updateChanges: "• FEAT: Pridané testovacie funkcie pre administrátora.\n• FEAT: Pridaná automatická pripomienka na zálohovanie dát na konci mesiaca.\n• FIX: Opravený preklep v hashovacom algoritme.",
+    updateReady: "Nová verzia (v2.19) je pripravená:",
+    updateChanges: "• UI: Vylepšený nadpis a responzivita.\n• FEAT: Pridaný kontaktný email.\n• CODE: Zjednodušený systém prekladov.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -177,7 +177,7 @@ const translations = {
     termsMenu: "📜 Podmienky",
     termsTitle: "Podmienky používania a Ochrana súkromia",
     t1T: "1. Lokálne úložisko:", t1D: "Vaše zdravotné záznamy sú ukladané výhradne vo vašom zariadení. Aplikácia neodosiela ani nezálohuje vaše dáta na externé servery.",
-    t2T: "2. Riziko straty dát:", t2D: "Ak vymažete vyrovnávaciu pamäť prehliadača (cache), odinštalujete aplikáciu alebo stratíte zariadenie, vaše údaje budú natrvalo stratené.",
+    t2T: "2. Riziko straty dát:", t2D: "Ak vymažete vyrovnávaciu pamäť prehliadača (cache), odinštalujete aplikáciu alebo stratíte zariadenie, vaše údaje budú natrvalo stratené a nebude možné ich obnoviť.",
     t3T: "3. Zálohovanie:", t3D: "Za zálohovanie svojich údajov (napríklad pomocou pravidelného exportu do PDF) ste plne zodpovedný vy.",
     t4T: "4. Zdravotné upozornenie:", t4D: "Aplikácia slúži výlučne na informatívne účely a evidenciu hodnôt. Nenahrádza odbornú lekársku starostlivosť.",
     btnUnderstand: "Rozumiem / Zatvoriť",
@@ -229,7 +229,7 @@ const translations = {
     termsMenu: "📜 Bedingungen",
     termsTitle: "Nutzungsbedingungen & Datenschutz",
     t1T: "1. Lokaler Speicher:", t1D: "Ihre Gesundheitsdaten werden ausschließlich auf Ihrem Gerät gespeichert. Die App sendet oder sichert keine Daten auf externen Servern.",
-    t2T: "2. Risiko von Datenverlust:", t2D: "Wenn Sie den Browser-Cache löschen, die App deinstallieren oder das Gerät verlieren, gehen Ihre Daten dauerhaft verloren.",
+    t2T: "2. Risiko von Datenverlust:", t2D: "Wenn Sie den Browser-Cache löschen, die App deinstallieren oder das Gerät verlieren, gehen Ihre Daten dauerhaft verloren und können nicht wiederhergestellt werden.",
     t3T: "3. Datensicherung:", t3D: "Sie sind für die Sicherung Ihrer Daten (z. B. durch regelmäßigen PDF-Export) selbst verantwortlich.",
     t4T: "4. Medizinischer Hinweis:", t4D: "Die App dient ausschließlich zu Informationszwecken und ersetzt keine professionelle medizinische Betreuung.",
     btnUnderstand: "Verstanden / Schließen",
@@ -246,104 +246,20 @@ window.currentLang = localStorage.getItem('zdravie_lang') || 'sk';
 if (window.isBpOnly) document.body.classList.add('bp-only');
 
 window.updateUI = () => {
-  const t = translations[window.currentLang] || translations['sk'];
-  document.querySelectorAll('.tab-buttons .secondary')[0].innerText = t.login;
-  document.querySelectorAll('.tab-buttons .secondary')[1].innerText = t.register;
-  document.querySelector('#loginForm h3').innerText = t.titleLogin;
-  document.querySelector('#registerForm h3').innerText = t.titleReg;
-  document.getElementById('loginName').placeholder = t.namePh;
-  document.getElementById('loginPin').placeholder = t.pinPh;
-  document.getElementById('regName').placeholder = t.namePh;
-  document.getElementById('regPin').placeholder = t.pinPh;
-  document.getElementById('regPinConfirm').placeholder = t.pinConfPh;
-  document.querySelectorAll('#loginForm .main')[0].innerText = t.login;
-  document.querySelectorAll('#registerForm .main')[0].innerText = t.createBtn;
-  
-  const menuBtns = document.querySelectorAll('#dropdown button');
-  if (menuBtns && menuBtns.length > 0) {
-    if (menuBtns[0]) menuBtns[0].innerText = t.menuProfile;
-    if (menuBtns[1]) menuBtns[1].innerText = t.menuArchive;
-    if (menuBtns[2]) menuBtns[2].innerText = t.menuManual;
-    if (document.getElementById('menu_terms')) {
-      document.getElementById('menu_terms').style.borderTop = '1px solid rgba(0,0,0,0.1)';
-      // document.getElementById('menu_terms').style.paddingTop = '0.8rem';
-      // document.getElementById('menu_terms').style.marginTop = '0.3rem';
-    }
-    if (document.getElementById('menu_terms')) document.getElementById('menu_terms').innerText = t.termsMenu;
-    if (menuBtns[4]) menuBtns[4].innerText = t.menuSettings; // Index upravený po odstránení tlačidla
-    if (menuBtns[9]) menuBtns[9].innerText = t.menuLogout;
-    if (document.getElementById('btn_test_reminder')) document.getElementById('btn_test_reminder').innerText = "Test pripomienky";
-  }
+  const t = translations[window.currentLang] || translations.sk;
+
+  document.querySelectorAll('[data-translate]').forEach(el => {
+    const key = el.getAttribute('data-translate');
+    if (t[key]) el.innerText = t[key];
+  });
+
+  document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-translate-placeholder');
+    if (t[key]) el.placeholder = t[key];
+  });
+
   if (document.getElementById('toggleBtn')) document.getElementById('toggleBtn').innerText = window.isBpOnly ? t.menuToggleFull : t.menuToggleBp;
-
-  document.querySelector('#viewProfileModal h2').innerText = t.titleViewProfile;
-  document.getElementById('viewProfileMenoLabel').innerText = t.namePhProfile + ':';
-  document.getElementById('viewProfilePriezviskoLabel').innerText = t.surnamePhProfile + ':';
-  document.getElementById('viewProfileVahaLabel').innerText = t.weightPhProfile.replace(' (kg)', '') + ':'; 
-  document.getElementById('viewProfileVyskaLabel').innerText = t.heightPhProfile.replace(' (cm)', '') + ':'; 
-  document.getElementById('viewProfileKartaLabel').innerText = t.medicationCardPh + ':';
-  document.getElementById('profile_edit_btn').innerText = t.editBtnProfile;
-  document.getElementById('edit_med_btn').innerText = t.editMedBtn;
-  document.getElementById('view_profile_close').innerText = t.closeBtn;
-
-  document.querySelector('#editProfileModal h2').innerText = t.titleEditProfile;
-  document.getElementById('profileMeno').placeholder = t.namePhProfile;
-  document.getElementById('profilePriezvisko').placeholder = t.surnamePhProfile;
-  document.getElementById('profileVaha').placeholder = t.weightPhProfile;
-  document.getElementById('profileVyska').placeholder = t.heightPhProfile;
-  document.getElementById('edit_profile_save').innerText = t.saveBtnProfile;
-  document.getElementById('edit_profile_close').innerText = t.closeBtn;
-
-  document.getElementById('edit_med_title').innerText = t.titleEditMed;
-  document.getElementById('edit_med_save').innerText = t.saveBtn;
-  document.getElementById('edit_med_close').innerText = t.closeBtn;
-
-  document.querySelector('#formular .main').innerText = t.addBtn;
-  document.querySelector('#archiv h2').innerText = t.titleArchive;
-  
-  document.querySelector('#manualModal h2').innerText = t.titleManual;
-  document.getElementById('manualDatum').placeholder = "Dátum a čas (dd.mm.rr hh:mm)";
-  document.querySelector('#manualModal .main').innerText = t.saveBtn;
-  document.querySelectorAll('#manualModal .main')[1].innerText = t.closeBtn;
-
-  document.querySelector('#settingsModal h3').innerText = t.titleSettings;
-  document.getElementById('btn_lang_menu').innerText = t.menuLang;
-  document.getElementById('set_close').innerText = t.closeBtn;
-  document.getElementById('lang_title').innerText = t.selectLang;
-  document.getElementById('lang_close').innerText = t.closeBtn;
-
-  document.querySelector('#infoModal h2').innerText = t.titleInfo;
-  document.querySelector('#infoModal .main').innerText = t.closeBtn;
-  document.getElementById('info_tab_desc').innerText = t.infoTab;
-  document.getElementById('info_inr_note').innerText = t.infoInrNote;
-
-  document.getElementById('info_legend_title').innerText = t.legendTitle;
-  document.getElementById('leg_purple').innerText = t.legPurple;
-  document.getElementById('leg_yellow').innerText = t.legYellow;
-  document.getElementById('leg_green').innerText = t.legGreen;
-  document.getElementById('leg_red').innerText = t.legRed;
-  document.getElementById('leg_blue').innerText = t.legBlue;
-
-  if (document.getElementById('auth_terms_link')) document.getElementById('auth_terms_link').innerText = t.termsTitle;
-  if (document.getElementById('terms_title')) document.getElementById('terms_title').innerText = t.termsTitle;
-  if (document.getElementById('t1_title')) document.getElementById('t1_title').innerText = t.t1T;
-  if (document.getElementById('t1_desc')) document.getElementById('t1_desc').innerText = t.t1D;
-  if (document.getElementById('t2_title')) document.getElementById('t2_title').innerText = t.t2T;
-  if (document.getElementById('t2_desc')) document.getElementById('t2_desc').innerText = t.t2D;
-  if (document.getElementById('t3_title')) document.getElementById('t3_title').innerText = t.t3T;
-  if (document.getElementById('t3_desc')) document.getElementById('t3_desc').innerText = t.t3D;
-  if (document.getElementById('t4_title')) document.getElementById('t4_title').innerText = t.t4T;
-  if (document.getElementById('t4_desc')) document.getElementById('t4_desc').innerText = t.t4D;
-  if (document.getElementById('terms_close')) document.getElementById('terms_close').innerText = t.btnUnderstand;
-
   document.getElementById('userDisplay').innerText = window.userName ? `${t.userPrefix}: ${window.userName}` : '';
-  document.getElementById('btn_pdf').innerText = t.btnExportPdf;
-  document.getElementById('btn_close_month').innerText = t.closeBtn;
-  if (document.getElementById('btn_force_update')) document.getElementById('btn_force_update').innerText = t.menuForceUpdate;
-
-  document.querySelectorAll('.t-low').forEach(el => el.innerText = t.infoLow);
-  document.querySelectorAll('.t-norm').forEach(el => el.innerText = t.infoNorm);
-  document.querySelectorAll('.t-high').forEach(el => el.innerText = t.infoHigh);
 
   ['inr','tab','sys','dia','pulse'].forEach(id => {
     const el = document.getElementById(id);
@@ -533,12 +449,12 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '2.18';
+      const currentAppVersion = '2.19';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
         
-        let msg = t.updateReady.replace(' je pripravená:', ' bola úspešne nainštalovaná.') + '\n\n' + t.updateChanges;
+        let msg = t.updateReady.replace(' je pripravená:', ' bola úspešne nainštalovaná.') + '\n\n' + t.updateChanges.replace(/\\n/g, '\n');
         if (window.currentLang === 'de') msg = t.updateReady.replace(' ist bereit:', ' wurde erfolgreich installiert.') + '\n\n' + t.updateChanges;
         
         document.getElementById('dialogMessage').innerText = msg;
@@ -1436,7 +1352,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.18').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.19').then(reg => {
     setInterval(() => { reg.update().catch(()=>{}); }, 1000 * 60 * 60);
     reg.update().catch(()=>{});
 

@@ -1,18 +1,17 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.18):
-- ✅ FEAT: Pridané testovacie funkcie a menu pre administrátora.
-- ✅ FEAT: Pridaná automatická pripomienka na zálohovanie dát na konci mesiaca.
-- ✅ FEAT: Pridaná možnosť registrácie "superadmin" účtu.
-- ✅ FIX: Opravený preklep v hashovacom algoritme (vyššia bezpečnosť).
+## Zmeny v tejto verzii (v2.19):
+- ✅ **UI/UX:** Vylepšený nadpis v hornej lište, pridaný kontaktný email a zlepšená responzivita modálnych okien.
+- ✅ **CODE:** Výrazne zjednodušený a zautomatizovaný systém prekladov pre jednoduchšiu údržbu.
+- ✅ **FIX:** Drobné opravy a vylepšenia stability.
 
 ## POSTUP - Skopíruj do Git Bash:
 
 ```bash
-cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr_app_v1_01"
+cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr.app"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Release v2.18: Admin features and EOM reminder"
+git commit -m "Release v2.19: UI improvements and translation refactor"
 git push -u origin main --force
 ```
 
