@@ -29,7 +29,7 @@ window.exportMedCardPDF = () => {
   pdfWrapper.style.minHeight = '277mm';
 
   const watermark = document.createElement('img');
-  watermark.src = window.isBpOnly ? 'img/bp karta liekov archiv vahy.png' : 'img/bp inr.png';
+  watermark.src = 'img/icon_v2.png';
   watermark.style.position = 'absolute';
   watermark.style.top = '138.5mm';
   watermark.style.left = '50%';
@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.19) je pripravená:",
-    updateChanges: "• UI: Vylepšený nadpis a responzivita.\n• FEAT: Pridaný kontaktný email.\n• CODE: Zjednodušený systém prekladov.",
+    updateReady: "Nová verzia (v2.20) je pripravená:",
+    updateChanges: "• FIX: Vynútená aktualizácia ikony aplikácie pre všetkých používateľov.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -449,7 +449,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = '2.19';
+      const currentAppVersion = 'v2.20';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -911,7 +911,7 @@ window.exportToPDF = (isCurrent = false) => {
   pdfWrapper.style.minHeight = '277mm'; 
 
   const watermark = document.createElement('img');
-  watermark.src = window.isBpOnly ? 'img/bp.png' : 'img/bp inr.png';
+  watermark.src = 'img/icon_v2.png';
   watermark.style.position = 'absolute';
   watermark.style.top = '138.5mm'; 
   watermark.style.left = '50%';
@@ -1352,7 +1352,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.19').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.20').then(reg => {
     setInterval(() => { reg.update().catch(()=>{}); }, 1000 * 60 * 60);
     reg.update().catch(()=>{});
 

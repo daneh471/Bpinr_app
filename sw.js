@@ -1,12 +1,12 @@
-// BP & INR Service Worker - Build: v2.19
-const CACHE_NAME = 'bp-inr-v2.19';
+// BP & INR Service Worker - Build: v2.20
+const CACHE_NAME = 'bp-inr-v2.20';
 const FILES_TO_CACHE = [
   './',
   './index.html',
   './style.css',
   './app.js',
   './manifest.json',
-  './img/favicon.png'
+  './img/icon_v2.png'
 ];
 
 // Inštalácia service workera – ukladáme potrebné súbory
