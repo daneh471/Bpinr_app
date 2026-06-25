@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.24) je pripravená:",
-    updateChanges: "• FEAT: Názov v hlavičke zmenený na 'BP & INR Denník' pre lepšiu konzistenciu a responzivitu.",
+    updateReady: "Nová verzia (v2.25) je pripravená:",
+    updateChanges: "• FIX: Opravená responzivita hlavičky a pozadie aplikácie v APK.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -214,9 +214,9 @@ const translations = {
     legBlue: "Blau – niedrige Werte",
     confirmDel: "Diesen Eintrag wirklich löschen?",
     confirmLogout: "Möchten Sie sich wirklich abmelden?", 
-    confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v2.24) ist bereit:",
-    updateChanges: "• FEAT: Header-Titel zu 'BP & INR Denník' für bessere Konsistenz und Responsivität geändert.",
+    confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?", 
+    updateReady: "Neue Version (v2.25) ist bereit:",
+    updateChanges: "• FIX: Header-Responsivität und App-Hintergrund im APK korrigiert.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -449,7 +449,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = 'v2.24';
+      const currentAppVersion = 'v2.25';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1354,7 +1354,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.24').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.25').then(reg => {
     setInterval(() => { reg.update().catch(()=>{}); }, 1000 * 60 * 60);
     reg.update().catch(()=>{});
 
