@@ -1,7 +1,7 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.23):
-- ✅ **FIX:** Opravená responzivita hlavičky, aby sa názov správne skrátil na úzkych obrazovkách.
+## Zmeny v tejto verzii (v2.24):
+- ✅ **FEAT:** Názov v hlavičke zmenený na "BP & INR Denník" pre lepšiu konzistenciu a responzivitu.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -9,7 +9,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr.app"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Release v2.23: Fix header title responsiveness"
+git commit -m "Release v2.24: Change header title to 'BP & INR Denník'"
 git push -u origin main --force
 ```
 

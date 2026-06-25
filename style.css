@@ -59,11 +59,11 @@ header {
 }
 .header-logo-container { height: 100%; display: flex; align-items: center; justify-content: flex-start; overflow: hidden; }
 .header-logo { height: 85%; max-height: 38px; width: auto; object-fit: contain; pointer-events: none; }
-sp.header-title {
+.header-title {
   justify-self: center;
   text-align: center;
   font-weight: 800;
-  font-size: clamp(1.1rem, 5vw, 1.4rem);
+  font-size: clamp(1rem, 4.5vw, 1.4rem); /* Responzívna veľkosť písma */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
