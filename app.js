@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.31) je pripravená:",
-    updateChanges: "• FIX: Pridaná konfigurácia pre správne zobrazenie v APK (tmavý režim a celá obrazovka). Vyžaduje reinštaláciu APK.",
+    updateReady: "Nová verzia (v2.32) je pripravená:",
+    updateChanges: "• FIX: Pridaná farba stavového riadku pre jednotný vzhľad v APK. Vyžaduje reinštaláciu APK.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -214,9 +214,9 @@ const translations = {
     legBlue: "Blau – niedrige Werte",
     confirmDel: "Diesen Eintrag wirklich löschen?",
     confirmLogout: "Möchten Sie sich wirklich abmelden?",
-    confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v2.31) ist bereit:",
-    updateChanges: "• FIX: Konfiguration für korrekte APK-Anzeige hinzugefügt (Dunkelmodus & Vollbild). APK-Neuinstallation erforderlich.",
+    confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?", 
+    updateReady: "Neue Version (v2.32) ist bereit:",
+    updateChanges: "• FIX: Statusleistenfarbe für einheitliches APK-Erscheinungsbild hinzugefügt. APK-Neuinstallation erforderlich.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -449,7 +449,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = 'v2.31';
+      const currentAppVersion = 'v2.32';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1354,7 +1354,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.31').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.32').then(reg => {
     setInterval(() => { reg.update().catch(()=>{}); }, 1000 * 60 * 60);
     reg.update().catch(()=>{});
 

@@ -3,6 +3,7 @@
   "host": "app.bpinr.sk",
   "name": "BP & INR",
   "themeColor": "#000000",
+  "statusBarColor": "#000000",
   "navigationBarColor": "#000000",
   "backgroundColor": "#000000",
   "enableNotifications": false,

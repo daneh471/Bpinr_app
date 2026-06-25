@@ -1,7 +1,7 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.31):
-- ✅ **FIX:** Pridaná konfigurácia pre správne zobrazenie v APK (tmavý režim a celá obrazovka). **Vyžaduje reinštaláciu APK!**
+## Zmeny v tejto verzii (v2.32):
+- ✅ **FIX:** Pridaná farba stavového riadku pre jednotný vzhľad v APK. **Vyžaduje reinštaláciu APK!**
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -9,7 +9,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr.app"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Release v2.31: Add twa-manifest.json for native APK build"
+git commit -m "Release v2.32: Add statusBarColor to TWA manifest"
 git push -u origin main --force
 ```
 
