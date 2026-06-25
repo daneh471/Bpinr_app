@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.29) je pripravená:",
-    updateChanges: "• FIX: Opravené zobrazenie na celú obrazovku, odstránené prázdne pásy hore a dole.",
+    updateReady: "Nová verzia (v2.30) je pripravená:",
+    updateChanges: "• CHORE: Vrátené späť zmeny zobrazenia na celú obrazovku.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -213,10 +213,10 @@ const translations = {
     legRed: "Rot – hohe Werte",
     legBlue: "Blau – niedrige Werte",
     confirmDel: "Diesen Eintrag wirklich löschen?",
-    confirmLogout: "Möchten Sie sich wirklich abmelden?",
-    confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v2.29) ist bereit:",
-    updateChanges: "• FIX: Vollbildanzeige korrigiert, leere Balken oben und unten entfernt.",
+    confirmLogout: "Möchten Sie sich wirklich abmelden?", 
+    confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?", 
+    updateReady: "Neue Version (v2.30) ist bereit:",
+    updateChanges: "• CHORE: Vollbild-Layout-Änderungen zurückgesetzt.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -449,7 +449,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = 'v2.29';
+      const currentAppVersion = 'v2.30';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1354,7 +1354,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.29').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.30').then(reg => {
     setInterval(() => { reg.update().catch(()=>{}); }, 1000 * 60 * 60);
     reg.update().catch(()=>{});
 

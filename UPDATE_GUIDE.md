@@ -1,7 +1,7 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.29):
-- ✅ **FIX:** Opravené zobrazenie na celú obrazovku, odstránené prázdne pásy hore a dole.
+## Zmeny v tejto verzii (v2.30):
+- ✅ **CHORE:** Vrátené späť zmeny zobrazenia na celú obrazovku.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -9,7 +9,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr.app"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Release v2.29: Fix fullscreen layout"
+git commit -m "Release v2.30: Revert fullscreen layout changes"
 git push -u origin main --force
 ```
 
