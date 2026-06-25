@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.20) je pripravená:",
-    updateChanges: "• FIX: Vynútená aktualizácia ikony aplikácie pre všetkých používateľov.",
+    updateReady: "Nová verzia (v2.21) je pripravená:",
+    updateChanges: "• FIX: Opravený manifest pre správne generovanie Android aplikácie (rieši chybu 404).",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -213,10 +213,10 @@ const translations = {
     legRed: "Rot – hohe Werte",
     legBlue: "Blau – niedrige Werte",
     confirmDel: "Diesen Eintrag wirklich löschen?",
-    confirmLogout: "Möchten Sie sich wirklich abmelden?",
-    confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v2.18) ist bereit:",
-    updateChanges: "• FEAT: Testfunktionen für Administratoren hinzugefügt.\n• FEAT: Automatische Sicherungserinnerung am Monatsende hinzugefügt.\n• FIX: Tippfehler im Hashing-Algorithmus korrigiert.",
+    confirmLogout: "Möchten Sie sich wirklich abmelden?", 
+    confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?", 
+    updateReady: "Neue Version (v2.21) ist bereit:",
+    updateChanges: "• FIX: Manifest für korrekte Android-App-Generierung repariert (behebt 404-Fehler).",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -449,7 +449,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = 'v2.20';
+      const currentAppVersion = 'v2.21';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -820,15 +820,17 @@ window.zobrazArchiv = function() {
   list.innerHTML = currentMonthHtml;
 
   // Pridanie spodnej lišty s tlačidlami
+  const footer = document.getElementById('archivFooter');
   const hasOlderRecords = Object.keys(window.groupedOlder).length > 0;
   const monthlyArchiveBtn = `<button class="info-icon-btn" style="background-color: #2196F3;" onclick="window.otvoritMesacnyArchivList()" title="${translations[window.currentLang].btnMonthlyArchive}">📅</button>`;
   const infoBtn = `<button class="info-icon-btn" onclick="window.otvoritInfo()" title="${translations[window.currentLang].titleInfo}">i</button>`;
 
-  const footerHtml = `<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 0.8rem; border-top: 1px solid rgba(128,128,128,0.15);">
+  const footerHtml = `<div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
     ${monthlyArchiveBtn}
     ${infoBtn}
   </div>`;
-  list.innerHTML += footerHtml;
+  
+  if (footer) footer.innerHTML = footerHtml;
 };
 
 window.otvoritMesacnyArchivList = () => {
@@ -1352,7 +1354,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.20').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.21').then(reg => {
     setInterval(() => { reg.update().catch(()=>{}); }, 1000 * 60 * 60);
     reg.update().catch(()=>{});
 

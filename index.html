@@ -65,8 +65,7 @@
         <button onclick="window.otvoritProfil(); window.toggleDropdown();" data-translate="menuProfile">👤 Profil</button>
         <button onclick="window.zobrazArchiv(); window.toggleDropdown();" data-translate="menuArchive">📄 Archív</button>
         <button onclick="window.otvoritModal(); window.toggleDropdown();" data-translate="menuManual">➕ Manuálny záznam</button>
-        <button style="display: none;" onclick="window.otvoritNastavenia(); window.toggleDropdown();">📜 Podmienky</button>
-        <button onclick="window.otvoritTerms(); window.toggleDropdown();" id="menu_terms" data-translate="termsMenu">📜 Podmienky</button>
+        <button onclick="window.otvoritTerms(); window.toggleDropdown();" data-translate="termsMenu">📜 Podmienky</button>
         <button id="toggleBtn" onclick="window.toggleViewMode(); window.toggleDropdown();"></button>
         <button id="btn_admin_menu" onclick="window.otvoritAdminTestModal(); window.toggleDropdown();" style="background-color: #8e44ad; color: white; display: none;">🧪 Testovacie funkcie</button>
         <button onclick="window.logout(); window.toggleDropdown();" style="border-top: 1px solid rgba(0,0,0,0.1); padding-top: 0.8rem; margin-top: 0.3rem;" data-translate="menuLogout">🚪 Odhlásiť sa</button>
@@ -153,6 +152,7 @@
       <h2 data-translate="titleArchive">Archív záznamov</h2>
       <div id="userDisplay" style="margin-bottom: 0.8rem; font-weight: bold; opacity: 0.8; font-size: 0.9rem;"></div>
       <div id="archivList" class="record-list"></div>
+      <div id="archivFooter"></div>
     </div>
 
     <div id="monthlyArchiveListModal" class="modal"><div class="modal-content" style="max-height: 80dvh; overflow-y: auto;">
