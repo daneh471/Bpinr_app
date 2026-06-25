@@ -1,7 +1,7 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.33):
-- ✅ **FIX:** Finálna oprava zobrazenia na celú obrazovku. **Vyžaduje reinštaláciu APK!**
+## Zmeny v tejto verzii (v2.34):
+- ✅ **FIX:** Oprava pozície formulára, ktorý bol posunutý príliš vysoko a nebolo ho vidieť celý.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -9,7 +9,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr.app"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Release v2.33: Final fix for fullscreen layout"
+git commit -m "Release v2.34: Fix form position"
 git push -u origin main --force
 ```
 
