@@ -1,0 +1,29 @@
+{
+  "packageId": "sk.bpinr.app",
+  "host": "app.bpinr.sk",
+  "name": "BP & INR",
+  "themeColor": "#000000",
+  "navigationBarColor": "#000000",
+  "backgroundColor": "#000000",
+  "enableNotifications": false,
+  "startUrl": "/",
+  "iconUrl": "https://app.bpinr.sk/img/icon_v2.png",
+  "maskableIconUrl": "https://app.bpinr.sk/img/icon_v2.png",
+  "appVersionName": "1.1.0",
+  "appVersionCode": 2,
+  "signingKey": {
+    "path": "./signing.keystore",
+    "alias": "android"
+  },
+  "webManifestUrl": "https://app.bpinr.sk/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {
+    "playBilling": {
+      "enabled": false
+    }
+  },
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "display": "fullscreen"
+}
