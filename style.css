@@ -7,7 +7,7 @@
 
 img { max-width: 100%; height: auto; }
 
-html { background-color: var(--bg); transition: background-color 0.3s; height: 100%; width: 100%; overflow: hidden; }
+html { background-color: #000000; transition: background-color 0.3s; height: 100%; width: 100%; overflow: hidden; }
 
 body { 
   background-color: var(--bg); 
@@ -31,7 +31,7 @@ body {
   position: relative;
   padding: calc(3.5rem + env(safe-area-inset-top)) 1rem calc(2rem + env(safe-area-inset-bottom)) 1rem;
   text-align: center;
-  background-color: var(--bg); /* Nastaví pozadie pre celý wrapper */
+  background-color: transparent; /* Pozadie bude presvitať z html */
   display: flex;
   flex-direction: column;
   margin: 0 auto;

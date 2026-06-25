@@ -1,7 +1,7 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.27):
-- ✅ **FIX:** Pridané nastavenia pre správne zobrazenie pozadia v Android (APK) aplikácii.
+## Zmeny v tejto verzii (v2.28):
+- ✅ **FIX:** Finálna oprava pozadia aplikácie pre APK. **Vyžaduje vygenerovanie nového APK súboru!**
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -9,7 +9,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr.app"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Release v2.27: Add manifest and meta tags for native APK background"
+git commit -m "Release v2.28: Final fix for APK background rendering"
 git push -u origin main --force
 ```
 

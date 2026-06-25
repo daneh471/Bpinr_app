@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.27) je pripravená:",
-    updateChanges: "• FIX: Pridané nastavenia pre správne zobrazenie pozadia v Android (APK) aplikácii.",
+    updateReady: "Nová verzia (v2.28) je pripravená:",
+    updateChanges: "• FIX: Finálna oprava pozadia aplikácie pre APK. Je potrebná reinštalácia APK.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -214,9 +214,9 @@ const translations = {
     legBlue: "Blau – niedrige Werte",
     confirmDel: "Diesen Eintrag wirklich löschen?",
     confirmLogout: "Möchten Sie sich wirklich abmelden?", 
-    confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?", 
-    updateReady: "Neue Version (v2.27) ist bereit:",
-    updateChanges: "• FIX: Einstellungen für korrekte Hintergrundanzeige in der Android (APK) App hinzugefügt.",
+    confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
+    updateReady: "Neue Version (v2.28) ist bereit:",
+    updateChanges: "• FIX: Endgültige Korrektur des App-Hintergrunds für APK. Eine Neuinstallation der APK ist erforderlich.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -449,7 +449,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = 'v2.27';
+      const currentAppVersion = 'v2.28';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1354,7 +1354,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.27').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.28').then(reg => {
     setInterval(() => { reg.update().catch(()=>{}); }, 1000 * 60 * 60);
     reg.update().catch(()=>{});
 
