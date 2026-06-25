@@ -59,7 +59,15 @@ header {
 }
 .header-logo-container { height: 100%; display: flex; align-items: center; justify-content: flex-start; overflow: hidden; }
 .header-logo { height: 85%; max-height: 38px; width: auto; object-fit: contain; pointer-events: none; }
-.header-title { justify-self: center; text-align: center; font-weight: 800; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0 2px; }
+sp.header-title {
+  justify-self: center;
+  text-align: center;
+  font-weight: 800;
+  font-size: clamp(1.1rem, 5vw, 1.4rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 header button { background-color: transparent; border: none; font-size: 1rem; cursor: pointer; padding: 5px; color: var(--text); display: flex; align-items: center; justify-self: flex-end; white-space: nowrap; }
 
 .dropdown-content { display: none; position: absolute; right: 0.5rem; top: calc(3.8rem + env(safe-area-inset-top)); background-color: var(--card); width: max-content; max-width: 90vw; box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.3); z-index: 1001; border-radius: 1rem; overflow: hidden; max-height: calc(100dvh - 5rem); flex-direction: column; padding: 0.5rem; box-sizing: border-box; border: 1px solid rgba(128,128,128,0.2); }
