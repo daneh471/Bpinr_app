@@ -1,7 +1,7 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.21):
-- ✅ **FIX:** Opravený `manifest.json` pre správne generovanie Android aplikácie (rieši chybu 404).
+## Zmeny v tejto verzii (v2.22):
+- ✅ **FIX:** Opravené pozadie aplikácie, aby sa na mobilných zariadeniach nezobrazoval biely pás.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -9,7 +9,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr.app"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Release v2.21: Fix manifest for PWA builder"
+git commit -m "Release v2.22: Fix background color on mobile devices"
 git push -u origin main --force
 ```
 
