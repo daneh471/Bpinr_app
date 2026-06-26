@@ -162,9 +162,9 @@ const translations = {
     legYellow: "Žltá – neutrálne (hodnoty stanovuje lekár)",
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
-    legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.38) je pripravená:",
-    updateChanges: "• FEATURE: Vylepšenie archívu váhy, každý záznam sa ukladá samostatne.",
+    legBlue: "Modrá – nízke hodnoty",    
+    updateReady: "Nová verzia (v2.39) je pripravená:",
+    updateChanges: "• UI: Vylepšenie tmavého režimu (true black) a zjednotenie farby systémových líšt.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -213,10 +213,10 @@ const translations = {
     legRed: "Rot – hohe Werte",
     legBlue: "Blau – niedrige Werte",
     confirmDel: "Diesen Eintrag wirklich löschen?",
-    confirmLogout: "Möchten Sie sich wirklich abmelden?", 
-    confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue verzia (v2.38) ist bereit:",
-    updateChanges: "• FEATURE: Verbesserungen im Gewichtsarchiv, jeder Eintrag wird separat gespeichert.",
+    confirmLogout: "Möchten Sie sich wirklich abmelden?",
+    confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",    
+    updateReady: "Neue Version (v2.39) ist bereit:",
+    updateChanges: "• UI: Verbesserung des Dark Mode (True Black) & Vereinheitlichung der Systemleisten.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -449,7 +449,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = 'v2.38';
+      const currentAppVersion = 'v2.39';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1317,7 +1317,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.38').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.39').then(reg => {
     setInterval(() => { reg.update().catch(()=>{}); }, 1000 * 60 * 60);
     reg.update().catch(()=>{});
 
