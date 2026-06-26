@@ -1,7 +1,7 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.39):
-- ✅ **UI:** Vylepšenie tmavého režimu (true black) a zjednotenie farby systémových líšt.
+## Zmeny v tejto verzii (v2.40):
+- ✅ **UI:** Aplikácia je teraz výhradne v tmavom režime (dark-mode only).
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -9,7 +9,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr.app"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Release v2.39: UI improvements (true black theme)"
+git commit -m "Release v2.40: Enforce dark-mode only"
 git push -u origin main --force
 ```
 
