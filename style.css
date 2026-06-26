@@ -1,5 +1,5 @@
 :root { --bg: #f5f5f5; --header: #e8e8e8; --text: #000; --card: #fff; }
-:root.dark { --bg: #121212; --header: #121212; --text: #fff; --card: #1E1E1E; }
+:root.dark { --bg: #121212; --header: #1E1E1E; --text: #fff; --card: #1E1E1E; }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; scrollbar-width: none; -ms-overflow-style: none; }
@@ -47,13 +47,12 @@ header {
   width: 100%;
   max-width: 30rem;
   z-index: 1000;
-  background-color: var(--header); 
+  background-color: transparent; 
   padding: env(safe-area-inset-top) 10px 0 10px;
   height: 45px;
   display: grid;
   grid-template-columns: 80px 1fr auto;
   align-items: center; 
-  box-shadow: 0 0.125rem 0.3125rem rgba(0,0,0,0.1); 
   box-sizing: border-box;
 }
 .header-logo-container { height: 100%; display: flex; align-items: center; justify-content: flex-start; overflow: hidden; }
