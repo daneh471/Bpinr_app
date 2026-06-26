@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.36) je pripravená:",
-    updateChanges: "• UI: Finálne úpravy vzhľadu, priehľadná hlavička pre lepšiu konzistenciu.",
+    updateReady: "Nová verzia (v2.37) je pripravená:",
+    updateChanges: "• FIX: Obnovenie pôvodného vzhľadu hlavičky pre lepšiu kompatibilitu.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -215,8 +215,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?",
     confirmLogout: "Möchten Sie sich wirklich abmelden?", 
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v2.36) ist bereit:",
-    updateChanges: "• UI: Finale Anpassungen am Erscheinungsbild, transparenter Header für bessere Konsistenz.",
+    updateReady: "Neue verzia (v2.37) ist bereit:",
+    updateChanges: "• FIX: Wiederherstellung des ursprünglichen Header-Designs für bessere Kompatibilität.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -449,7 +449,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = 'v2.36';
+      const currentAppVersion = 'v2.37';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1355,7 +1355,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.36').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.37').then(reg => {
     setInterval(() => { reg.update().catch(()=>{}); }, 1000 * 60 * 60);
     reg.update().catch(()=>{});
 
