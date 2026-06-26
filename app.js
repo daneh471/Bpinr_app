@@ -163,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.37) je pripravená:",
-    updateChanges: "• FIX: Obnovenie pôvodného vzhľadu hlavičky pre lepšiu kompatibilitu.",
+    updateReady: "Nová verzia (v2.38) je pripravená:",
+    updateChanges: "• FEATURE: Vylepšenie archívu váhy, každý záznam sa ukladá samostatne.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -215,8 +215,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?",
     confirmLogout: "Möchten Sie sich wirklich abmelden?", 
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue verzia (v2.37) ist bereit:",
-    updateChanges: "• FIX: Wiederherstellung des ursprünglichen Header-Designs für bessere Kompatibilität.",
+    updateReady: "Neue verzia (v2.38) ist bereit:",
+    updateChanges: "• FEATURE: Verbesserungen im Gewichtsarchiv, jeder Eintrag wird separat gespeichert.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -449,7 +449,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = 'v2.37';
+      const currentAppVersion = 'v2.38';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -537,28 +537,10 @@ window.pridatVahu = async function() {
     
     let history = window.getVahaHistory();
     const novyDatum = window.formatDatum();
-    const dParts = novyDatum.split(' ')[0].split('.');
-    const aktualnyMesiacRok = `${dParts[1]}.${dParts[2]}`;
-    
-    let existujeVmesiaci = false;
-    for (let i = 0; i < history.length; i++) {
-      const p = history[i].datum.split(' ')[0].split('.');
-      if (p.length >= 3) {
-        let m = p[1].padStart(2, '0');
-        let y = p[2].length === 2 ? '20' + p[2] : p[2];
-        if (`${m}.${y}` === aktualnyMesiacRok) {
-          history[i].vaha = val;
-          history[i].datum = novyDatum;
-          existujeVmesiaci = true;
-          break;
-        }
-      }
-    }
-    
-    if (!existujeVmesiaci) {
-      const data = { id: Date.now().toString(), datum: novyDatum, vaha: val };
-      history.push(data);
-    }
+
+    // Vždy pridať nový záznam, neprepisovať starý
+    const data = { id: Date.now().toString(), datum: novyDatum, vaha: val };
+    history.push(data);
     localStorage.setItem('vaha_historia_' + window.user.uid, JSON.stringify(history));
     
     document.getElementById('novaVaha').value = '';
@@ -1248,28 +1230,8 @@ window.ulozitProfil = () => {
   if (novaVaha && novaVaha !== staraVaha && window.user) {
     let history = window.getVahaHistory();
     const novyDatum = window.formatDatum();
-    const dParts = novyDatum.split(' ')[0].split('.');
-    const aktualnyMesiacRok = `${dParts[1]}.${dParts[2]}`;
-    
-    let existujeVmesiaci = false;
-    for (let i = 0; i < history.length; i++) {
-      const p = history[i].datum.split(' ')[0].split('.');
-      if (p.length >= 3) {
-        let m = p[1].padStart(2, '0');
-        let y = p[2].length === 2 ? '20' + p[2] : p[2];
-        if (`${m}.${y}` === aktualnyMesiacRok) {
-          history[i].vaha = novaVaha;
-          history[i].datum = novyDatum;
-          existujeVmesiaci = true;
-          break;
-        }
-      }
-    }
-    
-    if (!existujeVmesiaci) {
-      const data = { id: Date.now().toString(), datum: novyDatum, vaha: novaVaha };
-      history.push(data);
-    }
+    const data = { id: Date.now().toString(), datum: novyDatum, vaha: novaVaha };
+    history.push(data);
     localStorage.setItem('vaha_historia_' + window.user.uid, JSON.stringify(history));
   }
   
@@ -1355,7 +1317,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.37').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.38').then(reg => {
     setInterval(() => { reg.update().catch(()=>{}); }, 1000 * 60 * 60);
     reg.update().catch(()=>{});
 

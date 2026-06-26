@@ -1,7 +1,7 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.37):
-- ✅ **FIX:** Obnovenie pôvodného vzhľadu hlavičky pre lepšiu kompatibilitu.
+## Zmeny v tejto verzii (v2.38):
+- ✅ **FEATURE:** Vylepšenie archívu váhy, každý záznam sa ukladá samostatne.
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -9,7 +9,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr.app"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Release v2.37: Revert transparent header"
+git commit -m "Release v2.38: Improve weight archive"
 git push -u origin main --force
 ```
 
