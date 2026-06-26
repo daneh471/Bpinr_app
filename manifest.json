@@ -1,12 +1,14 @@
 {
-  "name": "BP & INR",
-  "short_name": "BP & INR",
+  "name": "BP &amp; INR denník",
+  "short_name": "BP &amp; INR",
   "description": "Aplikácia na sledovanie hodnôt INR a krvného tlaku.",
   "id": "/",
   "start_url": "/",
   "scope": "/",
-  "display": "standalone",
-  "display_override": ["standalone"],
+  "display": "fullscreen",
+  "display_override": [
+    "standalone"
+  ],
   "background_color": "#000000",
   "theme_color": "#000000",
   "icons": [
