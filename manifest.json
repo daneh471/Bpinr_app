@@ -4,8 +4,7 @@
   "description": "Aplikácia na sledovanie hodnôt INR a krvného tlaku.",
   "id": "/",
   "start_url": "/",
-  "scope": "/",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#000000",
   "theme_color": "#000000",
   "navigation_bar": {
