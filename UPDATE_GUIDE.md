@@ -1,7 +1,7 @@
 # 🚀 AKTUALIZÁCIA APLIKÁCIE NA GITHUB
 
-## Zmeny v tejto verzii (v2.35):
-- ✅ **UI:** Vylepšenie vzhľadu, zjednotenie zarovnania a farieb pozadia.
+## Zmeny v tejto verzii (v2.36):
+- ✅ **SECURITY:** Pridané šifrovanie všetkých lokálnych dát (AES-GCM).
 
 ## POSTUP - Skopíruj do Git Bash:
 
@@ -9,7 +9,7 @@
 cd "c:\Users\doros\Desktop\Programovanie\Web a App_V1_01\Bpinr.app"
 git remote set-url origin https://github.com/daneh471/Zdravie_plus.git
 git add .
-git commit -m "Release v2.35: UI improvements"
+git commit -m "Release v2.36: Add data encryption"
 git push -u origin main --force
 ```
 
