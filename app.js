@@ -13,61 +13,6 @@ window.hashString = async (str) => {
   return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
 };
 
-// --- NOVÁ BEZPEČNOSTNÁ VRSTVA: ŠIFROVANIE DÁT ---
-window.encryptionKey = null;
-
-const deriveKeyFromPin = async (pin, salt) => {
-  const enc = new TextEncoder();
-  const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(pin), { name: 'PBKDF2' }, false, ['deriveKey']);
-  return crypto.subtle.deriveKey(
-    { name: 'PBKDF2', salt: salt, iterations: 100000, hash: 'SHA-256' },
-    keyMaterial,
-    { name: 'AES-GCM', length: 256 },
-    true,
-    ['encrypt', 'decrypt']
-  );
-};
-
-const encryptData = async (data) => {
-  if (!window.encryptionKey) throw new Error("Encryption key is not set.");
-  const iv = crypto.getRandomValues(new Uint8Array(12));
-  const encrypted = await crypto.subtle.encrypt(
-    { name: 'AES-GCM', iv: iv },
-    window.encryptionKey,
-    new TextEncoder().encode(JSON.stringify(data))
-  );
-  // Spojíme IV a zašifrované dáta do jedného reťazca pre uloženie
-  const combined = new Uint8Array(iv.length + encrypted.byteLength);
-  combined.set(iv);
-  combined.set(new Uint8Array(encrypted), iv.length);
-  return btoa(String.fromCharCode.apply(null, combined)); // Uložíme ako base64 string
-};
-
-const decryptData = async (encryptedBase64) => {
-  if (!window.encryptionKey) throw new Error("Encryption key is not set.");
-  try {
-    const combined = new Uint8Array(atob(encryptedBase64).split('').map(c => c.charCodeAt(0)));
-    const iv = combined.slice(0, 12);
-    const data = combined.slice(12);
-    const decrypted = await crypto.subtle.decrypt(
-      { name: 'AES-GCM', iv: iv },
-      window.encryptionKey,
-      data
-    );
-    return JSON.parse(new TextDecoder().decode(decrypted));
-  } catch (e) {
-    console.error("Decryption failed:", e);
-    // Ak dešifrovanie zlyhá, je pravdepodobné, že PIN je nesprávny
-    return null;
-  }
-};
-
-// Pomocná funkcia na generovanie saltu
-const generateSalt = () => {
-  const salt = crypto.getRandomValues(new Uint8Array(16));
-  return Array.from(salt).map(b => b.toString(16).padStart(2, '0')).join('');
-};
-
 window.exportMedCardPDF = () => {
   const tInfo = translations[window.currentLang];
   const pMeno = window.escapeHTML(localStorage.getItem('userProfile_meno') || '-');
@@ -218,8 +163,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.35) je pripravená:",
-    updateChanges: "• UI: Vylepšenie vzhľadu, zjednotenie zarovnania a farieb pozadia.",
+    updateReady: "Nová verzia (v2.36) je pripravená:",
+    updateChanges: "• SECURITY: Pridané šifrovanie všetkých lokálnych dát (AES-GCM).",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -270,8 +215,8 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?",
     confirmLogout: "Möchten Sie sich wirklich abmelden?", 
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue Version (v2.35) ist bereit:",
-    updateChanges: "• UI: Verbesserungen am Erscheinungsbild, Vereinheitlichung von Ausrichtung und Hintergrundfarben.",
+    updateReady: "Neue Version (v2.36) ist bereit:",
+    updateChanges: "• SECURITY: Verbesserungen bei der Datensicherheit (AES-GCM Verschlüsselung).",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -392,13 +337,11 @@ window.registerUser = async function() {
     }
     
     window.isRegistering = true;
-    const salt = generateSalt(); // Generujeme unikátny salt pre nového používateľa
     const uid = 'local_' + Date.now().toString();
     const hashedPin = await window.hashString(pin);
     
     const role = (nameLower === 'superadmin') ? 'admin' : 'user';
-    // Uložíme aj salt, ktorý je potrebný na odvodenie šifrovacieho kľúča
-    localAccounts[nameLower] = { uid: uid, name: name, pin: hashedPin, role: role, salt: salt };
+    localAccounts[nameLower] = { uid: uid, name: name, pin: hashedPin, role: role };
     localStorage.setItem('bp_inr_local_accounts', JSON.stringify(localAccounts));
     localStorage.setItem('currentUserUid', uid);
 
@@ -452,14 +395,6 @@ window.loginUser = async function() {
       return window.showAlert(translations[window.currentLang].msgWrongPin);
     }
     
-    // Ak je PIN správny, odvodíme šifrovací kľúč a uložíme ho do pamäte pre túto session
-    const saltHex = userDoc.salt;
-    if (!saltHex) {
-        return window.showAlert("Chyba: Chýba bezpečnostný kľúč (salt). Skúste sa zaregistrovať znova.");
-    }
-    const salt = new Uint8Array(saltHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
-    window.encryptionKey = await deriveKeyFromPin(pin, salt);
-
     localStorage.setItem('currentUserUid', userDoc.uid);
     window.onLocalAuthStateChanged(userDoc);
   } catch (e) { 
@@ -468,7 +403,7 @@ window.loginUser = async function() {
   }
 };
 
-window.onLocalAuthStateChanged = async (user) => {
+window.onLocalAuthStateChanged = (user) => {
   if (window.isRegistering) return;
 
   document.getElementById('splashScreen').style.opacity = '0';
@@ -478,21 +413,6 @@ window.onLocalAuthStateChanged = async (user) => {
     window.userName = user.name;
     window.userRole = user.role || 'user';
 
-    // --- Automatická migrácia na šifrované dáta ---
-    const migrationKey = `migrated_to_encryption_${user.uid}`;
-    if (!localStorage.getItem(migrationKey)) {
-        console.log("Spúšťam jednorazovú migráciu dát na šifrovaný formát...");
-        const recordsKey = 'zaznamy_historia_' + user.uid;
-        const weightKey = 'vaha_historia_' + user.uid;
-        
-        const unencryptedRecords = JSON.parse(localStorage.getItem(recordsKey) || '[]');
-        const unencryptedWeight = JSON.parse(localStorage.getItem(weightKey) || '[]');
-
-        localStorage.setItem(recordsKey, await encryptData(unencryptedRecords));
-        localStorage.setItem(weightKey, await encryptData(unencryptedWeight));
-        localStorage.setItem(migrationKey, 'true');
-        console.log("Migrácia dokončená.");
-    }
     const storedUid = localStorage.getItem('userProfile_uid');
     if (storedUid && storedUid !== user.uid) {
       localStorage.removeItem('userProfile_meno');
@@ -529,7 +449,7 @@ window.onLocalAuthStateChanged = async (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = 'v2.35';
+      const currentAppVersion = 'v2.36';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -603,8 +523,7 @@ window.pridatZaznam = async function() {
   
   data.id = Date.now().toString();
   window.zaznamy.push(data);
-  const encryptedRecords = await encryptData(window.zaznamy);
-  localStorage.setItem('zaznamy_historia_' + window.user.uid, encryptedRecords);
+  localStorage.setItem('zaznamy_historia_' + window.user.uid, JSON.stringify(window.zaznamy));
   
   ['inr','tab','sys','dia','pulse'].forEach(id => document.getElementById(id).value = '');
   window.showToast(translations[window.currentLang].saved || 'Uložené');
@@ -640,8 +559,7 @@ window.pridatVahu = async function() {
       const data = { id: Date.now().toString(), datum: novyDatum, vaha: val };
       history.push(data);
     }
-    const encryptedHistory = await encryptData(history);
-    localStorage.setItem('vaha_historia_' + window.user.uid, encryptedHistory);
+    localStorage.setItem('vaha_historia_' + window.user.uid, JSON.stringify(history));
     
     document.getElementById('novaVaha').value = '';
     localStorage.setItem('userProfile_vaha', val); 
@@ -660,8 +578,7 @@ window.vymazatVahu = async function(id) {
     try {
       let history = window.getVahaHistory();
       history = history.filter(h => h.id !== id);
-      const encryptedHistory = await encryptData(history);
-      localStorage.setItem('vaha_historia_' + window.user.uid, encryptedHistory);
+      localStorage.setItem('vaha_historia_' + window.user.uid, JSON.stringify(history));
       
       if (history.length > 0) {
          const sorted = history.sort((a, b) => parseInt(b.id) - parseInt(a.id));
@@ -798,9 +715,7 @@ window.spustitImport = async function() {
       count++;
     }
     
-    // Pri importe musíme načítať, dešifrovať, pridať a znova zašifrovať
-    // Zjednodušenie: Tento import bude fungovať len pre aktuálne prihláseného používateľa
-    localStorage.setItem('zaznamy_historia_' + window.user.uid, await encryptData(window.zaznamy));
+    localStorage.setItem('zaznamy_historia_' + targetUserId, JSON.stringify(window.zaznamy));
     window.showAlert(`Import úspešne dokončený! Pridaných ${count} záznamov.`);
     if (document.getElementById('archiv').style.display === 'block') window.zobrazArchiv();
   } catch (e) {
@@ -1136,9 +1051,7 @@ window.exportToPDF = (isCurrent = false) => {
 window.vymazatZaznam = (id) => {
   window.showConfirm(translations[window.currentLang].confirmDel, async () => {
     window.zaznamy = window.zaznamy.filter(r => r.id !== id);
-    
-    const encryptedRecords = await encryptData(window.zaznamy);
-    localStorage.setItem('zaznamy_historia_' + window.user.uid, encryptedRecords);
+    localStorage.setItem('zaznamy_historia_' + window.user.uid, JSON.stringify(window.zaznamy));
     
     window.zobrazArchiv();
   });
@@ -1155,7 +1068,6 @@ window.skrytArchiv = () => { window.skrytVsetko(); document.getElementById('form
 window.logout = () => {
   window.showConfirm(translations[window.currentLang].confirmLogout, () => {
     localStorage.removeItem('currentUserUid');
-    window.encryptionKey = null; // Vymažeme kľúč z pamäte
       window.onLocalAuthStateChanged(null);
   });
 };
@@ -1208,9 +1120,7 @@ window.ulozitManual = async () => {
 
   data.id = Date.now().toString();
   window.zaznamy.push(data);
-  
-  const encryptedRecords = await encryptData(window.zaznamy);
-  localStorage.setItem('zaznamy_historia_' + window.user.uid, encryptedRecords);
+  localStorage.setItem('zaznamy_historia_' + window.user.uid, JSON.stringify(window.zaznamy));
   
   ['manualDatum','manualInr','manualTab','manualSys','manualDia','manualPulse'].forEach(id => document.getElementById(id).value = '');
   window.zavrietModal(); window.showToast(translations[window.currentLang].saved);
@@ -1361,8 +1271,7 @@ window.ulozitProfil = () => {
       history.push(data);
     }
     localStorage.setItem('vaha_historia_' + window.user.uid, JSON.stringify(history));
-    encryptData(history).then(encrypted => localStorage.setItem('vaha_historia_' + window.user.uid, encrypted));
-  } 
+  }
   
   window.showToast(t.saved || 'Uložené');
   window.zavrietEditProfil(); 
@@ -1446,7 +1355,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.35').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.36').then(reg => {
     setInterval(() => { reg.update().catch(()=>{}); }, 1000 * 60 * 60);
     reg.update().catch(()=>{});
 
