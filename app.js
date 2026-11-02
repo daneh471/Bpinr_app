@@ -125,6 +125,16 @@ window.exportAllCSV = () => {
     const weights = JSON.parse(localStorage.getItem('vaha_historia_' + uid) || '[]');
     if (!Array.isArray(records) || !Array.isArray(weights)) throw new Error('Neplatný formát uložených údajov.');
 
+    // Export obsahuje celý uložený archív prihláseného účtu: bez filtra podľa roka či mesiaca.
+    // Diagnostika upozorní, ktoré roky sú skutočne uložené v tomto zariadení.
+    const extractYear = (date) => {
+      const value = String(date || '');
+      const sk = value.match(/\b\d{1,2}\.\d{1,2}\.(\d{4})\b/);
+      const iso = value.match(/^\s*(\d{4})-\d{2}-\d{2}/);
+      return sk ? sk[1] : (iso ? iso[1] : 'nezistený');
+    };
+    const years = [...new Set(records.map(r => extractYear(r && r.datum)))].sort();
+
     // Jeden súbor, jednotné stĺpce. Typ riadka rozlišuje merania, váhu a profil.
     const headers = ['Typ', 'Dátum a čas', 'INR', 'TAB', 'SYS', 'DIA', 'Pulz', 'Váha (kg)',
       'Režim', 'ID záznamu', 'Meno', 'Priezvisko', 'Výška (cm)', 'Karta liekov'];
@@ -162,7 +172,10 @@ window.exportAllCSV = () => {
     link.click();
     link.remove();
     setTimeout(() => URL.revokeObjectURL(url), 60000);
-    window.showToast(window.currentLang === 'de' ? 'CSV-Export gestartet.' : 'Export CSV bol spustený.');
+    const message = window.currentLang === 'de'
+      ? `CSV exportiert: ${records.length} Messungen, ${weights.length} Gewichte. Jahre: ${years.join(', ') || 'keine'}. Wenn ältere Jahre fehlen, sind sie unter diesem Konto in diesem Browser nicht gespeichert.`
+      : `CSV export: ${records.length} meraní, ${weights.length} záznamov váhy. Uložené roky: ${years.join(', ') || 'žiadne'}. Ak staršie roky chýbajú, pod týmto účtom v tomto zariadení nie sú uložené.`;
+    window.showAlert(message);
   } catch (error) {
     window.showAlert((window.currentLang === 'de' ? 'CSV-Export fehlgeschlagen: ' : 'Export CSV zlyhal: ') + error.message);
   }
@@ -216,7 +229,7 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.38) je pripravená:",
+    updateReady: "Nová verzia (v2.40) je pripravená:",
     updateChanges: "• FEATURE: Vylepšenie archívu váhy, každý záznam sa ukladá samostatne.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
@@ -268,7 +281,7 @@ const translations = {
     confirmDel: "Diesen Eintrag wirklich löschen?",
     confirmLogout: "Möchten Sie sich wirklich abmelden?", 
     confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
-    updateReady: "Neue verzia (v2.38) ist bereit:",
+    updateReady: "Neue verzia (v2.40) ist bereit:",
     updateChanges: "• FEATURE: Verbesserungen im Gewichtsarchiv, jeder Eintrag wird separat gespeichert.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
@@ -502,7 +515,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = 'v2.38';
+      const currentAppVersion = 'v2.40';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1370,7 +1383,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.38').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.40').then(reg => {
     setInterval(() => { reg.update().catch(()=>{}); }, 1000 * 60 * 60);
     reg.update().catch(()=>{});
 
