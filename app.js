@@ -115,6 +115,59 @@ window.loadRecords = async function() {
   if (document.getElementById('archiv').style.display === 'block') window.zobrazArchiv();
 };
 
+// Kompletný CSV export prihláseného používateľa (vrátane archívu a váhy).
+// Údaje zostávajú v zariadení; neprenášajú sa na žiadny server.
+window.exportAllCSV = () => {
+  if (!window.user || !window.user.uid) return;
+  try {
+    const uid = window.user.uid;
+    const records = JSON.parse(localStorage.getItem('zaznamy_historia_' + uid) || '[]');
+    const weights = JSON.parse(localStorage.getItem('vaha_historia_' + uid) || '[]');
+    if (!Array.isArray(records) || !Array.isArray(weights)) throw new Error('Neplatný formát uložených údajov.');
+
+    // Jeden súbor, jednotné stĺpce. Typ riadka rozlišuje merania, váhu a profil.
+    const headers = ['Typ', 'Dátum a čas', 'INR', 'TAB', 'SYS', 'DIA', 'Pulz', 'Váha (kg)',
+      'Režim', 'ID záznamu', 'Meno', 'Priezvisko', 'Výška (cm)', 'Karta liekov'];
+    const rows = [];
+    for (const r of records) {
+      if (!r || typeof r !== 'object') continue;
+      rows.push(['Meranie', r.datum, r.inr, r.tab, r.sys, r.dia, r.pulse,
+        '', r.mode, r.id, '', '', '', '']);
+    }
+    for (const w of weights) {
+      if (!w || typeof w !== 'object') continue;
+      rows.push(['Váha', w.datum, '', '', '', '', '', w.vaha,
+        '', w.id, '', '', '', '']);
+    }
+    rows.push(['Profil', '', '', '', '', '', '', localStorage.getItem('userProfile_vaha') || '',
+      '', '', localStorage.getItem('userProfile_meno') || '',
+      localStorage.getItem('userProfile_priezvisko') || '',
+      localStorage.getItem('userProfile_vyska') || '',
+      localStorage.getItem('userProfile_karta') || '']);
+
+    // Excel SK/DE: oddeľovač ;, UTF-8 BOM, správne úvodzovky a nové riadky.
+    // Potenciálne vzorce z používateľských polí musia zostať obyčajným textom.
+    const cell = (value) => {
+      let str = value == null ? '' : String(value);
+      if (/^[\s\u0000-\u001f]*[=+@-]/.test(str) && !/^-[0-9]+([.,][0-9]+)?$/.test(str.trim())) str = "'" + str;
+      return '"' + str.replace(/"/g, '""') + '"';
+    };
+    const csv = '\uFEFF' + [headers, ...rows].map(row => row.map(cell).join(';')).join('\r\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'BP_INR_vsetky_udaje_' + new Date().toISOString().slice(0, 10) + '.csv';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+    window.showToast(window.currentLang === 'de' ? 'CSV-Export gestartet.' : 'Export CSV bol spustený.');
+  } catch (error) {
+    window.showAlert((window.currentLang === 'de' ? 'CSV-Export fehlgeschlagen: ' : 'Export CSV zlyhal: ') + error.message);
+  }
+};
+
 window.skrytVsetko = () => {
   ['formular', 'archiv', 'viewProfileModal', 'editProfileModal', 'editMedicationModal', 'infoModal', 'manualModal', 'settingsModal', 'languageModal', 'monthlyArchiveListModal', 'monthDetailModal', 'archivVahyModal', 'termsModal'].forEach(id => {
     const el = document.getElementById(id);
@@ -138,7 +191,7 @@ const translations = {
     menuSettings: "📜 Podmienky", menuLogout: "🚪 Odhlásiť sa", addBtn: "Pridať záznam", backBtn: "Späť na formulár", saveBtn: "Uložiť", 
     closeBtn: "Zatvoriť", titleArchive: "Archív záznamov", titleManual: "Manuálny záznam", titleInfo: "Informácie o hodnotách", titleSettings: "Nastavenia",
     menuLang: "Jazyk", selectLang: "Vybrať jazyk", menuToggleBp: "Prepnúť na: Iba Tlak", menuToggleFull: "Prepnúť na: INR + Tlak", userPrefix: "Používateľ",
-    infoTab: "Tabletka (počet tabletiek)", infoLow: "Nízky", infoNorm: "Normálny", infoHigh: "Vysoký", btnExportPdf: "Exportovať PDF", menuToggleBp: "🩺 Režim: Iba Tlak", menuToggleFull: "❤️ Režim: INR + Tlak",
+    infoTab: "Tabletka (počet tabletiek)", infoLow: "Nízky", infoNorm: "Normálny", infoHigh: "Vysoký", btnExportPdf: "Exportovať PDF", btnExportAllCsv: "📥 Exportovať všetko do CSV", menuToggleBp: "🩺 Režim: Iba Tlak", menuToggleFull: "❤️ Režim: INR + Tlak",
     saved: "Uložené", msgOccupied: "Meno už je obsadené.", msgUserNotFound: "Používateľ neexistuje.", msgWrongPin: "Nesprávny PIN kód.",
     confirmDel: "Naozaj chcete vymazať tento záznam?", confirmLogout: "Ste si istý, že sa chcete odhlásiť?",
     confirmDelMed: "Naozaj chcete vymazať tento liek?",
@@ -163,8 +216,8 @@ const translations = {
     legGreen: "Zelená – hodnoty sú v poriadku",
     legRed: "Červená – vysoké hodnoty",
     legBlue: "Modrá – nízke hodnoty",
-    updateReady: "Nová verzia (v2.41) je pripravená:",
-    updateChanges: "• UI: Oprava zobrazenia hornej stavovej lišty na iOS.",
+    updateReady: "Nová verzia (v2.38) je pripravená:",
+    updateChanges: "• FEATURE: Vylepšenie archívu váhy, každý záznam sa ukladá samostatne.",
     btnMonthlyArchive: "Mesačný archív",
     confirmModeChange: "Ste si istý, že chcete prepnúť režim?",
     menuForceUpdate: "🔄 Vynútiť aktualizáciu",
@@ -190,7 +243,7 @@ const translations = {
     menuSettings: "📜 Bedingungen", menuLogout: "🚪 Abmelden", addBtn: "Eintrag hinzufügen", backBtn: "Zurück zum Formular", saveBtn: "Speichern", 
     closeBtn: "Schließen", titleArchive: "Eintragshistorie", titleManual: "Manueller Eintrag", titleInfo: "Informationen zu Werten", titleSettings: "Einstellungen",
     menuLang: "Sprache", selectLang: "Sprache wählen", menuToggleBp: "Nur Blutdruck", menuToggleFull: "INR + Blutdruck", userPrefix: "Benutzer",
-    infoTab: "Tablette (Anzahl der Tabletten)", infoLow: "Niedrig", infoNorm: "Normal", infoHigh: "Hoch", btnExportPdf: "PDF Exportieren", menuToggleBp: "🩺 Modus: Nur Blutdruck", menuToggleFull: "❤️ Modus: INR + Blutdruck",
+    infoTab: "Tablette (Anzahl der Tabletten)", infoLow: "Niedrig", infoNorm: "Normal", infoHigh: "Hoch", btnExportPdf: "PDF Exportieren", btnExportAllCsv: "📥 Alles als CSV exportieren", menuToggleBp: "🩺 Modus: Nur Blutdruck", menuToggleFull: "❤️ Modus: INR + Blutdruck",
     saved: "Gespeichert", msgOccupied: "Name bereits vergeben.", msgUserNotFound: "Benutzer existiert nicht.", msgWrongPin: "Falscher PIN-Code.",
     infoInrNote: "(Standardbereich. Individuelle Zielwerte werden vom behandelnden Arzt festgelegt.)",
     legendTitle: "Farberklärung:",
@@ -213,10 +266,10 @@ const translations = {
     legRed: "Rot – hohe Werte",
     legBlue: "Blau – niedrige Werte",
     confirmDel: "Diesen Eintrag wirklich löschen?",
-    confirmLogout: "Möchten Sie sich wirklich abmelden?",
-    confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",    
-    updateReady: "Neue Version (v2.41) ist bereit:",
-    updateChanges: "• UI: Korrektur der Anzeige der oberen Statusleiste auf iOS.",
+    confirmLogout: "Möchten Sie sich wirklich abmelden?", 
+    confirmPdf: "Sind Sie sicher, dass Sie das PDF herunterladen möchten?",
+    updateReady: "Neue verzia (v2.38) ist bereit:",
+    updateChanges: "• FEATURE: Verbesserungen im Gewichtsarchiv, jeder Eintrag wird separat gespeichert.",
     btnMonthlyArchive: "Monatsarchiv",
     confirmModeChange: "Sind Sie sicher, dass Sie den Modus wechseln möchten?",
     menuForceUpdate: "🔄 Update erzwingen",
@@ -449,7 +502,7 @@ window.onLocalAuthStateChanged = (user) => {
       const dialog = document.getElementById('customDialog');
       if (dialog && dialog.style.display === 'flex') return; // Neprepisuj, ak už svieti iné okno
 
-      const currentAppVersion = 'v2.41';
+      const currentAppVersion = 'v2.38';
       if (localStorage.getItem('bp_inr_last_seen_version') !== currentAppVersion) {
         const t = translations[window.currentLang];
         document.getElementById('dialogTitle').innerText = window.currentLang === 'sk' ? 'Aktualizácia úspešná 🎉' : 'Update erfolgreich 🎉';
@@ -1317,7 +1370,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.register('./sw.js?v=2.41').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=2.38').then(reg => {
     setInterval(() => { reg.update().catch(()=>{}); }, 1000 * 60 * 60);
     reg.update().catch(()=>{});
 
